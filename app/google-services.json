@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "993768435082",
+    "firebase_url": "https://warmapp-e7eb8-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "warmapp-e7eb8",
+    "storage_bucket": "warmapp-e7eb8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:993768435082:android:63ee65b4a6ed33bbfb6c73",
+        "android_client_info": {
+          "package_name": "com.example.warmapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "993768435082-q7tcec38um4j1029d526vtmtengfailr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAkg2PPu2XXbSbnLbbg6ZwFUTyeZpU-6jU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "993768435082-q7tcec38um4j1029d526vtmtengfailr.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

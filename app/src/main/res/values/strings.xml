@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">WARMApp</string>
+    <string name="warmapp">WARMApp</string>
+    <string name="welcome">Welcome!</string>
+    <string name="nice_to_see_you_again">Nice to see you again!</string>
+    <string name="you_are_not_a_member">You are not a member?</string>
+    <string name="sign_up.">Sign up.</string>
+    <string name="sign_up">Sign up</string>
+    <string name="email">Email</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="login.">Login.</string>
+    <string name="forget_the_password">Forget the password?</string>
+    <string name="have_a_account">Have a Account?</string>
+    <string name="trainee">trainee</string>
+    <string name="trainer">trainer</string>
+    <string name="last_name">Last Name</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="password_verification">Password Verification</string>
+    <string name="first_name">First Name</string>
+</resources>
