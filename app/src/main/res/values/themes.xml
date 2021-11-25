@@ -14,5 +14,10 @@
         <!-- change navigation bar color -->
         <item name="android:navigationBarColor">@android:color/transparent</item>
         <!-- Customize your theme here. -->
+        <item name="android:windowAnimationStyle">@style/animation</item>
+    </style>
+    <style name="animation">
+        <item name="android:windowEnterAnimation">@android:anim/fade_in</item>
+        <item name="android:windowExitAnimation">@android:anim/fade_out</item>
     </style>
 </resources>

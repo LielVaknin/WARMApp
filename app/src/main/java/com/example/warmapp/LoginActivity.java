@@ -4,9 +4,12 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
+import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -25,11 +28,14 @@ public class LoginActivity extends AppCompatActivity {
     private TextInputLayout lPassword;
     private TextInputEditText email;
     private TextInputEditText password;
+    TextView forgetPassword;
+    Dialog dialog;
     MaterialButton login;
     TextView signup;
 
     FirebaseAuth auth;
 
+    @SuppressLint("UseCompatLoadingForDrawables")
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,6 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         lEmail = findViewById(R.id.email_input_layout);
         password = findViewById(R.id.password_input_edit_text);
         lPassword = findViewById(R.id.password_input_layout);
+        forgetPassword = findViewById(R.id.forget_password_txt);
         login = findViewById(R.id.button_login);
         signup = findViewById(R.id.sign_up_txt);
 
@@ -71,7 +78,48 @@ public class LoginActivity extends AppCompatActivity {
                 finish();
             }
         });
+
+        //forget password dialog
+        dialog = new Dialog(LoginActivity.this);
+        dialog.setContentView(R.layout.layout_reset_password);
+        dialog.getWindow().setBackgroundDrawable(getDrawable(R.drawable.edit_text_bg));
+        dialog.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT,ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialog.setCancelable(false);
+        dialog.getWindow().getAttributes().windowAnimations = R.style.animation;
+
+        forgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.show();
+            }
+        });
+
+        TextInputLayout layoutEmail = dialog.findViewById(R.id.edit_email);
+        TextInputEditText inputEditTextEmail = dialog.findViewById(R.id.input_edit_text_reset_password);
+
+        MaterialButton reset = dialog.findViewById(R.id.btn_reset);
+        reset.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String txt_email = inputEditTextEmail.getText().toString();
+
+                if (txt_email.isEmpty()){
+                    layoutEmail.setError("Enter a email!");
+                }else{
+                    emailToReset(txt_email);
+                    dialog.dismiss();
+                }
+            }
+        });
+        MaterialButton cancel = dialog.findViewById(R.id.btn_cancel);
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
     }
+
     //helper functions
     private void LoginUserAccount(String email, String password) {
         auth.signInWithEmailAndPassword(email,password)
@@ -87,9 +135,26 @@ public class LoginActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_SHORT).show();
+                Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
             }
         });
+    }
+
+    private void emailToReset(String email) {
+        auth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
+            @Override
+            public void onComplete(@NonNull Task<Void> task) {
+                if (task.isSuccessful()){
+                    Toast.makeText(LoginActivity.this,"Rest password mail send to: "+ email,Toast.LENGTH_LONG).show();
+                }
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 //    //if user login already
 //    @Override
