@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_search.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_reset_password.xml" value="0.1793478260869565" />
         <entry key="..\:/Users/ariel/AndroidStudioProjects/WARMApp/app/src/main/res/drawable-v24/bottom_bg.xml" value="0.37407407407407406" />
         <entry key="..\:/Users/ariel/AndroidStudioProjects/WARMApp/app/src/main/res/drawable-v24/edit_text_bg.xml" value="0.37407407407407406" />
         <entry key="..\:/Users/ariel/AndroidStudioProjects/WARMApp/app/src/main/res/drawable-v24/ic_launcher_foreground.xml" value="0.3769230769230769" />
@@ -16,9 +18,6 @@
         <entry key="..\:/Users/ariel/AndroidStudioProjects/WARMApp/app/src/main/res/layout/activity_sign_up.xml" value="0.33" />
         <entry key="..\:/Users/ariel/AndroidStudioProjects/WARMApp/app/src/main/res/layout/activity_splash.xml" value="0.30085470085470084" />
         <entry key="..\:/Users/ariel/AndroidStudioProjects/WARMApp/app/src/main/res/layout/activity_splash_screen.xml" value="0.3283514492753623" />
-        <entry key="..\:/Users/ariel/AndroidStudioProjects/Warmapp/app/src/main/res/layout/activity_login.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/ariel/AndroidStudioProjects/Warmapp/app/src/main/res/layout/activity_sign_up.xml" value="0.36666666666666664" />
-        <entry key="..\:/Users/ariel/AndroidStudioProjects/Warmapp/app/src/main/res/layout/layout_reset_password.xml" value="0.36666666666666664" />
       </map>
     </option>
   </component>
