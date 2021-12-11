@@ -33,7 +33,7 @@
     <string name="title">Title :</string>
     <string name="features">Features :</string>
 
-    <string-array name= "Titles">
+    <string-array name="Titles">
         <item>Yoga</item>
         <item>Pilates</item>
         <item>Trx</item>
@@ -63,7 +63,7 @@
         <item>Gymnastics</item>
     </string-array>
 
-    <string-array name= "Cities">
+    <string-array name="Cities">
         <item>Acre</item>
         <item>Afula</item>
         <item>Arad</item>
@@ -139,7 +139,7 @@
         <item>Yokneam Illit</item>-->
     </string-array>
 
-    <string-array name= "Features">
+    <string-array name="Features">
         <item>Group training</item>
         <item>Outdoor training</item>
         <item>For men only</item>

@@ -87,7 +87,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 text7.setText(training.getPrice() + "");
 
                 TextView text8 = dailogView.findViewById(R.id.description_dialog_text);
-                text8.setText(training.getDescription());
+                text8.setText(training.getDetails());
 
 
                 alert.show();
