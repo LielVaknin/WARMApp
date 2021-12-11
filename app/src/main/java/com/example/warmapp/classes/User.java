@@ -1,6 +1,8 @@
 package com.example.warmapp.classes;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class User {
     private String uniqueID;
@@ -9,8 +11,9 @@ public class User {
     private String mail;
     private String password;
     private String phone;
-    private ArrayList<Request> requests;
-    private ArrayList<Training> trainings;
+    private HashMap<String,Boolean> requests;
+    private HashMap<String,Boolean> trainings;
+
 
     public User(String uniqueid, String firstName, String lastName, String mail, String password, String phone) {
         this.uniqueID = uniqueid;
@@ -19,7 +22,10 @@ public class User {
         this.mail = mail;
         this.password = password;
         this.phone = phone;
+        requests= new HashMap<>();
+        trainings=new HashMap<>();
     }
+    public User(){}
     public String getUniqueID() { return uniqueID; }
 
     public String getFirstName() {
@@ -60,11 +66,15 @@ public class User {
 
     public void setPhone(String phone) { this.phone = phone; }
 
-    public void addRequest(Request request){ this.requests.add(request); }
+    public HashMap<String, Boolean> getRequests() {
+        return requests;
+    }
+
+    public void addRequest(String requestID){ this.requests.put(requestID,true); }
 
     public void removeRequest(Request request){ this.requests.remove(request); }
 
-    public ArrayList<Training> getTrainings() { return trainings; }
+    public HashMap<String,Boolean> getTrainings() { return trainings; }
 
-    public void addTraining(Training training) { this.trainings.add(training); }
+    public void addTraining(String trainingID) { this.trainings.put(trainingID,true); }
 }

@@ -2,28 +2,27 @@ package com.example.warmapp.classes;
 
 import com.example.warmapp.classes.Training;
 
-enum paymentMethod{
-    card,
-    other
-}
 
-public class Request {
+
+public class Request{
+
     String traineeID;
-    Training training;
+    String trainingID;
     boolean isConfirm = false;
-    paymentMethod paymentMethod;
+    String paymentMethod;
 
-    public Request(String traineeID, Training training) {
+    public Request(String traineeID, String trainingID) {
         this.traineeID = traineeID;
-        this.training = training;
+        this.trainingID = trainingID;
     }
 
+    public Request(){}
     public String getTraineeID() {
         return traineeID;
     }
 
-    public Training getTraining() {
-        return training;
+    public String getTrainingID() {
+        return trainingID;
     }
 
     public boolean isConfirm() {
@@ -34,11 +33,11 @@ public class Request {
         isConfirm = confirm;
     }
 
-    public paymentMethod getPaymentMethod() {
+    public String getPaymentMethod() {
         return paymentMethod;
     }
 
-    public void setPaymentMethod(paymentMethod paymentMethod) {
+    public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
 }

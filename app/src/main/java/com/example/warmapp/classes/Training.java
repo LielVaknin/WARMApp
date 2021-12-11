@@ -1,29 +1,32 @@
 package com.example.warmapp.classes;
 
+import java.io.Serializable;
 import java.sql.Time;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
-enum type{
+public class Training implements Serializable {
 
-};
-enum feature{
 
-};
-
-public class Training {
-    type title;
+    String trainingID;
+    String title;
     String city;
     String address;
-    ArrayList<feature> features;
+    HashMap<String,String> features;
     String trainerId;
-    Time startTraining;
-    Time endTraining;
-    Date date;
+    String startTraining;
+    String endTraining;
+    String date;
     int price;
     String details;
+    int maxParticipants;
+    HashMap<String,Boolean> participants;
 
-    public Training(type title, String city, String address, String trainerId, Time startTraining, Time endTraining, Date date, int price) {
+
+    public Training(){}
+    public Training(String trainingID, String title, String city, String address, String trainerId, String startTraining, String endTraining, String date, int price) {
+        this.trainingID=trainingID;
         this.title = title;
         this.city = city;
         this.address = address;
@@ -32,13 +35,17 @@ public class Training {
         this.endTraining = endTraining;
         this.date = date;
         this.price = price;
+        this.participants = new HashMap<>();
+    }
+    public String getTrainingID() {
+        return trainingID;
     }
 
-    public type getTitle() {
+    public String getTitle() {
         return title;
     }
 
-    public void setTitle(type title) {
+    public void setTitle(String title) {
         this.title = title;
     }
 
@@ -58,15 +65,15 @@ public class Training {
         this.address = address;
     }
 
-    public ArrayList<feature> getFeatures() {
+    public HashMap<String, String> getFeatures() {
         return features;
     }
 
-    public void addFeature(feature feature){
-        this.features.add(feature);
+    public void addFeature(String feature){
+        this.features.put(feature,feature);
     }
 
-    public void removeFeature(feature feature) {
+    public void removeFeature(String feature) {
         this.features.remove(feature);
     }
 
@@ -78,27 +85,27 @@ public class Training {
         this.trainerId = trainerId;
     }
 
-    public Time getStartTraining() {
+    public String getStartTraining() {
         return startTraining;
     }
 
-    public void setStartTraining(Time startTraining) {
+    public void setStartTraining(String startTraining) {
         this.startTraining = startTraining;
     }
 
-    public Time getEndTraining() {
+    public String getEndTraining() {
         return endTraining;
     }
 
-    public void setEndTraining(Time endTraining) {
+    public void setEndTraining(String endTraining) {
         this.endTraining = endTraining;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
@@ -118,4 +125,28 @@ public class Training {
         this.details = details;
     }
 
+    public int getMaxParticipants() {
+        return maxParticipants;
+    }
+
+    public void setMaxParticipants(int maxParticipants) {
+        this.maxParticipants = maxParticipants;
+    }
+
+
+    @Override
+    public String toString() {
+        return "Training{" +
+                "title='" + title + '\'' +
+                ", city='" + city + '\'' +
+                ", address='" + address + '\'' +
+                ", features=" + features +
+                ", trainerId='" + trainerId + '\'' +
+                ", startTraining='" + startTraining + '\'' +
+                ", endTraining='" + endTraining + '\'' +
+                ", date='" + date + '\'' +
+                ", price=" + price +
+                ", details='" + details + '\'' +
+                '}';
+    }
 }
