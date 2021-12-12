@@ -110,7 +110,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
                 builder.setView(dailogView);
 
-                TextView text1 = dailogView.findViewById(R.id.training_title);
+                TextView text1 = dailogView.findViewById(R.id.request_training_title1);
                 text1.setText(training.getTitle());
 
                 TextView text2 = dailogView.findViewById(R.id.trainer_name);

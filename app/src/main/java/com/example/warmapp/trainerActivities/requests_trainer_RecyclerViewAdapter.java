@@ -1,5 +1,6 @@
 package com.example.warmapp.trainerActivities;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -69,11 +70,24 @@ import java.util.ArrayList;
             holder.reject.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    removeRequest(holder.getAdapterPosition());
-                    holder.reject.setVisibility(View.GONE);
-                    holder.apply.setVisibility(View.GONE);
-                    holder.message.setText("The training is rejected");
-                    holder.message.setVisibility(View.VISIBLE);
+                    final AlertDialog dialog = new AlertDialog.Builder(v.getContext())
+                            .setMessage("Reject "+ holder.traineeName.getText()+" "+holder.trainingTitle.getText() + " training request?")
+                            .setPositiveButton("Yes", null)
+                            .setNegativeButton("No", null)
+                            .show();
+
+                    Button positiveButton = dialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                    positiveButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View alertView) {
+                            removeRequest(holder.getAdapterPosition());
+                            holder.reject.setVisibility(View.GONE);
+                            holder.apply.setVisibility(View.GONE);
+                            holder.message.setText("The training is rejected");
+                            holder.message.setVisibility(View.VISIBLE);
+                        }
+                    });
+
                 }
             });
 
@@ -111,8 +125,8 @@ import java.util.ArrayList;
 
             public myViewHolder(@NonNull View itemView) {
                 super(itemView);
-                traineeImage= itemView.findViewById(R.id.trainee_image);
-                traineeName=itemView.findViewById(R.id.trainee_name);
+                traineeImage= itemView.findViewById(R.id.request_trainee_image);
+                traineeName=itemView.findViewById(R.id.request_trainee_name);
                 traineeName.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -120,12 +134,12 @@ import java.util.ArrayList;
 
 
                 });
-                paymentMethod=itemView.findViewById(R.id.payment_method1);
-                trainingTitle=itemView.findViewById(R.id.training_title);
-                trainingDate=itemView.findViewById(R.id.training_date1);
-                trainingTime=itemView.findViewById(R.id.training_time1);
-                apply = itemView.findViewById(R.id.apply_button);
-                reject= itemView.findViewById(R.id.reject_button);
+                paymentMethod=itemView.findViewById(R.id.request_payment_method1);
+                trainingTitle=itemView.findViewById(R.id.request_training_title1);
+                trainingDate=itemView.findViewById(R.id.request_training_date1);
+                trainingTime=itemView.findViewById(R.id.request_training_time1);
+                apply = itemView.findViewById(R.id.request_apply_button);
+                reject= itemView.findViewById(R.id.request_reject_button);
                 message = itemView.findViewById(R.id.message_request);
 
 

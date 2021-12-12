@@ -5,25 +5,14 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="15dp"
-        android:layout_marginBottom="5dp"
-        app:cardBackgroundColor="@color/grey_400"
-        app:cardCornerRadius="20dp"
-        app:cardElevation="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/training_date1"
+                android:id="@+id/request_training_date1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -31,12 +20,12 @@
                 android:text="date"
                 android:textColor="#000000"
                 android:textSize="15sp"
-                app:layout_constraintStart_toStartOf="@+id/training_time1"
-                app:layout_constraintTop_toBottomOf="@+id/training_time1" />
+                app:layout_constraintStart_toStartOf="@+id/request_training_time1"
+                app:layout_constraintTop_toBottomOf="@+id/request_training_time1" />
 
 
             <ImageView
-                android:id="@+id/trainee_image"
+                android:id="@+id/request_trainee_image"
                 android:layout_width="74dp"
                 android:layout_height="81dp"
                 android:layout_marginStart="4dp"
@@ -46,7 +35,7 @@
                 app:srcCompat="@drawable/ic_user" />
 
             <TextView
-                android:id="@+id/trainee_name"
+                android:id="@+id/request_trainee_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="4dp"
@@ -56,11 +45,11 @@
                 android:textColor="#000000"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toEndOf="@+id/trainee_image"
-                app:layout_constraintTop_toTopOf="@+id/trainee_image" />
+                app:layout_constraintStart_toEndOf="@+id/request_trainee_image"
+                app:layout_constraintTop_toTopOf="@+id/request_trainee_image" />
 
             <TextView
-                android:id="@+id/training_title"
+                android:id="@+id/request_training_title1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:fontFamily="@font/outfitregular"
@@ -68,11 +57,11 @@
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/trainee_name"
-                app:layout_constraintTop_toBottomOf="@+id/trainee_name" />
+                app:layout_constraintStart_toStartOf="@+id/request_trainee_name"
+                app:layout_constraintTop_toBottomOf="@+id/request_trainee_name" />
 
             <TextView
-                android:id="@+id/payment_method1"
+                android:id="@+id/request_payment_method1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="2dp"
@@ -82,12 +71,12 @@
                 android:textSize="15sp"
                 android:textStyle="italic"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/training_time1"
-                app:layout_constraintTop_toBottomOf="@+id/training_date1"
+                app:layout_constraintStart_toStartOf="@+id/request_training_time1"
+                app:layout_constraintTop_toBottomOf="@+id/request_training_date1"
                 app:layout_constraintVertical_bias="0.0" />
 
             <TextView
-                android:id="@+id/training_time1"
+                android:id="@+id/request_training_time1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
 
@@ -98,11 +87,11 @@
                 android:textSize="15sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.131"
-                app:layout_constraintStart_toEndOf="@+id/trainee_name"
-                app:layout_constraintTop_toTopOf="@+id/trainee_name" />
+                app:layout_constraintStart_toEndOf="@+id/request_trainee_name"
+                app:layout_constraintTop_toTopOf="@+id/request_trainee_name" />
 
             <ImageButton
-                android:id="@+id/apply_button"
+                android:id="@+id/request_apply_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginEnd="12dp"
@@ -111,7 +100,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageButton
-                android:id="@+id/reject_button"
+                android:id="@+id/request_reject_button"
                 android:layout_width="50dp"
                 android:layout_height="50dp"
                 android:layout_marginTop="2dp"
@@ -119,7 +108,7 @@
                 android:background="@drawable/cancel_icon"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/apply_button"
+                app:layout_constraintTop_toBottomOf="@+id/request_apply_button"
                 app:layout_constraintVertical_bias="1.0" />
 
             <TextView
@@ -131,12 +120,12 @@
                 android:textSize="13dp"
                 android:textStyle="italic"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/reject_button"
-                app:layout_constraintEnd_toEndOf="@+id/reject_button"
+                app:layout_constraintBottom_toBottomOf="@+id/request_reject_button"
+                app:layout_constraintEnd_toEndOf="@+id/request_reject_button"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.461" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.cardview.widget.CardView>
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,6 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
+
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <TextView
+                android:id="@+id/request_training_date2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/outfitregular"
+                android:text="date"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                app:layout_constraintStart_toStartOf="@+id/request_training_time2"
+                app:layout_constraintTop_toBottomOf="@+id/request_training_time2" />
+
+
+            <ImageView
+                android:id="@+id/request_trainer_image"
+                android:layout_width="74dp"
+                android:layout_height="81dp"
+                android:layout_marginStart="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/ic_user" />
+
+            <TextView
+                android:id="@+id/request_trainer_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="8dp"
+                android:fontFamily="@font/outfitregular"
+                android:text="trainer"
+                android:textColor="#000000"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toEndOf="@+id/request_trainer_image"
+                app:layout_constraintTop_toTopOf="@+id/request_trainer_image" />
+
+            <TextView
+                android:id="@+id/request_training_title2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:fontFamily="@font/outfitregular"
+                android:text="training"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/request_trainer_name"
+                app:layout_constraintTop_toBottomOf="@+id/request_trainer_name" />
+
+            <TextView
+                android:id="@+id/request_payment_method2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="2dp"
+                android:fontFamily="@font/outfitregular"
+                android:text="payment"
+                android:textColor="#3C3838"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/request_training_time2"
+                app:layout_constraintTop_toBottomOf="@+id/request_training_date2"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/request_training_time2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+
+                android:layout_marginTop="4dp"
+                android:fontFamily="@font/outfitregular"
+                android:text="time"
+                android:textColor="#000000"
+                android:textSize="15sp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.131"
+                app:layout_constraintStart_toEndOf="@+id/request_trainer_name"
+                app:layout_constraintTop_toTopOf="@+id/request_trainer_name" />
+
+
+            <ImageButton
+                android:id="@+id/request_cancel_button"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
+                android:layout_marginEnd="12dp"
+                android:background="@drawable/cancel_icon"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/message_request2"
+                android:layout_width="60dp"
+                android:layout_height="69dp"
+                android:fontFamily="@font/outfitregular"
+                android:text="apply or reject"
+                android:textSize="13dp"
+                android:textStyle="italic"
+                android:visibility="invisible"
+                app:layout_constraintBottom_toBottomOf="@+id/request_cancel_button"
+                app:layout_constraintEnd_toEndOf="@+id/request_cancel_button"
+                app:layout_constraintTop_toTopOf="@+id/request_cancel_button"
+                app:layout_constraintVertical_bias="0.461" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

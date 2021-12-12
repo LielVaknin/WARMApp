@@ -2,10 +2,14 @@ package com.example.warmapp.trainerActivities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
+
 import com.example.warmapp.R;
 import com.example.warmapp.classes.MyAdapter;
 import com.example.warmapp.classes.Request;
@@ -25,6 +29,7 @@ public class TrainerRequestsActivity extends AppCompatActivity {
     ArrayList<RequestModel>requests;
     DatabaseReference firebaseReference;
     RecyclerView recyclerView;
+    TextView hasRequests;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -35,6 +40,7 @@ public class TrainerRequestsActivity extends AppCompatActivity {
         firebaseReference=FirebaseDatabase.getInstance().getReference();
         setUpRequests(userID);
 
+
     }
 
     private void setUpRequests(String userID) {
@@ -42,9 +48,15 @@ public class TrainerRequestsActivity extends AppCompatActivity {
                 addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
-                    String requestID = dataSnapshot.getKey();
-                    getRequestDetails(requestID);
+                if(!snapshot.hasChildren()){
+                    hasRequests=findViewById(R.id.has_requests1);
+                    hasRequests.setVisibility(View.VISIBLE);
+                }
+                else {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        String requestID = dataSnapshot.getKey();
+                        getRequestDetails(requestID);
+                    }
                 }
             }
 
@@ -108,7 +120,7 @@ public class TrainerRequestsActivity extends AppCompatActivity {
                 trainingTime=training.getStartTraining()+"-"+training.getEndTraining();
                 requestModel.trainingTitle=trainingTitle;
                 requestModel.trainingDate=trainingDate;
-                requestModel.trainingDate=trainingTime;
+                requestModel.trainingTime=trainingTime;
                 requests.add(requestModel);
                 showRows();
 
@@ -125,5 +137,8 @@ public class TrainerRequestsActivity extends AppCompatActivity {
         requests_trainer_RecyclerViewAdapter adapter = new requests_trainer_RecyclerViewAdapter(this,requests);
         recyclerView.setAdapter(adapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+
+
     }
 }
