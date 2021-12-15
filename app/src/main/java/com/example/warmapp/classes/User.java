@@ -22,6 +22,7 @@ public class User {
         this.userType = userType;
         requests= new HashMap<>();
         trainings=new HashMap<>();
+        this.userType=userType;
     }
     public User(){}
 
@@ -78,4 +79,9 @@ public class User {
     public HashMap<String,Boolean> getTrainings() { return trainings; }
 
     public void addTraining(String trainingID) { this.trainings.put(trainingID,true); }
+
+    public String getUserType() {
+        return userType;
+    }
+
 }

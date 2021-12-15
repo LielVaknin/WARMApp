@@ -195,7 +195,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        String userID = "8dxiQ2SiWIVWbDED9nfKJVfEmvp1";
                         Request request = new Request(userID, training.getTrainingID());
 
                         int buttonID = rg.getCheckedRadioButtonId();

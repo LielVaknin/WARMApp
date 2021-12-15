@@ -7,20 +7,29 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.warmapp.LoginActivity;
 import com.example.warmapp.R;
+import com.example.warmapp.SignUpActivity;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.RequestModel;
 import com.example.warmapp.classes.Training;
+import com.example.warmapp.classes.User;
 import com.example.warmapp.classes.UserTrainee;
 import com.example.warmapp.classes.UserTrainer;
+import com.example.warmapp.trainerActivities.CalendarActivity;
 import com.example.warmapp.trainerActivities.requests_trainer_RecyclerViewAdapter;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -33,22 +42,63 @@ public class TraineeRequestsActivity extends AppCompatActivity {
 
     ArrayList<RequestModel> requests;
     DatabaseReference firebaseReference;
+    FirebaseAuth auth;
     RecyclerView recyclerView;
     TextView hasRequests;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_trainee_requests);
-        recyclerView=findViewById(R.id.trainee_requests_list);
+        auth = FirebaseAuth.getInstance();
+        //String userID=auth.getCurrentUser().getUid();
+        String userID="mEMcSemGPIMgWbP9anZ668m5KHH2";
+
+        recyclerView = findViewById(R.id.trainee_requests_list);
         requests=new ArrayList<>();
-        String userID="8dxiQ2SiWIVWbDED9nfKJVfEmvp1";
         firebaseReference= FirebaseDatabase.getInstance().getReference();
+        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.menu_requests);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+               @Override
+               public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                   Intent intent;
+                   switch (item.getItemId()){
+                       case R.id.menu_profile:
+
+                        /*intent = new Intent(TraineeRequestsActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();*/
+                           return true;
+                       case R.id.menu_search:
+                           intent = new Intent(TraineeRequestsActivity.this, SearchActivity.class);
+                           startActivity(intent);
+                           finish();
+                           return true;
+                       case R.id.menu_schedule:
+                           intent = new Intent(TraineeRequestsActivity.this, CalendarActivity.class);
+                           startActivity(intent);
+                           finish();
+                           return true;
+                       case R.id.menu_requests:
+                           return true;
+                       case R.id.menu_home:
+                           return true;
+                   }
+                return false;
+
+
+
+               }
+           });
+
+
+
         setUpRequests(userID);
 
     }
 
     private void setUpRequests(String userID) {
-        firebaseReference.child("Users").child("Trainee").child(userID).child("requests").
+        firebaseReference.child("Users").child(userID).child("requests").
                 addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -95,7 +145,7 @@ public class TraineeRequestsActivity extends AppCompatActivity {
     }
 
     private void getTrainerDetails(String traineeID,RequestModel requestModel) {
-        firebaseReference.child("Users").child("Trainer").child(traineeID).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseReference.child("Users").child(traineeID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserTrainer trainer = snapshot.getValue(UserTrainer.class);

@@ -3,45 +3,39 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable-mdpi/ic_calendar.xml" value="0.2703125" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/drawable/ic_outline_message_24.xml" value="0.18697916666666667" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/drawable/ic_usa_pro_summer_workout_accessories.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/drawable/phone_icon.xml" value="0.14270833333333333" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/font/outfitregular.xml" value="0.23055555555555557" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/activity_bottom_menu.xml" value="0.264" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/activity_home.xml" value="0.4" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/activity_search.xml" value="0.15572916666666667" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/activity_trainee_requests.xml" value="0.176" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/activity_trainer_requests.xml" value="0.1793478260869565" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/fragment_trainee_requests.xml" value="0.1109375" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/request_training_dialog.xml" value="0.14947916666666666" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/trainee_request_row.xml" value="0.5778947368421052" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/trainer_request_row.xml" value="0.536" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/menu/bottom_navigation_menu.xml" value="0.17083333333333334" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable-v24/edit_text_bg.xml" value="0.14166666666666666" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/background_1.xml" value="0.1" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/background_2.xml" value="0.3828125" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_activity_1.xml" value="0.2703125" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_baseline_add_circle_24.xml" value="0.14375" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_baseline_check_circle_outline_24.xml" value="0.16145833333333334" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_clock_1.xml" value="0.2703125" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_credit_card_black_24dp.xml" value="0.2703125" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.2703125" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_fitness_center_black_24dp.xml" value="0.14635416666666667" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.2703125" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_info_1.xml" value="0.2703125" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_launcher_background.xml" value="0.2203125" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_lock.xml" value="0.26615384615384613" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_logan_weaver_mi4gfdl36yg_unsplash_1.xml" value="0.3828125" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_map_pin_1.xml" value="0.14635416666666667" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_notifications_black_24dp.xml" value="0.14635416666666667" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_noun_shekel_3452110.xml" value="0.17708333333333334" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_noun_shekel_3452295.xml" value="0.2703125" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_plus_circle_1.xml" value="0.24114583333333334" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_search_1.xml" value="0.2703125" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable/ic_user.xml" value="0.2921875" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_home.xml" value="0.2" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_home.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_login.xml" value="0.264" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_main.xml" value="0.1" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_search.xml" value="0.25" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_search.xml" value="0.1" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_sign_up.xml" value="0.20572916666666666" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_splash.xml" value="0.12604166666666666" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_trainer_profile.xml" value="0.4" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_training_list.xml" value="0.18" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/cities_list.xml" value="0.21403508771929824" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_reset_password.xml" value="0.1793478260869565" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/list.xml" value="0.264" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/more_details_dialog.xml" value="0.536" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/request_training_dialog.xml" value="0.32407407407407407" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/list.xml" value="0.14628623188405798" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/more_details_dialog.xml" value="0.264" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/request_training_dialog.xml" value="0.4" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/titles_list.xml" value="0.1" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/training.xml" value="0.30120481927710846" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/training2.xml" value="0.3350125944584383" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/ariel/AndroidStudioProjects/WARMApp/app/src/main/res/drawable-v24/bottom_bg.xml" value="0.37407407407407406" />
         <entry key="..\:/Users/ariel/AndroidStudioProjects/WARMApp/app/src/main/res/drawable-v24/edit_text_bg.xml" value="0.37407407407407406" />

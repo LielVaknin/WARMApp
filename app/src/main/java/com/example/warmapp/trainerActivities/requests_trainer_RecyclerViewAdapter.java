@@ -2,6 +2,8 @@ package com.example.warmapp.trainerActivities;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.Intent;
+import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,11 +27,13 @@ import java.util.ArrayList;
         Context context;
         ArrayList<RequestModel> requests;
         DatabaseReference databaseReference;
+        String userID;
 
 
         public requests_trainer_RecyclerViewAdapter(Context context, ArrayList<RequestModel> requests){
             this.context=context;
             this.requests=requests;
+            this.userID="qIcl2TIXEDbKwUziUDaqNp9Inmo2";
             databaseReference= FirebaseDatabase.getInstance().getReference();
         }
 
@@ -49,13 +53,21 @@ import java.util.ArrayList;
             holder.trainingTime.setText(requests.get(position).trainingTime);
             holder.trainingTitle.setText(requests.get(position).trainingTitle);
             holder.paymentMethod.setText(requests.get(position).paymentMethod);
+            holder.trainerPhone.setText(requests.get(position).otherUserPhone);
+            holder.trainerPhone.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(Intent.ACTION_DIAL);
+                    intent.setData(Uri.parse("tel:" +holder.trainerPhone.getText()));
+                    context.startActivity(intent);
+                }
+            });
             holder.apply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     String traineeID = requests.get(holder.getAdapterPosition()).otherUserID;
                     String trainingID = requests.get(holder.getAdapterPosition()).trainingID;
-                    databaseReference.child("Users").
-                            child("Trainee").child(traineeID).child("trainings").child(trainingID).setValue(true);
+                    databaseReference.child("Users").child(traineeID).child("trainings").child(trainingID).setValue(true);
                     //add the trainee to the training participants list
                     databaseReference.child("Trainings").
                             child(trainingID).child("participants").child(traineeID).setValue(true);
@@ -85,6 +97,7 @@ import java.util.ArrayList;
                             holder.apply.setVisibility(View.GONE);
                             holder.message.setText("The training is rejected");
                             holder.message.setVisibility(View.VISIBLE);
+                            dialog.dismiss();
                         }
                     });
 
@@ -96,16 +109,16 @@ import java.util.ArrayList;
         private void removeRequest(int position){
             String requestID= requests.get(position).requestID;
             String traineeID= requests.get(position).otherUserID;
-            String userID= "Z1QT2iiO0ZVOMg7E8vph4TQQLT32";
+
             String trainingID = requests.get(position).trainingID;
 
             //remove the request from the trainer requests list
             databaseReference.child("Users").
-                    child("Trainer").child(userID).child("requests").child(requestID).removeValue();
+                    child(userID).child("requests").child(requestID).removeValue();
 
             //remove the request from the trainee requests list
             databaseReference.child("Users").
-                    child("Trainee").child(traineeID).child("requests").child(requestID).removeValue();
+                    child(traineeID).child("requests").child(requestID).removeValue();
 
             //remove the request from the requests list
             databaseReference.child("Requests").
@@ -120,7 +133,7 @@ import java.util.ArrayList;
         public static class myViewHolder extends RecyclerView.ViewHolder{
 
             ImageView traineeImage;
-            TextView traineeName,paymentMethod,trainingTitle,trainingDate,trainingTime,message;
+            TextView traineeName,paymentMethod,trainingTitle,trainingDate,trainingTime,trainerPhone,message;
             ImageButton reject,apply;
 
             public myViewHolder(@NonNull View itemView) {
@@ -138,6 +151,7 @@ import java.util.ArrayList;
                 trainingTitle=itemView.findViewById(R.id.training_title);
                 trainingDate=itemView.findViewById(R.id.request_training_date1);
                 trainingTime=itemView.findViewById(R.id.request_training_time1);
+                trainerPhone=itemView.findViewById(R.id.request_trainee_phone);
                 apply = itemView.findViewById(R.id.request_apply_button);
                 reject= itemView.findViewById(R.id.request_reject_button);
                 message = itemView.findViewById(R.id.message_request);

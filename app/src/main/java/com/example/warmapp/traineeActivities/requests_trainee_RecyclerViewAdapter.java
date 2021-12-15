@@ -84,11 +84,11 @@ public class requests_trainee_RecyclerViewAdapter extends RecyclerView.Adapter<r
 
         //remove the request from the trainee requests list
         databaseReference.child("Users").
-                child("Trainee").child(userID).child("requests").child(requestID).removeValue();
+                child(userID).child("requests").child(requestID).removeValue();
 
         //remove the request from the trainer requests list
         databaseReference.child("Users").
-                child("Trainer").child(trainerID).child("requests").child(requestID).removeValue();
+                child(trainerID).child("requests").child(requestID).removeValue();
 
         //remove the request from the requests list
         databaseReference.child("Requests").

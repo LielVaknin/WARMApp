@@ -11,8 +11,10 @@ import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.InputType;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
@@ -28,11 +30,16 @@ import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.warmapp.R;
 import com.example.warmapp.classes.MyTrainingsAdapter;
 import com.example.warmapp.classes.Training;
+import com.example.warmapp.classes.User;
+import com.example.warmapp.traineeActivities.SearchActivity;
+import com.example.warmapp.traineeActivities.TraineeRequestsActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.Slider;
 import com.google.android.material.textfield.TextInputEditText;
@@ -103,13 +110,48 @@ public class CalendarActivity extends AppCompatActivity {
 
     private FirebaseAuth auth;
     private DatabaseReference databaseReference;
-
+    String userID;
+    String userType;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_calendar);
+        userID = "qIcl2TIXEDbKwUziUDaqNp9Inmo2";
+        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.menu_schedule);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
+                switch (item.getItemId()){
+                    case R.id.menu_profile:
 
+                        /*intent = new Intent(TraineeRequestsActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();*/
+                        return true;
+                    case R.id.menu_search:
+                        intent = new Intent(CalendarActivity.this, SearchActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return true;
+                    case R.id.menu_schedule:
+                        return true;
+                    case R.id.menu_requests:
+                        intent = new Intent(CalendarActivity.this, TrainerRequestsActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return true;
+                    case R.id.menu_home:
+                        return true;
+                }
+                return false;
+
+
+
+            }
+        });
         initViews();
         putTrainingsDayOnCalendar();
 
@@ -146,7 +188,6 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void putTrainingsDayOnCalendar() {
         //get userID
-        String userID = "Z1QT2iiO0ZVOMg7E8vph4TQQLT32";
         events = new ArrayList<>();
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("Trainer").child(userID).child("trainings");
@@ -201,8 +242,6 @@ public class CalendarActivity extends AppCompatActivity {
         myTrainingsAdapter = new MyTrainingsAdapter(this, trainingsToShow);
         recyclerViewMyTrainings.setAdapter(myTrainingsAdapter);
 
-        //get userID
-        String userID = "Z1QT2iiO0ZVOMg7E8vph4TQQLT32";
 
         databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("Trainer").child(userID).child("trainings");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -341,7 +380,7 @@ public class CalendarActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         //databaseReference = FirebaseDatabase.getInstance().getReference("Trainings");
         //String trainingID = auth.getCurrentUser().getUid();
-        String trainerID = "Z1QT2iiO0ZVOMg7E8vph4TQQLT32";
+        String trainerID = "qIcl2TIXEDbKwUziUDaqNp9Inmo2";
 
         addTrainingButton.setOnClickListener(new View.OnClickListener() {
             @Override

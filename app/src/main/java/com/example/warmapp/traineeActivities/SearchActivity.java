@@ -8,8 +8,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
@@ -22,14 +24,19 @@ import com.example.warmapp.classes.MyAdapter;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.TrainingModel;
+import com.example.warmapp.classes.User;
 import com.example.warmapp.classes.UserTrainer;
+import com.example.warmapp.trainerActivities.CalendarActivity;
+import com.example.warmapp.trainerActivities.TrainerRequestsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.chip.Chip;
 import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.textfield.TextInputLayout;
@@ -94,6 +101,44 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        userID = "mEMcSemGPIMgWbP9anZ668m5KHH2";
+        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.menu_search);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
+                switch (item.getItemId()){
+                    case R.id.menu_profile:
+
+                        /*intent = new Intent(TraineeRequestsActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();*/
+                        return true;
+                    case R.id.menu_search:
+                        /*intent = new Intent(TraineeRequestsActivity.this, SearchActivity.class);
+                        startActivity(intent);
+                        finish();*/
+                        return true;
+                    case R.id.menu_schedule:
+                        intent = new Intent(SearchActivity.this, CalendarActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return true;
+                    case R.id.menu_requests:
+                        intent = new Intent(SearchActivity.this, TrainerRequestsActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return true;
+                    case R.id.menu_home:
+                        return true;
+                }
+                return false;
+
+
+
+            }
+        });
 
 // Search
         recyclerView = findViewById(R.id.m_RecycleView);
@@ -107,8 +152,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
                 }
                 userRequestsTrainings.clear();
                 userTrainings.clear();
-                 userType = "Trainee";
-                 userID = "mEMcSemGPIMgWbP9anZ668m5KHH2";
+
                 FirebaseDatabase.getInstance().getReference().child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {

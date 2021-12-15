@@ -6,7 +6,9 @@ import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
@@ -16,6 +18,10 @@ import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.RequestModel;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.UserTrainee;
+import com.example.warmapp.traineeActivities.SearchActivity;
+import com.example.warmapp.traineeActivities.TraineeRequestsActivity;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -36,7 +42,42 @@ public class TrainerRequestsActivity extends AppCompatActivity {
         setContentView(R.layout.activity_trainer_requests);
         recyclerView=findViewById(R.id.trainer_requests_list);
         requests=new ArrayList<>();
-        String userID="Z1QT2iiO0ZVOMg7E8vph4TQQLT32";
+        String userID="qIcl2TIXEDbKwUziUDaqNp9Inmo2";
+        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
+        bottomNavigationView.setSelectedItemId(R.id.menu_requests);
+        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+                Intent intent;
+                switch (item.getItemId()){
+                    case R.id.menu_profile:
+
+                        /*intent = new Intent(TraineeRequestsActivity.this, LoginActivity.class);
+                        startActivity(intent);
+                        finish();*/
+                        return true;
+                    case R.id.menu_search:
+                        intent = new Intent(TrainerRequestsActivity.this, SearchActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return true;
+                    case R.id.menu_schedule:
+                        intent = new Intent(TrainerRequestsActivity.this, CalendarActivity.class);
+                        startActivity(intent);
+                        finish();
+                        return true;
+                    case R.id.menu_requests:
+                        return true;
+                    case R.id.menu_home:
+                        return true;
+                }
+                return false;
+
+
+
+            }
+        });
+
         firebaseReference=FirebaseDatabase.getInstance().getReference();
         setUpRequests(userID);
 
@@ -44,7 +85,7 @@ public class TrainerRequestsActivity extends AppCompatActivity {
     }
 
     private void setUpRequests(String userID) {
-        firebaseReference.child("Users").child("Trainer").child(userID).child("requests").
+        firebaseReference.child("Users").child(userID).child("requests").
                 addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -91,13 +132,14 @@ public class TrainerRequestsActivity extends AppCompatActivity {
     }
 
     private void getTraineeDetails(String traineeID, String trainingID,RequestModel requestModel) {
-        firebaseReference.child("Users").child("Trainee").child(traineeID).addListenerForSingleValueEvent(new ValueEventListener() {
+        firebaseReference.child("Users").child(traineeID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserTrainee trainee = snapshot.getValue(UserTrainee.class);
                 String traineeName= trainee.getFirstName() + " "+trainee.getLastName();
                 requestModel.otherUserID=traineeID;
                 requestModel.otherUserName=traineeName;
+                requestModel.otherUserPhone=trainee.getPhone();
                 requestModel.trainingID=trainingID;
                 getTrainingDetails(trainingID,requestModel);
             }
