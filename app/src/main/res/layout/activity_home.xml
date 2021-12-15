@@ -6,4 +6,26 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <SearchView
+        android:layout_width="407dp"
+        android:layout_height="55dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView4"
+        android:layout_width="186dp"
+        android:layout_height="43dp"
+        android:text="My trainings"
+        android:textSize="30sp"
+        tools:layout_editor_absoluteX="81dp"
+        tools:layout_editor_absoluteY="106dp" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:layout_width="410dp"
+        android:layout_height="204dp"
+        tools:layout_editor_absoluteX="1dp"
+        tools:layout_editor_absoluteY="164dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

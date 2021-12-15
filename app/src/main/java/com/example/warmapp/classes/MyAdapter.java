@@ -3,6 +3,7 @@ package com.example.warmapp.classes;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,35 +18,72 @@ import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.warmapp.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.ArrayList;
 
 public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<TrainingModel> trainings;
+    FirebaseAuth auth;
+    String userType;
+    String userID;
 
     public MyAdapter(Context context, ArrayList<TrainingModel> trainings) {
         this.context = context;
         this.trainings = trainings;
+        auth= FirebaseAuth.getInstance();
+        userID="mEMcSemGPIMgWbP9anZ668m5KHH2";
     }
 
     @NonNull
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.training, parent, false);
+        View view = inflater.inflate(R.layout.training2, parent, false);
         return new MyAdapter.MyViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
+        databaseReference.child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                userType = snapshot.getValue(User.class).getUserType();
+                if(userType.equals("trainer")){
+                    holder.requestTraining.setVisibility(View.INVISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         Training training = trainings.get(position).training;
         String trainerName = trainings.get(position).trainerName;
-        holder.imageView.setImageResource(R.drawable.ic_user);
+        holder.trainerImage.setImageResource(R.drawable.ic_user);
         holder.tvTitle.setText(trainings.get(position).training.getTitle());
         holder.tvCity.setText(trainings.get(position).training.getCity());
         holder.tvTrainerName.setText(trainerName);
+
+        if(trainings.get(position).trainingStatus.equals("request")){
+            holder.requestTraining.setImageResource(R.drawable.ic_clock_1);
+            holder.requestTraining.setClickable(false);
+            holder.requestTraining.setEnabled(false);
+        } else if(trainings.get(position).trainingStatus.equals("apply")){
+            holder.requestTraining.setImageResource(R.drawable.ic_baseline_check_circle_outline_24);
+            holder.requestTraining.setClickable(false);
+            holder.requestTraining.setEnabled(false);
+        }
 
         holder.moreDetailsBtn.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("SetTextI18n")
@@ -60,35 +98,51 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 builder.setNegativeButton("Cancel", null);
                 AlertDialog alert = builder.create();
 
-                TextView text1 = dailogView.findViewById(R.id.title_dialog_text);
+                TextInputEditText text1 = dailogView.findViewById(R.id.title_dialog);
                 text1.setText(training.getTitle());
+                text1.setInputType(InputType.TYPE_NULL);
+                text1.setKeyListener(null);
 
-                TextView text2 = dailogView.findViewById(R.id.feature_dialog_text);
+                TextInputEditText text2 = dailogView.findViewById(R.id.features_dialog);
                 StringBuilder s = new StringBuilder();
                 int sizeFeatures = training.getFeatures().size() - 1;
                 for (String feature : training.getFeatures().keySet()) {
-                    s.append(training.getFeatures().get(feature)).append("  ");
+                    s.append(training.getFeatures().get(feature)).append(", ");
                 }
+
                 text2.setText(s.toString());
+                text2.setInputType(InputType.TYPE_NULL);
+                text2.setKeyListener(null);
 
-                TextView text3 = dailogView.findViewById(R.id.address_dialog_text);
+                TextInputEditText text3 = dailogView.findViewById(R.id.address_dialog);
                 text3.setText(training.getAddress());
+                text3.setInputType(InputType.TYPE_NULL);
+                text3.setKeyListener(null);
 
-                TextView text4 = dailogView.findViewById(R.id.date_dialog_text);
+                TextInputEditText text4 = dailogView.findViewById(R.id.date_dialog);
                 text4.setText(training.getDate());
+                text4.setInputType(InputType.TYPE_NULL);
+                text4.setKeyListener(null);
 
-                TextView text5 = dailogView.findViewById(R.id.starting_time_dialog_text);
+                TextInputEditText text5 = dailogView.findViewById(R.id.starting_time_dialog);
                 text5.setText(training.getStartTraining());
+                text5.setInputType(InputType.TYPE_NULL);
+                text5.setKeyListener(null);
 
-                TextView text6 = dailogView.findViewById(R.id.ending_time_dialog_text);
+                TextInputEditText text6 = dailogView.findViewById(R.id.ending_time_dialog);
                 text6.setText(training.getEndTraining());
+                text6.setInputType(InputType.TYPE_NULL);
+                text6.setKeyListener(null);
 
-                TextView text7 = dailogView.findViewById(R.id.price_dialog_text);
-                text7.setText(training.getPrice() + "");
+                TextInputEditText text7 = dailogView.findViewById(R.id.price_dialog);
+                text7.setText(training.getPrice() + "₪");
+                text7.setInputType(InputType.TYPE_NULL);
+                text7.setKeyListener(null);
 
-                TextView text8 = dailogView.findViewById(R.id.description_dialog_text);
+                TextInputEditText text8 = dailogView.findViewById(R.id.description_dialog);
                 text8.setText(training.getDetails());
-
+                text8.setInputType(InputType.TYPE_NULL);
+                text8.setKeyListener(null);
 
                 alert.show();
                 Button negativeButton = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
@@ -100,6 +154,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                 });
             }
         });
+
         holder.requestTraining.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -110,7 +165,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
                 builder.setView(dailogView);
 
-                TextView text1 = dailogView.findViewById(R.id.request_training_title1);
+                TextView text1 = dailogView.findViewById(R.id.training_title);
                 text1.setText(training.getTitle());
 
                 TextView text2 = dailogView.findViewById(R.id.trainer_name);
@@ -149,8 +204,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
                         request.setPaymentMethod(rb.getText().toString());
                         String requestID = FirebaseDatabase.getInstance().getReference().child("Requests").push().getKey();
                         FirebaseDatabase.getInstance().getReference().child("Requests").child(requestID).setValue(request);
-                        FirebaseDatabase.getInstance().getReference().child("Users").child("Trainer").child(training.getTrainerId()).child("requests").child(requestID).setValue(true);
-                        FirebaseDatabase.getInstance().getReference().child("Users").child("Trainee").child(userID).child("requests").child(requestID).setValue(true);
+                        FirebaseDatabase.getInstance().getReference().child("Users").child(training.getTrainerId()).child("requests").child(requestID).setValue(true);
+                        FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("requests").child(requestID).setValue(true);
+                        holder.requestTraining.setImageResource(R.drawable.ic_clock_1);
+                        holder.requestTraining.setClickable(false);
+                        holder.requestTraining.setEnabled(false);
                         alert.dismiss();
                         Toast t = Toast.makeText(context, "The request has been sent", Toast.LENGTH_SHORT);
                         t.show();
@@ -167,17 +225,14 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView imageView;
+        ImageView trainerImage, requestTraining;
         TextView tvTitle, tvCity, tvTrainerName;
         Button moreDetailsBtn;
-        FloatingActionButton requestTraining;
-        View container;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageView = itemView.findViewById(R.id.imageView);
-            container = itemView.findViewById(R.id.card_view_payment);
+            trainerImage = itemView.findViewById(R.id.imageView);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvCity = itemView.findViewById(R.id.tvCity);
             tvTrainerName = itemView.findViewById(R.id.tv_trainer_name);

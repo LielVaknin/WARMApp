@@ -2,22 +2,24 @@ package com.example.warmapp.traineeActivities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.Dialog;
+import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
-import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.warmapp.R;
 import com.example.warmapp.classes.MyAdapter;
+import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.TrainingModel;
 import com.example.warmapp.classes.UserTrainer;
@@ -39,13 +41,14 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
-import java.util.TimeZone;
+import java.util.Locale;
+import java.util.concurrent.Callable;
 
 public class SearchActivity extends AppCompatActivity implements Serializable {
 
@@ -54,7 +57,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     ArrayList<TrainingModel> trainings;
 
     Button mDatePickerBtn;
-    //    TextView mSelectedDateText;
+    Button searchBtn;
     RangeSlider rangeSlider;
 
     TextInputLayout textInputLayoutCity;
@@ -73,7 +76,17 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     Chip chipPreparationForCompetitions;
     Chip chipInjuryRehabilitation;
     ArrayList<String> selectedChips;
+    MaterialDatePicker<Long> materialDatePicker;
 
+    HashSet<String> userRequestsTrainings = new HashSet<>();
+    HashSet<String> userTrainings = new HashSet<>();
+
+    boolean titleSelected = true;
+    boolean citySelected = true;
+    boolean dateSelected = false;
+
+    String userType ;
+    String userID;
     DatabaseReference databaseReference;
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -82,6 +95,55 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
 
+// Search
+        recyclerView = findViewById(R.id.m_RecycleView);
+        searchBtn = findViewById(R.id.serach_button);
+        searchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                trainings.clear();
+                if(myAdapter != null) {
+                    myAdapter.notifyDataSetChanged();
+                }
+                userRequestsTrainings.clear();
+                userTrainings.clear();
+                 userType = "Trainee";
+                 userID = "mEMcSemGPIMgWbP9anZ668m5KHH2";
+                FirebaseDatabase.getInstance().getReference().child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        Log.d("f",snapshot.hasChild("requests")+"");
+                        Log.d("f",snapshot.hasChild("trainings")+"");
+                        if(!snapshot.hasChild("requests")){
+                            if(!snapshot.hasChild("trainings")) {
+                                findSelectedElements();
+                            }
+                            else{
+                                getUserTrainings();
+                            }
+                        }else{
+                            if(!snapshot.hasChild("trainings")){
+                                getUserRequests("found");
+                            }
+                            else{
+                                getUserRequests("trainings");
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+
+
+
+            }
+
+        });
+
+        // Chips
         chipGroupTraining = findViewById(R.id.group_training);
         chipOutdoorTraining = findViewById(R.id.outdoor_training);
         chipForMenOnly = findViewById(R.id.for_men_only);
@@ -116,27 +178,19 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         chipPreparationForCompetitions.setOnCheckedChangeListener(checkedChangeListener);
         chipInjuryRehabilitation.setOnCheckedChangeListener(checkedChangeListener);
 
+        // Calender
         mDatePickerBtn = findViewById(R.id.date_picker_btn);
-//        mSelectedDateText = findViewById(R.id.selected_date);
-
-        Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
-        calendar.clear();
-
-        long today = MaterialDatePicker.todayInUtcMilliseconds();
-
-        calendar.setTimeInMillis(today);
-
-        // CalendarConstraints
-        CalendarConstraints.Builder constraintBuilder = new CalendarConstraints.Builder();
-        constraintBuilder.setValidator(DateValidatorPointForward.now());
-
-        // MaterialDatePicker
-        MaterialDatePicker.Builder builder = MaterialDatePicker.Builder.datePicker();
-        builder.setTitleText("Select a date");
-        builder.setSelection(today);
-        builder.setCalendarConstraints(constraintBuilder.build());
-        final MaterialDatePicker materialDatePicker = builder.build();
-
+        materialDatePicker = MaterialDatePicker.Builder.datePicker()
+                .setTitleText("Select a date")
+                .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
+                .setCalendarConstraints(new CalendarConstraints.Builder().setValidator(DateValidatorPointForward.now()).build())
+                .build();
+        materialDatePicker.addOnNegativeButtonClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mDatePickerBtn.setText("Select a date");
+            }
+        });
         mDatePickerBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -146,11 +200,13 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                mDatePickerBtn.setText(materialDatePicker.getHeaderText());
-//                mSelectedDateText.setText(materialDatePicker.getHeaderText());
+                SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+                mDatePickerBtn.setText(simpleFormat.format(selection));
+                dateSelected = true;
             }
         });
 
+        // Range slider
         rangeSlider = findViewById(R.id.sliderRange);
         rangeSlider.setLabelFormatter(new LabelFormatter() {
             @NonNull
@@ -158,15 +214,16 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
             public String getFormattedValue(float value) {
                 NumberFormat currencyFormat = NumberFormat.getCurrencyInstance();
                 currencyFormat.setCurrency(Currency.getInstance("ILS"));
-                return currencyFormat.format(value);
+                return currencyFormat.format((int) value);
             }
         });
 
+        // Titles and Cities
         textInputLayoutTitle = findViewById(R.id.menu_drop2);
         autoCompleteTextViewTitle = findViewById(R.id.drop_titles);
         textInputLayoutCity = findViewById(R.id.menu_drop);
         autoCompleteTextCity = findViewById(R.id.drop_cities);
-        recyclerView = findViewById(R.id.m_RecycleView);
+//        recyclerView = findViewById(R.id.m_RecycleView);
 
         String[] titles = getResources().getStringArray(R.array.Titles);
         ArrayAdapter<String> titleAdapter = new ArrayAdapter<>(SearchActivity.this, R.layout.list, titles);
@@ -176,50 +233,143 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(SearchActivity.this, R.layout.list, cities);
         autoCompleteTextCity.setAdapter(cityAdapter);
 
-//        databaseReference = FirebaseDatabase.getInstance().getReference("Trainings");
-//        Training training = new Training("type.t" ,"Tel Aviv-Yafo","gg","3452432","43","43","localDate",534);
-//        Training training1 = new Training("type.t" ,"Rehovot","gg","3452432","43","43","localDate",534);
-//        Training training2 = new Training("type.t" ,"Jerusalem","gg","3452432","43","43","localDate",534);
-//        databaseReference.child("train").setValue(training);
-//        databaseReference.child("train2").setValue(training1);
-//        databaseReference.child("train3").setValue(training2);
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Trainings");
         trainings = new ArrayList<>();
     }
+    public void getUserRequests(String callback){
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("requests").addListenerForSingleValueEvent(new ValueEventListener() {
+            int counter=0;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot1) {
 
+                for (DataSnapshot dataSnapshot : snapshot1.getChildren()) {
+
+                    String requestID = dataSnapshot.getKey();
+                    FirebaseDatabase.getInstance().getReference().child("Requests").child(requestID).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            counter++;
+                            String requestTrainingID = snapshot.getValue(Request.class).getTrainingID();
+                            userRequestsTrainings.add(requestTrainingID);
+                            if(counter==snapshot1.getChildrenCount()){
+                                if(callback.equals("trainings")){
+                                    getUserTrainings();
+                                }
+                                else{
+                                    findSelectedElements();
+                                }
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                }
+
+            }
+
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+    private void getUserTrainings() {
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("trainings").addListenerForSingleValueEvent(new ValueEventListener() {
+            int counter=0;
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    counter++;
+                    String trainingID = dataSnapshot.getKey();
+                    userTrainings.add(trainingID);
+                    if(counter==snapshot.getChildrenCount()) {
+                        findSelectedElements();
+                    }
+                }
+
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+    }
     public void filterDataBase(String city, String title, String date, List<Float> values) {
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                trainings.clear();
+                int countTrainings = 0;
+                boolean flag = false;
+                if (title.equals("")) {
+                    titleSelected = false;
+                } else {
+                    titleSelected = true;
+                }
+                if (city.equals("")) {
+                    citySelected = false;
+                } else {
+                    citySelected = true;
+                }
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    countTrainings++;
                     Training training = dataSnapshot.getValue(Training.class);
                     TrainingModel trainingModel = new TrainingModel();
-                    boolean flag = true;
-                    for (int i = 0; i < selectedChips.size() && flag; i++){
-                        HashMap<String, String> features = training.getFeatures();
-                        if(features.get(selectedChips.get(i)) == null) {
-                            flag = false;
-                        }
-                    }
-                    if (city.equals(training.getCity()) && title.equals(training.getTitle()) && date.equals(training.getDate()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1) && flag) {
-                        trainingModel.training = training;
-                        String trainerId = training.getTrainerId();
-                        FirebaseDatabase.getInstance().getReference().child("Users").child("Trainer").child(trainerId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-                            @Override
-                            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                                if (task.isSuccessful()) {
-                                    UserTrainer userTrainer = task.getResult().getValue(UserTrainer.class);
-                                    trainingModel.trainerName = userTrainer.getFirstName() + " " + userTrainer.getLastName();
-                                    trainings.add(trainingModel);
-                                }
+                    boolean hasFeatures = true;
+                    HashMap<String, String> features = training.getFeatures();
+                    if (features != null) {
+                        for (int i = 0; i < selectedChips.size() && hasFeatures; i++) {
+                            if (features.get(selectedChips.get(i)) == null) {
+                                hasFeatures = false;
                             }
-                        });
+                        }
+                    } else if (!selectedChips.isEmpty()) {
+                        hasFeatures = false;
+                    }
+
+                    if ( training.getParticipants()==null ||(training.getParticipants().size() < training.getMaxParticipants()) ) {
+                        if (selectedChips.isEmpty() && !titleSelected && !citySelected && !dateSelected && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1)) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (titleSelected && citySelected && dateSelected && city.equals(training.getCity()) && title.equals(training.getTitle()) && date.equals(training.getDate()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1) && hasFeatures) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (!titleSelected && citySelected && !dateSelected && city.equals(training.getCity()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1) && hasFeatures) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (titleSelected && !citySelected && !dateSelected && title.equals(training.getTitle()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1) && hasFeatures) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (!titleSelected && !citySelected && dateSelected && date.equals(training.getDate()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1) && hasFeatures) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (titleSelected && citySelected && !dateSelected && city.equals(training.getCity()) && title.equals(training.getTitle()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1) && hasFeatures) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (!titleSelected && citySelected && dateSelected && city.equals(training.getCity()) && date.equals(training.getDate()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1) && hasFeatures) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (titleSelected && !citySelected && dateSelected && title.equals(training.getTitle()) && date.equals(training.getDate()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1) && hasFeatures) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (hasFeatures && !titleSelected && !citySelected && !dateSelected && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1)) {
+                            flag = true;
+                            setTrainingModel(trainingModel, training);
+                        } else if (snapshot.getChildrenCount() == countTrainings && !flag) {
+                            Toast.makeText(SearchActivity.this, "No trainings found", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
 
-            // && title.equals(training.getTitle()) && date.equals(training.getDate()) && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1)
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -227,20 +377,45 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         });
     }
 
-    public void onClickSearch(View view) throws InterruptedException {
+    public void setTrainingModel(TrainingModel trainingModel, Training training) {
+        trainingModel.training = training;
+        if (userRequestsTrainings.contains(training.getTrainingID())) {
+            trainingModel.trainingStatus = "request";
+        } else if (userTrainings.contains(training.getTrainingID())) {
+            trainingModel.trainingStatus = "apply";
+        }
+        String trainerId = training.getTrainerId();
+        FirebaseDatabase.getInstance().getReference().child("Users").child(trainerId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DataSnapshot> task) {
+                if (task.isSuccessful()) {
+                    Log.d("training:", training.getTitle());
+                    UserTrainer userTrainer = task.getResult().getValue(UserTrainer.class);
+                    trainingModel.trainerName = userTrainer.getFirstName() + " " + userTrainer.getLastName();
+                    trainings.add(trainingModel);
+                    //myAdapter.notifyDataSetChanged();
+                    setAdapter();
+                    Log.d("training:", training.getTitle());
+
+                }
+            }
+        });
+    }
+
+    public void setAdapter() {
+        Log.d("adapter:", "" + trainings.size());
+        myAdapter = new MyAdapter(this, trainings);
+        recyclerView.setAdapter(myAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+    }
+
+    public void findSelectedElements() {
+        Log.d("find","one more");
         String city = autoCompleteTextCity.getText().toString();
         String title = autoCompleteTextViewTitle.getText().toString();
-//        String date = mSelectedDateText.getText().toString();
         String date = mDatePickerBtn.getText().toString();
         List<Float> values = rangeSlider.getValues();
         filterDataBase(city, title, date, values);
-//        Thread.sleep(5000);
-        try {
-            myAdapter = new MyAdapter(this, trainings);
-            recyclerView.setAdapter(myAdapter);
-            recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 }

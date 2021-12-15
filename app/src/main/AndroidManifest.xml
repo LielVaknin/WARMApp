@@ -16,6 +16,9 @@
             android:name=".traineeActivities.TraineeRequestsActivity"
             android:exported="true" />
         <activity
+            android:name=".classes.TrainerProfile"
+            android:exported="false" />
+        <activity
             android:name=".SplashActivity"
             android:exported="false" />
         <activity

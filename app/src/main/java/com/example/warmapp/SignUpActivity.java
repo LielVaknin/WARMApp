@@ -122,7 +122,7 @@ public class SignUpActivity extends AppCompatActivity {
                 } else {
                     radioButton = findViewById(radioId);
                     String selected_user = radioButton.getText().toString();
-                    RegisterUserAccount(txt_first_Name, txt_last_name, txt_phone, txt_email, txt_password, selected_user.equals("trainer"));//auth signup
+                    RegisterUserAccount(txt_first_Name, txt_last_name, txt_phone, txt_email, txt_password, selected_user);//auth signup
                 }
             }
         });
@@ -139,22 +139,24 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     //helper functions
-    private void RegisterUserAccount(String firstName, String lastName, String phone, String email, String pass, boolean flag) {
+    private void RegisterUserAccount(String firstName, String lastName, String phone, String email, String pass, String userType) {
         auth.createUserWithEmailAndPassword(email, pass)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             String userID = auth.getCurrentUser().getUid();
-                            if (flag) {
-                                UserTrainer user = new UserTrainer(userID, firstName, lastName, email, pass, phone);
-                                databaseReference.child("Trainer").child(userID).setValue(user);
+                            if (userType.equals("trainer")) {
+                                UserTrainer user = new UserTrainer(firstName, lastName, email, pass, phone,userType);
+                                databaseReference.child(userID).setValue(user);
+                                databaseReference.child(userID).child("userType").setValue(userType);
                             } else {
-                                UserTrainee user = new UserTrainee(userID, firstName, lastName, email, pass, phone);
-                                databaseReference.child("Trainee").child(userID).setValue(user);
+                                UserTrainee user = new UserTrainee(firstName, lastName, email, pass, phone,userType);
+                                databaseReference.child(userID).setValue(user);
+                                databaseReference.child(userID).child("userType").setValue(userType);
                             }
                             Toast.makeText(SignUpActivity.this, "Registering User successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SignUpActivity.this,HomeActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
                             startActivity(intent);
                             finish();
                         } else {

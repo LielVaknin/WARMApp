@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class User {
-    private String uniqueID;
     private String firstName;
     private String lastName;
     private String mail;
@@ -13,10 +12,10 @@ public class User {
     private String phone;
     private HashMap<String,Boolean> requests;
     private HashMap<String,Boolean> trainings;
+    String userType;
 
 
-    public User(String uniqueid, String firstName, String lastName, String mail, String password, String phone) {
-        this.uniqueID = uniqueid;
+    public User(String firstName, String lastName, String mail, String password, String phone, String userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.mail = mail;
@@ -24,9 +23,9 @@ public class User {
         this.phone = phone;
         requests= new HashMap<>();
         trainings=new HashMap<>();
+        this.userType = userType;
     }
     public User(){}
-    public String getUniqueID() { return uniqueID; }
 
     public String getFirstName() {
         return firstName;
@@ -77,4 +76,8 @@ public class User {
     public HashMap<String,Boolean> getTrainings() { return trainings; }
 
     public void addTraining(String trainingID) { this.trainings.put(trainingID,true); }
+
+    public String getUserType() {
+        return userType;
+    }
 }

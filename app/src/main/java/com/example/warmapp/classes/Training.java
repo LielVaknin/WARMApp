@@ -133,6 +133,9 @@ public class Training implements Serializable {
         this.maxParticipants = maxParticipants;
     }
 
+    public HashMap<String, Boolean> getParticipants() {
+        return participants;
+    }
 
     @Override
     public String toString() {

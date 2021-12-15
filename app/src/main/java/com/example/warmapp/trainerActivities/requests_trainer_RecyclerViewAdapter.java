@@ -135,7 +135,7 @@ import java.util.ArrayList;
 
                 });
                 paymentMethod=itemView.findViewById(R.id.request_payment_method1);
-                trainingTitle=itemView.findViewById(R.id.request_training_title1);
+                trainingTitle=itemView.findViewById(R.id.training_title);
                 trainingDate=itemView.findViewById(R.id.request_training_date1);
                 trainingTime=itemView.findViewById(R.id.request_training_time1);
                 apply = itemView.findViewById(R.id.request_apply_button);

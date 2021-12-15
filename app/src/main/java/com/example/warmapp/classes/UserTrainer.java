@@ -6,9 +6,10 @@ import java.util.ArrayList;
 public class UserTrainer extends User{
     ArrayList<File> diplomas;
     float rating;
+    String description;
 
-    public UserTrainer(String uid, String firstName, String lastName, String mail, String password, String phone) {
-        super(uid, firstName, lastName, mail, password, phone);
+    public UserTrainer(String firstName, String lastName, String mail, String password, String phone, String userType) {
+        super(firstName, lastName, mail, password, phone, userType);
     }
     public UserTrainer(){}
     public void removeTraining(Training training){}
@@ -20,7 +21,7 @@ public class UserTrainer extends User{
     public float getRating() {
         return rating;
     }
-
+    public String getDescription() { return description; }
     public void setRating(float rating) {
         this.rating = rating;
     }

@@ -6,56 +6,50 @@
     android:layout_height="match_parent"
     tools:context=".traineeActivities.SearchActivity">
 
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/menu_drop2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="387dp"
-        android:layout_height="82dp"
-        android:layout_marginTop="64dp"
-        android:hint="Title"
-        android:padding="20dp"
-        android:textColorHint="@color/white"
-        app:boxBackgroundColor="@color/blue_dark"
-        app:boxCornerRadiusBottomEnd="18dp"
-        app:boxCornerRadiusBottomStart="18dp"
-        app:boxCornerRadiusTopEnd="18dp"
-        app:boxCornerRadiusTopStart="18dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="128dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toTopOf="parent"
+        app:startIconDrawable="@drawable/ic_fitness_center_black_24dp">
 
         <AutoCompleteTextView
             android:id="@+id/drop_titles"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
-
-
+            android:background="@drawable/edit_text_bg"
+            android:completionThreshold="1"
+            android:hint="Title" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/menu_drop"
-        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
-        android:layout_width="387dp"
-        android:layout_height="82dp"
-        android:hint="City"
-        android:padding="20dp"
-        android:textColorHint="@color/white"
-        app:boxBackgroundColor="@color/blue_dark"
-        app:boxCornerRadiusBottomEnd="18dp"
-        app:boxCornerRadiusBottomStart="18dp"
-        app:boxCornerRadiusTopEnd="18dp"
-        app:boxCornerRadiusTopStart="18dp"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu_drop2">
+        app:layout_constraintTop_toBottomOf="@+id/menu_drop2"
+        app:startIconDrawable="@drawable/ic_map_pin_1">
 
         <AutoCompleteTextView
             android:id="@+id/drop_cities"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:inputType="none" />
+            android:background="@drawable/edit_text_bg"
+            android:completionThreshold="1"
+            android:hint="City" />
 
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,9 +57,14 @@
         android:id="@+id/serach_button"
         android:layout_width="122dp"
         android:layout_height="47dp"
-        android:layout_marginTop="20dp"
-        android:onClick="onClickSearch"
+        android:layout_marginTop="24dp"
+        android:backgroundTint="@color/grey_400"
+        android:focusable="false"
+        android:focusableInTouchMode="false"
         android:text="Search"
+        android:textColor="@color/black"
+        android:textIsSelectable="true"
+        app:cornerRadius="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,8 +74,7 @@
         android:id="@+id/sliderRange"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
-        android:stepSize="1"
+        android:layout_marginTop="28dp"
         android:value="20.0"
         android:valueFrom="0"
         android:valueTo="500"
@@ -86,46 +84,36 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/date_picker_btn"
-        app:thumbColor="@color/blue_dark"
-        app:tickColor="@color/blue_dark"
-        app:trackColor="@color/blue_dark"
-        app:values="@array/rangeSliderValues" />
+        app:thumbColor="@color/black"
+        app:tickColor="@color/grey_400"
+        app:values="@array/rangeSliderValues"
+        app:trackColorActive="@color/black"/>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/m_RecycleView"
-        android:layout_width="385dp"
-        android:layout_height="197dp"
-        android:layout_marginTop="31dp"
+        android:layout_width="391dp"
+        android:layout_height="194dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/serach_button"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintVertical_bias="0.0" />
 
     <Button
         android:id="@+id/date_picker_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        android:layout_marginTop="5dp"
+        android:backgroundTint="@color/grey_400"
         android:text="Select a date"
+        android:textColor="@color/black"
+        app:cornerRadius="15dp"
+        app:icon="@drawable/ic_calendar"
+        app:iconTint="#000000"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/features_chip" />
-
-    <TextView
-        android:id="@+id/selected_date"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:text="Selected Date"
-        android:visibility="invisible"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/date_picker_btn"
-        app:layout_constraintHorizontal_bias="0.508"
-        app:layout_constraintStart_toStartOf="@+id/date_picker_btn"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_btn"
-        app:layout_constraintVertical_bias="0.0" />
 
     <HorizontalScrollView
         android:id="@+id/features_chip"
@@ -134,7 +122,7 @@
         android:layout_marginTop="16dp"
         android:scrollbars="none"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/menu_drop">
 
@@ -144,8 +132,6 @@
             android:layout_width="391dp"
             android:layout_height="47dp"
             android:layout_marginStart="12dp"
-            android:layout_marginTop="36dp"
-            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -158,8 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Group training"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/outdoor_training"
@@ -167,8 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Outdoor training"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/for_men_only"
@@ -176,8 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="For men only"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/for_women_only"
@@ -185,8 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="For women only"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/youth"
@@ -194,8 +176,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Youth"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/children"
@@ -203,8 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Children"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/for_pregnant_women"
@@ -212,8 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="For pregnant women"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/postpartum_women"
@@ -221,8 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Postpartum women"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/preparation_for_competitions"
@@ -230,8 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Preparation for competitions"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/injury_rehabilitation"
@@ -239,21 +216,68 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Injury rehabilitation"
-                android:textColor="@color/white"
-                app:chipBackgroundColor="@color/blue_dark" />
+                app:chipBackgroundColor="@color/grey_400" />
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 
     <TextView
-        android:id="@+id/search"
-        android:layout_width="127dp"
-        android:layout_height="39dp"
-        android:layout_marginTop="16dp"
-        android:text="Search"
-        android:textColor="@color/blue_dark"
+        android:id="@+id/search_training"
+        android:layout_width="256dp"
+        android:layout_height="47dp"
+        android:layout_marginTop="72dp"
+        android:text="Search training"
+        android:textColor="@color/black"
         android:textSize="30dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.045"
+        app:layout_constraintHorizontal_bias="0.103"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/textView5"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginBottom="2dp"
+        android:text="0₪"
+        android:textSize="15sp"
+        app:layout_constraintBottom_toTopOf="@+id/sliderRange"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker_btn"
+        app:layout_constraintVertical_bias="1.0" />
+
+    <TextView
+        android:id="@+id/textView6"
+        android:layout_width="41dp"
+        android:layout_height="18dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="3dp"
+        android:text="500₪"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toTopOf="@+id/sliderRange"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker_btn"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:text="price:"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toStartOf="@+id/textView6"
+        app:layout_constraintHorizontal_bias="0.53"
+        app:layout_constraintStart_toEndOf="@+id/textView5"
+        app:layout_constraintTop_toBottomOf="@+id/date_picker_btn" />
+
+    <SearchView
+        android:layout_width="407dp"
+        android:layout_height="55dp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
