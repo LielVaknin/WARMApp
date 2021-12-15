@@ -1,9 +1,5 @@
 package com.example.warmapp.classes;
 
-import com.example.warmapp.classes.Training;
-
-
-
 public class Request{
 
     String traineeID;

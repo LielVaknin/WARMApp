@@ -1,14 +1,9 @@
 package com.example.warmapp.classes;
 
 import java.io.Serializable;
-import java.sql.Time;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 
 public class Training implements Serializable {
-
-
     String trainingID;
     String title;
     String city;
@@ -25,7 +20,7 @@ public class Training implements Serializable {
 
 
     public Training(){}
-    public Training(String trainingID, String title, String city, String address, String trainerId, String startTraining, String endTraining, String date, int price) {
+    public Training(String trainingID, String title, String city, String address, String trainerId, String startTraining, String endTraining, String date,String details, int price, int maxParticipants,HashMap<String,String> features) {
         this.trainingID=trainingID;
         this.title = title;
         this.city = city;
@@ -35,8 +30,12 @@ public class Training implements Serializable {
         this.endTraining = endTraining;
         this.date = date;
         this.price = price;
+        this.details = details;
         this.participants = new HashMap<>();
+        this.maxParticipants = maxParticipants;
+        this.features = features;
     }
+
     public String getTrainingID() {
         return trainingID;
     }

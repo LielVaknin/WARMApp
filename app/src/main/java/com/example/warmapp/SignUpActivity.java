@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.warmapp.classes.User;
 import com.example.warmapp.classes.UserTrainee;
 import com.example.warmapp.classes.UserTrainer;
+import com.example.warmapp.trainerActivities.CalendarActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputEditText;
@@ -156,7 +157,7 @@ public class SignUpActivity extends AppCompatActivity {
                                 databaseReference.child(userID).child("userType").setValue(userType);
                             }
                             Toast.makeText(SignUpActivity.this, "Registering User successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, CalendarActivity.class);
                             startActivity(intent);
                             finish();
                         } else {

@@ -1,7 +1,5 @@
 package com.example.warmapp.classes;
 
-import java.io.File;
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class User {
@@ -10,20 +8,20 @@ public class User {
     private String mail;
     private String password;
     private String phone;
+    private String userType;
     private HashMap<String,Boolean> requests;
     private HashMap<String,Boolean> trainings;
-    String userType;
 
 
-    public User(String firstName, String lastName, String mail, String password, String phone, String userType) {
+    public User(String firstName, String lastName, String mail, String password, String phone,String userType) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.mail = mail;
         this.password = password;
         this.phone = phone;
+        this.userType = userType;
         requests= new HashMap<>();
         trainings=new HashMap<>();
-        this.userType = userType;
     }
     public User(){}
 
@@ -63,6 +61,10 @@ public class User {
         return phone;
     }
 
+    public String userType() {
+        return userType;
+    }
+
     public void setPhone(String phone) { this.phone = phone; }
 
     public HashMap<String, Boolean> getRequests() {
@@ -76,8 +78,4 @@ public class User {
     public HashMap<String,Boolean> getTrainings() { return trainings; }
 
     public void addTraining(String trainingID) { this.trainings.put(trainingID,true); }
-
-    public String getUserType() {
-        return userType;
-    }
 }

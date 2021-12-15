@@ -1,0 +1,296 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:fillViewport="true" >
+
+    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="16dp">
+
+        <ImageView
+            android:id="@+id/exit_dialog"
+            android:layout_width="wrap_content"
+            android:layout_height="24dp"
+            android:layout_marginTop="4dp"
+            android:src="@drawable/ic_x"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/txt_complete_the_following_steps"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="43dp"
+            android:layout_marginTop="24dp"
+            android:layout_marginEnd="50dp"
+            android:text="Complete the following steps for adding a workout:"
+            android:textSize="14sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.36"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spinner_title"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="@+id/txt_complete_the_following_steps"
+            app:layout_constraintStart_toStartOf="@+id/txt_complete_the_following_steps"
+            app:layout_constraintTop_toBottomOf="@+id/txt_complete_the_following_steps">
+
+            <AutoCompleteTextView
+                android:id="@+id/auto_complete_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Type"
+                android:completionThreshold="1"/>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_features"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="@+id/spinner_title"
+            app:layout_constraintStart_toStartOf="@+id/spinner_title"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_title"
+            app:startIconDrawable="@drawable/ic_activity">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_features"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Features" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+
+        <TextView
+            android:id="@+id/text_participants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Participants:"
+            app:layout_constraintStart_toStartOf="@+id/text_input_layout_features"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_features" />
+
+        <com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker
+            android:id="@+id/scroll_number_picker"
+            android:layout_width="wrap_content"
+            android:layout_height="35dp"
+            android:layout_margin="10dp"
+            android:layout_marginTop="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/text_input_layout_features"
+            app:layout_constraintHorizontal_bias="0.093"
+            app:layout_constraintStart_toEndOf="@+id/text_participants"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_features"
+            app:snp_buttonIconLeft="@drawable/ic_minus_circle"
+            app:snp_buttonIconRight="@drawable/ic_plus_circle"
+            app:snp_buttonTouchScaleFactor="0.7"
+            app:snp_maxValue="30"
+            app:snp_minValue="1"
+            app:snp_value="1"
+            app:snp_orientation="horizontal"
+            app:snp_scrollEnabled="true"
+            app:snp_valueMarginEnd="20dp"
+            app:snp_valueMarginStart="20dp"
+            app:snp_value_text_color="@color/black"
+            app:snp_value_text_size="18sp" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_date"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/text_input_layout_features"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/text_participants"
+            app:layout_constraintTop_toBottomOf="@+id/text_participants"
+            app:startIconDrawable="@drawable/ic_calendar">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_date"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Date" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_start_time"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toStartOf="@+id/text_input_layout_end_time"
+            app:layout_constraintStart_toStartOf="@+id/text_input_layout_date"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_date"
+            app:startIconDrawable="@drawable/ic_clock">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_start_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Start Time" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_end_time"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="176dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/text_input_layout_date"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/text_input_layout_start_time"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_date"
+            app:startIconDrawable="@drawable/ic_clock">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_end_time"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:hint="End Time" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/spinner_cities"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="65dp"
+            app:layout_constraintEnd_toEndOf="@+id/text_input_layout_end_time"
+            app:layout_constraintStart_toStartOf="@+id/text_input_layout_start_time"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_date"
+            app:startIconDrawable="@drawable/ic_map_pin">
+
+            <AutoCompleteTextView
+                android:id="@+id/auto_complete_cities"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:completionThreshold="1"
+                android:hint="City" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_address"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/spinner_cities"
+            app:layout_constraintStart_toStartOf="@+id/spinner_cities"
+            app:layout_constraintTop_toBottomOf="@+id/spinner_cities"
+            app:startIconDrawable="@drawable/ic_map_pin">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_address"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Address" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/txt_zero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="0₪"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/text_input_layout_address"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/text_input_layout_address"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_address" />
+
+
+        <TextView
+            android:id="@+id/txt_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="price:"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/text_input_layout_address"
+            app:layout_constraintHorizontal_bias="0.495"
+            app:layout_constraintStart_toStartOf="@+id/text_input_layout_address"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_address" />
+
+        <TextView
+            android:id="@+id/txt_five_hundred"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="500₪"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="@+id/text_input_layout_address"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/text_input_layout_address"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_address" />
+
+        <com.google.android.material.slider.Slider
+            android:id="@+id/slider_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:valueFrom="0"
+            android:valueTo="500"
+            app:layout_constraintEnd_toEndOf="@+id/txt_five_hundred"
+            app:layout_constraintStart_toStartOf="@+id/txt_zero"
+            app:layout_constraintTop_toBottomOf="@+id/txt_price" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/text_input_layout_details"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:endIconMode="clear_text"
+            app:layout_constraintEnd_toEndOf="@+id/slider_money"
+            app:layout_constraintStart_toStartOf="@+id/slider_money"
+            app:layout_constraintTop_toBottomOf="@+id/slider_money">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/text_input_edit_details"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:hint="Details" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/button_add_training"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:backgroundTint="@color/grey_500"
+            android:text="Add"
+            android:textColor="#000000"
+            app:cornerRadius="18dp"
+            app:layout_constraintEnd_toEndOf="@+id/text_input_layout_details"
+            app:layout_constraintStart_toStartOf="@+id/text_input_layout_details"
+            app:layout_constraintTop_toBottomOf="@+id/text_input_layout_details" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>
