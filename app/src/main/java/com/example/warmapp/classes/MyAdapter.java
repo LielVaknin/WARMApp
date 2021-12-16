@@ -36,11 +36,12 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     String userType;
     String userID;
 
-    public MyAdapter(Context context, ArrayList<TrainingModel> trainings) {
+    public MyAdapter(Context context, ArrayList<TrainingModel> trainings,String userType) {
         this.context = context;
         this.trainings = trainings;
         auth= FirebaseAuth.getInstance();
-        userID="mEMcSemGPIMgWbP9anZ668m5KHH2";
+        userID=auth.getCurrentUser().getUid();
+        this.userType=userType;
     }
 
     @NonNull
@@ -54,20 +55,9 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        databaseReference.child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userType = snapshot.getValue(User.class).getUserType();
-                if(userType.equals("trainer")){
-                    holder.requestTraining.setVisibility(View.INVISIBLE);
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        if(userType.equals("trainer")){
+            holder.requestTraining.setVisibility(View.INVISIBLE);
+        }
         Training training = trainings.get(position).training;
         String trainerName = trainings.get(position).trainerName;
         holder.trainerImage.setImageResource(R.drawable.ic_user);

@@ -17,6 +17,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warmapp.R;
 import com.example.warmapp.classes.RequestModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -26,12 +27,16 @@ public class requests_trainee_RecyclerViewAdapter extends RecyclerView.Adapter<r
     Context context;
     ArrayList<RequestModel> requests;
     DatabaseReference databaseReference;
+    FirebaseAuth auth;
+    String userID;
 
 
     public requests_trainee_RecyclerViewAdapter(Context context, ArrayList<RequestModel> requests){
         this.context=context;
         this.requests=requests;
         databaseReference= FirebaseDatabase.getInstance().getReference();
+        auth= FirebaseAuth.getInstance();
+        userID=auth.getCurrentUser().getUid();
     }
 
     @NonNull
@@ -79,7 +84,6 @@ public class requests_trainee_RecyclerViewAdapter extends RecyclerView.Adapter<r
     private void removeRequest(int position){
         String requestID= requests.get(position).requestID;
         String trainerID= requests.get(position).otherUserID;
-        String userID= "8dxiQ2SiWIVWbDED9nfKJVfEmvp1";
         String trainingID = requests.get(position).trainingID;
 
         //remove the request from the trainee requests list

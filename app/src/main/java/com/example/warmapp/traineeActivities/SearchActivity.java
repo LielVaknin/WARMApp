@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -17,9 +16,12 @@ import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
+import com.example.warmapp.classes.AccountActivity;
 import com.example.warmapp.classes.MyAdapter;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.Training;
@@ -27,7 +29,7 @@ import com.example.warmapp.classes.TrainingModel;
 import com.example.warmapp.classes.User;
 import com.example.warmapp.classes.UserTrainer;
 import com.example.warmapp.trainerActivities.CalendarActivity;
-import com.example.warmapp.trainerActivities.TrainerRequestsActivity;
+import com.example.warmapp.trainerActivities.RequestsActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -40,6 +42,7 @@ import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.RangeSlider;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,7 +58,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
-import java.util.concurrent.Callable;
 
 public class SearchActivity extends AppCompatActivity implements Serializable {
 
@@ -66,6 +68,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     Button mDatePickerBtn;
     Button searchBtn;
     RangeSlider rangeSlider;
+    ProgressBar progressBar;
 
     TextInputLayout textInputLayoutCity;
     AutoCompleteTextView autoCompleteTextCity;
@@ -91,7 +94,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     boolean titleSelected = true;
     boolean citySelected = true;
     boolean dateSelected = false;
-
+    FirebaseAuth auth;
     String userType ;
     String userID;
     DatabaseReference databaseReference;
@@ -101,7 +104,8 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        userID = "mEMcSemGPIMgWbP9anZ668m5KHH2";
+        auth= FirebaseAuth.getInstance();
+        userID=auth.getCurrentUser().getUid();
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.menu_search);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -111,9 +115,9 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
                 switch (item.getItemId()){
                     case R.id.menu_profile:
 
-                        /*intent = new Intent(TraineeRequestsActivity.this, LoginActivity.class);
+                        intent = new Intent(SearchActivity.this, AccountActivity.class);
                         startActivity(intent);
-                        finish();*/
+                        finish();
                         return true;
                     case R.id.menu_search:
                         /*intent = new Intent(TraineeRequestsActivity.this, SearchActivity.class);
@@ -126,11 +130,14 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
                         finish();
                         return true;
                     case R.id.menu_requests:
-                        intent = new Intent(SearchActivity.this, TrainerRequestsActivity.class);
+                        intent = new Intent(SearchActivity.this, RequestsActivity.class);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_home:
+                        intent = new Intent(SearchActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
                         return true;
                 }
                 return false;
@@ -143,9 +150,11 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
 // Search
         recyclerView = findViewById(R.id.m_RecycleView);
         searchBtn = findViewById(R.id.serach_button);
+        progressBar=findViewById(R.id.search_progress_bar);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                progressBar.setVisibility(View.VISIBLE);
                 trainings.clear();
                 if(myAdapter != null) {
                     myAdapter.notifyDataSetChanged();
@@ -156,6 +165,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
                 FirebaseDatabase.getInstance().getReference().child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        userType=snapshot.getValue(User.class).getUserType();
                         Log.d("f",snapshot.hasChild("requests")+"");
                         Log.d("f",snapshot.hasChild("trainings")+"");
                         if(!snapshot.hasChild("requests")){
@@ -409,6 +419,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
                             setTrainingModel(trainingModel, training);
                         } else if (snapshot.getChildrenCount() == countTrainings && !flag) {
                             Toast.makeText(SearchActivity.this, "No trainings found", Toast.LENGTH_SHORT).show();
+                            progressBar.setVisibility(View.GONE);
                         }
                     }
                 }
@@ -446,14 +457,6 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         });
     }
 
-    public void setAdapter() {
-        Log.d("adapter:", "" + trainings.size());
-        myAdapter = new MyAdapter(this, trainings);
-        recyclerView.setAdapter(myAdapter);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
-    }
-
     public void findSelectedElements() {
         Log.d("find","one more");
         String city = autoCompleteTextCity.getText().toString();
@@ -461,5 +464,14 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         String date = mDatePickerBtn.getText().toString();
         List<Float> values = rangeSlider.getValues();
         filterDataBase(city, title, date, values);
+    }
+
+    public void setAdapter() {
+        Log.d("adapter:", "" + trainings.size());
+        myAdapter = new MyAdapter(this, trainings,userType);
+        recyclerView.setAdapter(myAdapter);
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));
+        progressBar.setVisibility(View.GONE);
     }
 }

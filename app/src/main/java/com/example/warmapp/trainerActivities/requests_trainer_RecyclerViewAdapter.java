@@ -16,6 +16,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.warmapp.R;
 import com.example.warmapp.classes.RequestModel;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -27,14 +28,15 @@ import java.util.ArrayList;
         Context context;
         ArrayList<RequestModel> requests;
         DatabaseReference databaseReference;
+        FirebaseAuth auth;
         String userID;
-
 
         public requests_trainer_RecyclerViewAdapter(Context context, ArrayList<RequestModel> requests){
             this.context=context;
             this.requests=requests;
-            this.userID="qIcl2TIXEDbKwUziUDaqNp9Inmo2";
             databaseReference= FirebaseDatabase.getInstance().getReference();
+            auth= FirebaseAuth.getInstance();
+            userID=auth.getCurrentUser().getUid();
         }
 
         @NonNull

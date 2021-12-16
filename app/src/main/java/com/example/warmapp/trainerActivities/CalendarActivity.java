@@ -21,18 +21,20 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.applandeo.materialcalendarview.CalendarView;
 import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
+import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
+import com.example.warmapp.classes.AccountActivity;
 import com.example.warmapp.classes.MyTrainingsAdapter;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.User;
 import com.example.warmapp.traineeActivities.SearchActivity;
-import com.example.warmapp.traineeActivities.TraineeRequestsActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.datepicker.CalendarConstraints;
@@ -93,6 +95,7 @@ public class CalendarActivity extends AppCompatActivity {
     Slider slider;
     TextInputEditText textInputEditDetails;
     MaterialButton addTrainingButton;
+    ProgressBar progressBar;
 
     //input user
     String title;
@@ -117,7 +120,8 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_calendar);
-        userID = "qIcl2TIXEDbKwUziUDaqNp9Inmo2";
+        auth= FirebaseAuth.getInstance();
+        userID=auth.getCurrentUser().getUid();
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.menu_schedule);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -126,10 +130,9 @@ public class CalendarActivity extends AppCompatActivity {
                 Intent intent;
                 switch (item.getItemId()){
                     case R.id.menu_profile:
-
-                        /*intent = new Intent(TraineeRequestsActivity.this, LoginActivity.class);
+                        intent = new Intent(CalendarActivity.this, AccountActivity.class);
                         startActivity(intent);
-                        finish();*/
+                        finish();
                         return true;
                     case R.id.menu_search:
                         intent = new Intent(CalendarActivity.this, SearchActivity.class);
@@ -139,11 +142,14 @@ public class CalendarActivity extends AppCompatActivity {
                     case R.id.menu_schedule:
                         return true;
                     case R.id.menu_requests:
-                        intent = new Intent(CalendarActivity.this, TrainerRequestsActivity.class);
+                        intent = new Intent(CalendarActivity.this, RequestsActivity.class);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_home:
+                        intent = new Intent(CalendarActivity.this, HomeActivity.class);
+                        startActivity(intent);
+                        finish();
                         return true;
                 }
                 return false;
@@ -153,7 +159,7 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
         initViews();
-        putTrainingsDayOnCalendar();
+
 
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
@@ -181,6 +187,23 @@ public class CalendarActivity extends AppCompatActivity {
         calendarView.setCalendarDayLayout(R.layout.layout_custom_calendar);
         addTrainingButtonDialog = findViewById(R.id.button_add_training);
         recyclerViewMyTrainings = findViewById(R.id.recycle_view_my_trainings);
+        progressBar=findViewById(R.id.calendar_progress_bar);
+        FirebaseDatabase.getInstance().getReference("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user= snapshot.getValue(User.class);
+                userType=user.getUserType();
+                if(userType.equals("trainer")){
+                    addTrainingButtonDialog.setVisibility(View.VISIBLE);
+                }
+                putTrainingsDayOnCalendar();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         //user
 //        auth = FirebaseAuth.getInstance();
@@ -190,7 +213,7 @@ public class CalendarActivity extends AppCompatActivity {
         //get userID
         events = new ArrayList<>();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("Trainer").child(userID).child("trainings");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             int counter = 0;
             @Override
@@ -237,13 +260,13 @@ public class CalendarActivity extends AppCompatActivity {
         //init recycleView
         recyclerViewMyTrainings.setHasFixedSize(true);
         recyclerViewMyTrainings.setLayoutManager(new LinearLayoutManager(this));
-
+        progressBar.setVisibility(View.VISIBLE);
         trainingsToShow = new ArrayList<>();
         myTrainingsAdapter = new MyTrainingsAdapter(this, trainingsToShow);
         recyclerViewMyTrainings.setAdapter(myTrainingsAdapter);
 
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child("Trainer").child(userID).child("trainings");
+        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings");
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
@@ -258,6 +281,7 @@ public class CalendarActivity extends AppCompatActivity {
                                         trainingsToShow.add(training);
                                     }
                                     myTrainingsAdapter.notifyDataSetChanged();
+                                    progressBar.setVisibility(View.GONE);
                                 }
 
                                 @Override
@@ -377,10 +401,9 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-        auth = FirebaseAuth.getInstance();
+
         //databaseReference = FirebaseDatabase.getInstance().getReference("Trainings");
         //String trainingID = auth.getCurrentUser().getUid();
-        String trainerID = "qIcl2TIXEDbKwUziUDaqNp9Inmo2";
 
         addTrainingButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -388,7 +411,7 @@ public class CalendarActivity extends AppCompatActivity {
                 databaseReference = FirebaseDatabase.getInstance().getReference("Trainings");
                 address = textInputEditAddress.getText().toString();
                 details = textInputEditDetails.getText().toString();
-                addTraining(title, city, address, featuresUser, trainerID, startTime, endTime, date, price, details, participants);
+                addTraining(title, city, address, featuresUser, userID, startTime, endTime, date, price, details, participants);
                 Toast.makeText(CalendarActivity.this, "The training was added", Toast.LENGTH_LONG).show();
                 dialogAddTraining.dismiss();
             }
@@ -523,7 +546,7 @@ public class CalendarActivity extends AppCompatActivity {
     private void addTraining(String title, String city, String address, HashMap<String, String> features, String trainerId, String startTraining, String endTraining, String date, int price, String details, int maxParticipants) {
         String getUniqueTrainingID = databaseReference.push().getKey();
         Training training = new Training(getUniqueTrainingID, title, city, address, trainerId, startTraining, endTraining, date, details, price, maxParticipants, features);
-        FirebaseDatabase.getInstance().getReference("Users").child(trainerId).child("trainings").child(getUniqueTrainingID).setValue(true);
+        FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings").child(getUniqueTrainingID).setValue(true);
         databaseReference.child(Objects.requireNonNull(getUniqueTrainingID)).setValue(training);
     }
 
