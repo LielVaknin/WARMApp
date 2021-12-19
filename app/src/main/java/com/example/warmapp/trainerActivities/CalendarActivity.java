@@ -1,6 +1,7 @@
 package com.example.warmapp.trainerActivities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
@@ -9,11 +10,14 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,10 +34,10 @@ import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
+import com.example.warmapp.SignUpActivity;
 import com.example.warmapp.classes.AccountActivity;
 import com.example.warmapp.classes.MyTrainingsAdapter;
 import com.example.warmapp.classes.Training;
-import com.example.warmapp.classes.User;
 import com.example.warmapp.traineeActivities.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
@@ -41,6 +45,7 @@ import com.google.android.material.datepicker.CalendarConstraints;
 import com.google.android.material.datepicker.DateValidatorPointForward;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.android.material.datepicker.MaterialPickerOnPositiveButtonClickListener;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.slider.LabelFormatter;
 import com.google.android.material.slider.Slider;
@@ -49,7 +54,6 @@ import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker;
@@ -57,6 +61,7 @@ import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -65,70 +70,107 @@ import java.util.Locale;
 import java.util.Objects;
 
 public class CalendarActivity extends AppCompatActivity {
+    //activity
+    private BottomNavigationView bottomNavigationView;
+    private CalendarView calendarView;
+    private Calendar calendar;
+    private final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
+    private FloatingActionButton addTrainingButtonDialog;
+    private RecyclerView recyclerViewMyTrainings;
+    private MyTrainingsAdapter myTrainingsAdapter;
+    private ArrayList<Training> userTrainings;
+    private ArrayList<Training> trainingsToShowOnThisDate;
+    private List<EventDay> events;
+    private Dialog dialogAddTraining;
+    private ProgressDialog progressDialog;
 
-    CalendarView calendarView;
-    MaterialButton addTrainingButtonDialog;
-    RecyclerView recyclerViewMyTrainings;
-    MyTrainingsAdapter myTrainingsAdapter;
-    ArrayList<Training> trainingsToShow;
-    List<EventDay> events;
-    Dialog dialogAddTraining;
-
-    //dialog
-    ImageView exitIcon;
-    TextInputLayout spinnerTitle;
-    AutoCompleteTextView autoCompleteTitle;
-    ArrayAdapter<String> arrayAdapterSpinnerTitle;
-    TextInputLayout textInputLayoutFeatures;
-    TextInputEditText textInputEditFeatures;
-    ScrollableNumberPicker scrollableNumberPicker;
-    TextInputLayout textInputLayoutDate;
-    TextInputEditText textInputEditDate;
-    TextInputLayout textInputLayoutStartTime;
-    TextInputEditText textInputEditStartTime;
-    TextInputLayout textInputLayoutEndTime;
-    TextInputEditText textInputEditEndTime;
-    TextInputLayout spinnerCity;
-    AutoCompleteTextView autoCompleteCity;
-    ArrayAdapter<String> arrayAdapterSpinnerCity;
-    TextInputEditText textInputEditAddress;
-    Slider slider;
-    TextInputEditText textInputEditDetails;
-    MaterialButton addTrainingButton;
-    ProgressBar progressBar;
+    //dialog add training
+    private ImageView exitIcon;
+    private TextInputLayout spinnerTitle;
+    private AutoCompleteTextView autoCompleteTitle;
+    private ArrayAdapter<String> arrayAdapterSpinnerTitle;
+    private TextInputEditText textInputEditFeatures;
+    private ScrollableNumberPicker scrollableNumberPicker;
+    private TextInputLayout textInputLayoutDate;
+    private TextInputEditText textInputEditDate;
+    private TextInputLayout textInputLayoutStartTime;
+    private TextInputEditText textInputEditStartTime;
+    private TextInputLayout textInputLayoutEndTime;
+    private TextInputEditText textInputEditEndTime;
+    private TextInputLayout spinnerCity;
+    private AutoCompleteTextView autoCompleteCity;
+    private ArrayAdapter<String> arrayAdapterSpinnerCity;
+    private TextInputEditText textInputEditAddress;
+    private Slider slider;
+    private TextInputEditText textInputEditDetails;
+    private MaterialButton addTrainingButton;
 
     //input user
-    String title;
-    HashMap<String, String> featuresUser;
-    int participants;
-    String date;
-    String startTime;
-    String endTime;
-    String city;
-    String address;
-    int price;
-    String details;
-    boolean[] selectedFeatures;
-    ArrayList<Integer> features;
+    private String title = "";
+    private HashMap<String, String> featuresUser;
+    private int participants;
+    private String date = "";
+    private String startTime = "";
+    private String endTime = "";
+    private String city = "";
+    private String address;
+    private int price;
+    private String details;
+    private boolean[] selectedFeatures;
+    private ArrayList<Integer> features;
 
-    private FirebaseAuth auth;
-    private DatabaseReference databaseReference;
-    String userID;
-    String userType;
+    //firebase
+    private final FirebaseAuth auth = FirebaseAuth.getInstance();
+    private final String userID = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+    private String userType;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_calendar);
-        auth= FirebaseAuth.getInstance();
-        userID=auth.getCurrentUser().getUid();
-        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
+
+        initViews();
+        setUpBottomNavigation();
+        checkTrainerOrTrainee();
+        putTrainingsDayOnCalendar();
+
+        calendarView.setOnDayClickListener(new OnDayClickListener() {
+            @Override
+            public void onDayClick(@NonNull EventDay eventDay) {
+                calendar = eventDay.getCalendar();
+                String date = simpleDateFormat.format(calendar.getTime());
+                showTrainingsOnSelectedDate(date);
+            }
+        });
+
+
+        addTrainingButtonDialog.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showAddTrainingDialog();
+            }
+        });
+
+    }
+
+    private void initViews() {
+        //activity
+        bottomNavigationView = findViewById(R.id.bottom_navigation);
+        calendarView = findViewById(R.id.calendarView);
+        calendarView.setCalendarDayLayout(R.layout.layout_custom_calendar);
+        addTrainingButtonDialog = findViewById(R.id.button_add_training);
+        recyclerViewMyTrainings = findViewById(R.id.recycle_view_my_trainings);
+    }
+
+    private void setUpBottomNavigation() {
         bottomNavigationView.setSelectedItemId(R.id.menu_schedule);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
+            @SuppressLint("NonConstantResourceId")
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Intent intent;
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.menu_profile:
                         intent = new Intent(CalendarActivity.this, AccountActivity.class);
                         startActivity(intent);
@@ -153,50 +195,20 @@ public class CalendarActivity extends AppCompatActivity {
                         return true;
                 }
                 return false;
-
-
-
             }
         });
-        initViews();
-
-
-        calendarView.setOnDayClickListener(new OnDayClickListener() {
-            @Override
-            public void onDayClick(@NonNull EventDay eventDay) {
-                Calendar clickedDayCalendar = eventDay.getCalendar();
-                SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                String date = simpleFormat.format(clickedDayCalendar.getTime());
-                showTrainingsOnSelectedDate(date);
-            }
-        });
-
-
-        addTrainingButtonDialog.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showAddTrainingDialog();
-            }
-        });
-
     }
 
-    private void initViews() {
-        //activity
-        calendarView = findViewById(R.id.calendarView);
-        calendarView.setCalendarDayLayout(R.layout.layout_custom_calendar);
-        addTrainingButtonDialog = findViewById(R.id.button_add_training);
-        recyclerViewMyTrainings = findViewById(R.id.recycle_view_my_trainings);
-        progressBar=findViewById(R.id.calendar_progress_bar);
-        FirebaseDatabase.getInstance().getReference("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void checkTrainerOrTrainee() {
+        FirebaseDatabase.getInstance().getReference("Users").child(userID).child("userType")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                User user= snapshot.getValue(User.class);
-                userType=user.getUserType();
-                if(userType.equals("trainer")){
+                userType = snapshot.getValue(String.class);
+                //if trainer show add training button
+                if (Objects.requireNonNull(userType).equals("trainer")) {
                     addTrainingButtonDialog.setVisibility(View.VISIBLE);
                 }
-                putTrainingsDayOnCalendar();
             }
 
             @Override
@@ -204,40 +216,45 @@ public class CalendarActivity extends AppCompatActivity {
 
             }
         });
-
-        //user
-//        auth = FirebaseAuth.getInstance();
     }
 
     private void putTrainingsDayOnCalendar() {
-        //get userID
-        events = new ArrayList<>();
+        progressDialog = new ProgressDialog(CalendarActivity.this);
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
 
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            int counter = 0;
+        events = new ArrayList<>();
+        userTrainings = new ArrayList<>();
+
+        //get list uniqueID of user trainings
+        FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+            int countTrainings = 0;
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshotMain) {
                 for (DataSnapshot dataSnapshot : snapshotMain.getChildren()) {
+                    //over the list and get the training from database
                     FirebaseDatabase.getInstance().getReference("Trainings").child(Objects.requireNonNull(dataSnapshot.getKey()))
                             .addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    counter++;
+                                    countTrainings++;
                                     Training training = snapshot.getValue(Training.class);
+                                    userTrainings.add(training);
 
-                                    SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                                    Calendar calendar = Calendar.getInstance();
+                                    calendar = Calendar.getInstance();
                                     try {
-                                        calendar.setTime(Objects.requireNonNull(simpleFormat.parse(Objects.requireNonNull(training).getDate())));
+                                        calendar.setTime(Objects.requireNonNull(simpleDateFormat.parse(Objects.requireNonNull(training.getDate()))));
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
-                                    calendar.add(Calendar.DAY_OF_MONTH,0);
-                                    events.add(new EventDay(calendar, R.drawable.ic_minus));
+                                    calendar.add(Calendar.DAY_OF_MONTH, 0);
+                                    events.add(new EventDay(calendar, R.drawable.ic_more_horizontal));
 
-                                    if(counter == snapshotMain.getChildrenCount()){
+                                    if (countTrainings == snapshotMain.getChildrenCount()) {
                                         calendarView.setEvents(events);
+                                        progressDialog.dismiss();
                                     }
                                 }
                                 @Override
@@ -256,48 +273,23 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
 
+    @SuppressLint("NotifyDataSetChanged")
     private void showTrainingsOnSelectedDate(String selectedDate) {
         //init recycleView
         recyclerViewMyTrainings.setHasFixedSize(true);
         recyclerViewMyTrainings.setLayoutManager(new LinearLayoutManager(this));
-        progressBar.setVisibility(View.VISIBLE);
-        trainingsToShow = new ArrayList<>();
-        myTrainingsAdapter = new MyTrainingsAdapter(this, trainingsToShow);
+
+        trainingsToShowOnThisDate = new ArrayList<>();
+        myTrainingsAdapter = new MyTrainingsAdapter(this, trainingsToShowOnThisDate);
         recyclerViewMyTrainings.setAdapter(myTrainingsAdapter);
 
-
-        databaseReference = FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings");
-        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
-            @SuppressLint("NotifyDataSetChanged")
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    FirebaseDatabase.getInstance().getReference("Trainings").child(Objects.requireNonNull(dataSnapshot.getKey()))
-                            .addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    Training training = snapshot.getValue(Training.class);
-                                    if(selectedDate.equals(training.getDate())){
-                                        trainingsToShow.add(training);
-                                    }
-                                    myTrainingsAdapter.notifyDataSetChanged();
-                                    progressBar.setVisibility(View.GONE);
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                }
-
+        for(int i = 0; i < userTrainings.size(); i++){
+            if(selectedDate.equals(userTrainings.get(i).getDate())){
+                trainingsToShowOnThisDate.add(userTrainings.get(i));
             }
+        }
+        myTrainingsAdapter.notifyDataSetChanged();
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")
@@ -317,6 +309,18 @@ public class CalendarActivity extends AppCompatActivity {
         exitIcon.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                title = "";
+                featuresUser = null;
+                participants = 1;
+                date = "";
+                startTime = "";
+                endTime = "";
+                city = "";
+                address = "";
+                price = 0;
+                details = "";
+                selectedFeatures = null;
+                features = null;
                 dialogAddTraining.dismiss();
             }
         });
@@ -350,17 +354,6 @@ public class CalendarActivity extends AppCompatActivity {
         });
 
         //date and time
-        //keyboard won't open by clicking on the text field
-        textInputEditDate.setInputType(InputType.TYPE_NULL);
-        textInputEditStartTime.setInputType(InputType.TYPE_NULL);
-        textInputEditEndTime.setInputType(InputType.TYPE_NULL);
-        textInputEditFeatures.setInputType(InputType.TYPE_NULL);
-        //the user not be able to input any text
-        textInputEditDate.setKeyListener(null);
-        textInputEditStartTime.setKeyListener(null);
-        textInputEditEndTime.setKeyListener(null);
-        textInputEditFeatures.setKeyListener(null);
-
         textInputEditDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -401,37 +394,58 @@ public class CalendarActivity extends AppCompatActivity {
             }
         });
 
-
-        //databaseReference = FirebaseDatabase.getInstance().getReference("Trainings");
-        //String trainingID = auth.getCurrentUser().getUid();
-
         addTrainingButton.setOnClickListener(new View.OnClickListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onClick(View v) {
-                databaseReference = FirebaseDatabase.getInstance().getReference("Trainings");
-                address = textInputEditAddress.getText().toString();
-                details = textInputEditDetails.getText().toString();
-                addTraining(title, city, address, featuresUser, userID, startTime, endTime, date, price, details, participants);
-                Toast.makeText(CalendarActivity.this, "The training was added", Toast.LENGTH_LONG).show();
-                dialogAddTraining.dismiss();
+                address = Objects.requireNonNull(textInputEditAddress.getText()).toString();
+                details = Objects.requireNonNull(textInputEditDetails.getText()).toString();
+
+                if (title.isEmpty()){
+                    spinnerTitle.setError("This field is required");
+                }else {
+                    spinnerTitle.setError("");
+                }
+                if (date.isEmpty()){
+                    textInputLayoutDate.setError("This field is required");
+                }else {
+                    textInputLayoutDate.setError("");
+                }
+                if (startTime.isEmpty()){
+                    textInputLayoutStartTime.setError("This field is required");
+                }else {
+                    textInputLayoutStartTime.setError("");
+                }
+                if (endTime.isEmpty()){
+                    textInputLayoutEndTime.setError("This field is required");
+                }else {
+                    textInputLayoutEndTime.setError("");
+                }
+                if (city.isEmpty()){
+                    spinnerCity.setError("This field is required");
+                }else {
+                    spinnerCity.setError("");
+                }
+
+                if(title.isEmpty() || date.isEmpty() || startTime.isEmpty() || endTime.isEmpty() || city.isEmpty()){
+                    Toast.makeText(CalendarActivity.this, "Not all fields are full", Toast.LENGTH_LONG).show();
+                } else if (checkTrainingIsOverlapping()){
+                    textInputLayoutDate.setError("You already have a training at this time");
+                    textInputLayoutStartTime.setError(" ");
+                    textInputLayoutEndTime.setError(" ");
+                }else if (checkTimeBetweenTrainings(startTime,endTime)){
+                    textInputLayoutStartTime.setError("error");
+                    textInputLayoutEndTime.setError("error");
+                }else {
+                    addTraining(title, city, address, featuresUser, startTime, endTime, date, price, details, participants);
+                    Toast.makeText(CalendarActivity.this, "The training was added", Toast.LENGTH_LONG).show();
+                    dialogAddTraining.dismiss();
+                }
             }
         });
     }
 
     private void showDateDialog() {
-//        Calendar calendar = Calendar.getInstance();
-//        DatePickerDialog.OnDateSetListener dateSetListener = new DatePickerDialog.OnDateSetListener() {
-//            @SuppressLint("SetTextI18n")
-//            @Override
-//            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-//                month = month + 1;
-//                String date = dayOfMonth + "/" + (month) + "/" + year;
-//                dateText.setText(date);
-//            }
-//        };
-//        new DatePickerDialog(CalendarActivity.this, dateSetListener,
-//                calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH)).show();
-
         MaterialDatePicker<Long> materialDatePicker = MaterialDatePicker.Builder.datePicker()
                 .setTitleText("Select a date")
                 .setSelection(MaterialDatePicker.todayInUtcMilliseconds())
@@ -443,26 +457,19 @@ public class CalendarActivity extends AppCompatActivity {
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
-                SimpleDateFormat simpleFormat = new SimpleDateFormat("dd/MM/yyyy", Locale.US);
-                textInputEditDate.setText(simpleFormat.format(selection));
-                date = simpleFormat.format(selection);
-                //Log.d("picker date:" ,simpleFormat.format(selection));
+                textInputEditDate.setText(simpleDateFormat.format(selection));
+                date = simpleDateFormat.format(selection);
             }
         });
     }
 
     private void showStartTimeDialog() {
-        Calendar calendar = Calendar.getInstance();
+        calendar = Calendar.getInstance();
         TimePickerDialog.OnTimeSetListener timeSetListener = new TimePickerDialog.OnTimeSetListener() {
             @SuppressLint("SetTextI18n")
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String startTimeTraining;
-                if (minute <= 9) {
-                    startTimeTraining = hourOfDay + ":" + "0" + minute;
-                } else {
-                    startTimeTraining = hourOfDay + ":" + minute;
-                }
+                String startTimeTraining = fixMinuteDisplay(hourOfDay) + ":" + fixMinuteDisplay(minute);
                 textInputEditStartTime.setText(startTimeTraining);
                 startTime = startTimeTraining;
             }
@@ -477,18 +484,54 @@ public class CalendarActivity extends AppCompatActivity {
             @SuppressLint("SetTextI18n")
             @Override
             public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                String endTimeTraining;
-                if (minute <= 9) {
-                    endTimeTraining = hourOfDay + ":" + "0" + minute;
-                } else {
-                    endTimeTraining = hourOfDay + ":" + minute;
-                }
+                String endTimeTraining = fixMinuteDisplay(hourOfDay) + ":" + fixMinuteDisplay(minute);
                 textInputEditEndTime.setText(endTimeTraining);
                 endTime = endTimeTraining;
             }
         };
         new TimePickerDialog(CalendarActivity.this, timeSetListener,
                 calendar.get(Calendar.HOUR_OF_DAY), calendar.get(Calendar.MINUTE), false).show();
+    }
+
+    private String fixMinuteDisplay(int minute) {
+        String fixMinute;
+        if (minute <= 9) {
+            fixMinute = "0" + minute;
+        } else {
+            fixMinute = minute + "";
+        }
+        return fixMinute;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean checkTrainingIsOverlapping() {
+        for (int i = 0; i < userTrainings.size(); i++){
+            if (date.equals(userTrainings.get(i).getDate())){
+                String startTrainingEqualDate = userTrainings.get(i).getStartTraining();
+                String endTrainingEqualDate = userTrainings.get(i).getEndTraining();
+                if (isOverlapping(startTrainingEqualDate,endTrainingEqualDate,startTime,endTime)){
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static boolean isOverlapping(String start1, String end1, String start2, String end2) {
+        LocalTime startTraining1 = LocalTime.parse(start1);
+        LocalTime endTraining1 = LocalTime.parse(end1);
+        LocalTime startTraining2 = LocalTime.parse(start2);
+        LocalTime endTraining2 = LocalTime.parse(end2);
+        return (startTraining1.isBefore(endTraining2) && startTraining2.isBefore(endTraining1));
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean checkTimeBetweenTrainings(String startTime,String endTime) {
+        LocalTime start = LocalTime.parse(startTime);
+        LocalTime end = LocalTime.parse(endTime);
+        return !start.isBefore(end);
     }
 
     private void showPickerFeaturesDialog() {
@@ -543,11 +586,11 @@ public class CalendarActivity extends AppCompatActivity {
         builder.show();
     }
 
-    private void addTraining(String title, String city, String address, HashMap<String, String> features, String trainerId, String startTraining, String endTraining, String date, int price, String details, int maxParticipants) {
-        String getUniqueTrainingID = databaseReference.push().getKey();
-        Training training = new Training(getUniqueTrainingID, title, city, address, trainerId, startTraining, endTraining, date, details, price, maxParticipants, features);
-        FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings").child(getUniqueTrainingID).setValue(true);
-        databaseReference.child(Objects.requireNonNull(getUniqueTrainingID)).setValue(training);
+    private void addTraining(String title, String city, String address, HashMap<String, String> features, String startTraining, String endTraining, String date, int price, String details, int maxParticipants) {
+        String getUniqueTrainingID = FirebaseDatabase.getInstance().getReference("Trainings").push().getKey();
+        Training training = new Training(getUniqueTrainingID, title, city, address, userID, startTraining, endTraining, date, details, price, maxParticipants, features);
+        FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings").child(Objects.requireNonNull(getUniqueTrainingID)).setValue(true);
+        FirebaseDatabase.getInstance().getReference("Trainings").child(Objects.requireNonNull(getUniqueTrainingID)).setValue(training);
     }
 
     private void initViewsDialog() {
@@ -560,16 +603,25 @@ public class CalendarActivity extends AppCompatActivity {
                 R.layout.spinner_dropdown_item, getResources().getStringArray(R.array.Titles));
         //dialog select features
         textInputEditFeatures = dialogAddTraining.findViewById(R.id.text_input_edit_features);
-        textInputLayoutFeatures = dialogAddTraining.findViewById(R.id.text_input_layout_features);
         //number picker
         scrollableNumberPicker = dialogAddTraining.findViewById(R.id.scroll_number_picker);
         //date and time
-        textInputEditDate = dialogAddTraining.findViewById(R.id.text_input_edit_date);
         textInputLayoutDate = dialogAddTraining.findViewById(R.id.text_input_layout_date);
-        textInputEditStartTime = dialogAddTraining.findViewById(R.id.text_input_edit_start_time);
+        textInputEditDate = dialogAddTraining.findViewById(R.id.text_input_edit_date);
         textInputLayoutStartTime = dialogAddTraining.findViewById(R.id.text_input_layout_start_time);
-        textInputEditEndTime = dialogAddTraining.findViewById(R.id.text_input_edit_end_time);
+        textInputEditStartTime = dialogAddTraining.findViewById(R.id.text_input_edit_start_time);
         textInputLayoutEndTime = dialogAddTraining.findViewById(R.id.text_input_layout_end_time);
+        textInputEditEndTime = dialogAddTraining.findViewById(R.id.text_input_edit_end_time);
+        //keyboard won't open by clicking on the text field
+        textInputEditDate.setInputType(InputType.TYPE_NULL);
+        textInputEditStartTime.setInputType(InputType.TYPE_NULL);
+        textInputEditEndTime.setInputType(InputType.TYPE_NULL);
+        textInputEditFeatures.setInputType(InputType.TYPE_NULL);
+        //the user not be able to input any text
+        textInputEditDate.setKeyListener(null);
+        textInputEditStartTime.setKeyListener(null);
+        textInputEditEndTime.setKeyListener(null);
+        textInputEditFeatures.setKeyListener(null);
         //spinner city
         spinnerCity = dialogAddTraining.findViewById(R.id.spinner_cities);
         autoCompleteCity = dialogAddTraining.findViewById(R.id.auto_complete_cities);

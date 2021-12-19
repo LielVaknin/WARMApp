@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:fillViewport="true" >
 
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="16dp">
@@ -40,6 +41,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:startIconDrawable="@drawable/ic_align_left"
             app:layout_constraintEnd_toEndOf="@+id/txt_complete_the_following_steps"
             app:layout_constraintStart_toStartOf="@+id/txt_complete_the_following_steps"
             app:layout_constraintTop_toBottomOf="@+id/txt_complete_the_following_steps">
@@ -175,11 +177,11 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="65dp"
+            android:layout_marginTop="75dp"
             app:layout_constraintEnd_toEndOf="@+id/text_input_layout_end_time"
             app:layout_constraintStart_toStartOf="@+id/text_input_layout_start_time"
             app:layout_constraintTop_toBottomOf="@+id/text_input_layout_date"
-            app:startIconDrawable="@drawable/ic_map_pin">
+            app:startIconDrawable="@drawable/ic_map">
 
             <AutoCompleteTextView
                 android:id="@+id/auto_complete_cities"
@@ -196,7 +198,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="4dp"
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="@+id/spinner_cities"
             app:layout_constraintStart_toStartOf="@+id/spinner_cities"
@@ -257,6 +259,7 @@
             android:layout_height="wrap_content"
             android:valueFrom="0"
             android:valueTo="500"
+            android:stepSize="5.0"
             app:layout_constraintEnd_toEndOf="@+id/txt_five_hundred"
             app:layout_constraintStart_toStartOf="@+id/txt_zero"
             app:layout_constraintTop_toBottomOf="@+id/txt_price" />
@@ -269,7 +272,8 @@
             app:endIconMode="clear_text"
             app:layout_constraintEnd_toEndOf="@+id/slider_money"
             app:layout_constraintStart_toStartOf="@+id/slider_money"
-            app:layout_constraintTop_toBottomOf="@+id/slider_money">
+            app:layout_constraintTop_toBottomOf="@+id/slider_money"
+            app:startIconDrawable="@drawable/ic_file_text">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/text_input_edit_details"

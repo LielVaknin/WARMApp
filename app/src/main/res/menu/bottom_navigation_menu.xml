@@ -3,24 +3,29 @@
 
     <item
         android:id="@+id/menu_profile"
+        android:enabled="true"
         android:title="Profile"
-        android:icon="@drawable/profile_icon"/>
+        android:icon="@drawable/ic_user"/>
     <item
         android:id="@+id/menu_search"
+        android:enabled="true"
         android:title="Search"
-        android:icon="@drawable/search_icon"/>
+        android:icon="@drawable/ic_search_1"/>
     <item
         android:id="@+id/menu_home"
+        android:enabled="true"
         android:title="Home"
-        android:icon="@drawable/home_icon"/>
+        android:icon="@drawable/ic_home"/>
     <item
         android:id="@+id/menu_schedule"
+        android:enabled="true"
         android:title="Schedule"
-        android:icon="@drawable/schedule_icon"/>
+        android:icon="@drawable/ic_calendar"/>
     <item
         android:id="@+id/menu_requests"
+        android:enabled="true"
         android:title="Requests"
-        android:icon="@drawable/requests_icon"/>
+        android:icon="@drawable/ic_inbox"/>
 
 
 
