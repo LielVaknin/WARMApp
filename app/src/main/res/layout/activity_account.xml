@@ -6,110 +6,111 @@
     android:layout_height="match_parent"
     tools:context=".classes.AccountActivity">
 
-    <TextView
-        android:id="@+id/account_user_name"
+<!--    <TextView-->
+<!--        android:id="@+id/account_user_name"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="50dp"-->
+<!--        android:text="user name"-->
+<!--        android:textSize="20sp"-->
+<!--        app:layout_constraintEnd_toEndOf="parent"-->
+<!--        app:layout_constraintStart_toStartOf="parent"-->
+<!--        app:layout_constraintTop_toTopOf="parent" />-->
+
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/title_dialog_il"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginTop="20dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        app:hintTextColor="#388E3C"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/account_user_name"-->
+<!--        app:layout_constraintHorizontal_bias="0.446"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/account_user_name"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/account_user_name"-->
+<!--        app:startIconDrawable="@drawable/ic_fitness_center_black_24dp">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/account_first_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/edit_text_bg"-->
+<!--            android:hint="@string/first_name" />-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/features_dialog_il"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_marginStart="16dp"-->
+<!--        android:layout_marginEnd="16dp"-->
+<!--        app:hintTextColor="#388E3C"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/title_dialog_il"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/title_dialog_il"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/title_dialog_il"-->
+<!--        app:startIconDrawable="@drawable/ic_activity_1">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/account_last_name"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/edit_text_bg"-->
+<!--            android:hint="@string/last_name" />/>-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/address_dialog_il"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:hintTextColor="#388E3C"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/features_dialog_il"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/features_dialog_il"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/features_dialog_il"-->
+<!--        app:startIconDrawable="@drawable/ic_map_pin_1">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/account_phone"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/edit_text_bg"-->
+<!--            android:hint="Phone Number" />-->
+<!--    </com.google.android.material.textfield.TextInputLayout>-->
+
+
+<!--    <com.google.android.material.textfield.TextInputLayout-->
+<!--        android:id="@+id/date_dialog_il"-->
+<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
+<!--        android:layout_width="300dp"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        app:hintTextColor="#388E3C"-->
+<!--        app:layout_constraintEnd_toEndOf="@+id/address_dialog_il"-->
+<!--        app:layout_constraintStart_toStartOf="@+id/address_dialog_il"-->
+<!--        app:layout_constraintTop_toBottomOf="@+id/address_dialog_il"-->
+<!--        app:startIconDrawable="@drawable/ic_calendar">-->
+
+<!--        <com.google.android.material.textfield.TextInputEditText-->
+<!--            android:id="@+id/account_password"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:background="@drawable/edit_text_bg"-->
+<!--            android:hint="Password" />-->
+<!--</com.google.android.material.textfield.TextInputLayout>-->
+
+
+    <Button
+        android:id="@+id/log_out"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:text="user name"
-        android:textSize="20sp"
+        android:backgroundTint="#801313"
+        android:text="log out"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/title_dialog_il"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:layout_marginEnd="16dp"
-        app:hintTextColor="#388E3C"
-        app:layout_constraintEnd_toEndOf="@+id/account_user_name"
-        app:layout_constraintHorizontal_bias="0.446"
-        app:layout_constraintStart_toStartOf="@+id/account_user_name"
-        app:layout_constraintTop_toBottomOf="@+id/account_user_name"
-        app:startIconDrawable="@drawable/ic_fitness_center_black_24dp">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/account_first_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_bg"
-            android:hint="@string/first_name" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/features_dialog_il"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp"
-        app:hintTextColor="#388E3C"
-        app:layout_constraintEnd_toEndOf="@+id/title_dialog_il"
-        app:layout_constraintStart_toStartOf="@+id/title_dialog_il"
-        app:layout_constraintTop_toBottomOf="@+id/title_dialog_il"
-        app:startIconDrawable="@drawable/ic_activity_1">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/account_last_name"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_bg"
-            android:hint="@string/last_name" />/>
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/address_dialog_il"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        app:hintTextColor="#388E3C"
-        app:layout_constraintEnd_toEndOf="@+id/features_dialog_il"
-        app:layout_constraintStart_toStartOf="@+id/features_dialog_il"
-        app:layout_constraintTop_toBottomOf="@+id/features_dialog_il"
-        app:startIconDrawable="@drawable/ic_map_pin_1">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/account_phone"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_bg"
-            android:hint="Phone Number" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/date_dialog_il"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
-        android:layout_width="300dp"
-        android:layout_height="wrap_content"
-        app:hintTextColor="#388E3C"
-        app:layout_constraintEnd_toEndOf="@+id/address_dialog_il"
-        app:layout_constraintStart_toStartOf="@+id/address_dialog_il"
-        app:layout_constraintTop_toBottomOf="@+id/address_dialog_il"
-        app:startIconDrawable="@drawable/ic_calendar">
-
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/account_password"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_bg"
-            android:hint="Password" />
-
-        <Button
-            android:id="@+id/log_out"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="log out"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.546" />
-    </com.google.android.material.textfield.TextInputLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.481" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

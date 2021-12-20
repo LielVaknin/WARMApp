@@ -58,7 +58,7 @@
         android:layout_width="122dp"
         android:layout_height="47dp"
         android:layout_marginTop="24dp"
-        android:backgroundTint="@color/grey_400"
+        android:backgroundTint="#e0f2f1"
         android:focusable="false"
         android:focusableInTouchMode="false"
         android:text="Search"
@@ -104,7 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:backgroundTint="@color/grey_400"
+        android:backgroundTint="#e0f2f1"
         android:text="Select a date"
         android:textColor="@color/black"
         app:cornerRadius="15dp"
@@ -144,7 +144,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Group training"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/outdoor_training"
@@ -152,7 +152,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Outdoor training"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/for_men_only"
@@ -160,7 +160,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="For men only"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/for_women_only"
@@ -168,7 +168,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="For women only"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/youth"
@@ -176,7 +176,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Youth"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/children"
@@ -184,7 +184,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Children"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/for_pregnant_women"
@@ -192,7 +192,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="For pregnant women"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/postpartum_women"
@@ -200,7 +200,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Postpartum women"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/preparation_for_competitions"
@@ -208,7 +208,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Preparation for competitions"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
 
             <com.google.android.material.chip.Chip
                 android:id="@+id/injury_rehabilitation"
@@ -216,7 +216,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Injury rehabilitation"
-                app:chipBackgroundColor="@color/grey_400" />
+                app:chipBackgroundColor="#e0f2f1" />
         </com.google.android.material.chip.ChipGroup>
     </HorizontalScrollView>
 

@@ -28,7 +28,7 @@
             android:name=".classes.TrainerProfile"
             android:exported="false" />
         <activity
-            android:name=".SplashActivity"
+            android:name=".LoginActivity"
             android:exported="false" />
         <activity
             android:name=".HomeActivity"
@@ -37,7 +37,7 @@
             android:name=".SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".LoginActivity"
+            android:name=".SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

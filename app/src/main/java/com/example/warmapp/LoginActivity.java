@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Intent intent = new Intent(LoginActivity.this, SearchActivity.class);
+                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
                     startActivity(intent);
                     finish();
                 }
@@ -163,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onStart();
 
         if (auth.getCurrentUser() != null){
-            Intent intent = new Intent(LoginActivity.this,SearchActivity.class);
+            Intent intent = new Intent(LoginActivity.this,HomeActivity.class);
             startActivity(intent);
             finish();
         }
