@@ -2,7 +2,13 @@ package com.example.warmapp.classes;
 
 public class RequestModel {
 
-    public String requestID,trainingID,otherUserID,trainingTitle,otherUserName,otherUserPhone,paymentMethod,trainingDate,trainingTime;
+    public Training training;
+    public String
+            requestID,
+            otherUserID,
+            otherUserName,
+            otherUserPhone,
+            paymentMethod;
     public float trainerRate;
 
 }

@@ -83,6 +83,7 @@ public class CalendarActivity extends AppCompatActivity {
     private List<EventDay> events;
     private Dialog dialogAddTraining;
     private ProgressDialog progressDialog;
+    private Boolean hasTrainings;
 
     //dialog add training
     private ImageView exitIcon;
@@ -208,6 +209,9 @@ public class CalendarActivity extends AppCompatActivity {
                 //if trainer show add training button
                 if (Objects.requireNonNull(userType).equals("trainer")) {
                     addTrainingButtonDialog.setVisibility(View.VISIBLE);
+                }
+                if(snapshot.hasChild("trainings")){
+                    hasTrainings=true;
                 }
             }
 

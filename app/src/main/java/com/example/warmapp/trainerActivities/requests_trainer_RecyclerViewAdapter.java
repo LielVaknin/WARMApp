@@ -4,6 +4,8 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,15 +13,24 @@ import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.warmapp.R;
+import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.RequestModel;
+import com.example.warmapp.classes.Training;
+import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 
 
@@ -51,9 +62,9 @@ import java.util.ArrayList;
         public void onBindViewHolder(@NonNull myViewHolder holder, int position) {
 
             holder.traineeName.setText(requests.get(position).otherUserName);
-            holder.trainingDate.setText(requests.get(position).trainingDate);
-            holder.trainingTime.setText(requests.get(position).trainingTime);
-            holder.trainingTitle.setText(requests.get(position).trainingTitle);
+            holder.trainingDate.setText(requests.get(position).training.getDate());
+            holder.trainingTime.setText(requests.get(position).training.getStartTraining()+"-"+requests.get(position).training.getEndTraining());
+            holder.trainingTitle.setText(requests.get(position).training.getTitle());
             holder.paymentMethod.setText(requests.get(position).paymentMethod);
             holder.trainerPhone.setText(requests.get(position).otherUserPhone);
             holder.trainerPhone.setOnClickListener(new View.OnClickListener() {
@@ -65,20 +76,67 @@ import java.util.ArrayList;
                 }
             });
             holder.apply.setOnClickListener(new View.OnClickListener() {
+                @RequiresApi(api = Build.VERSION_CODES.O)
                 @Override
                 public void onClick(View v) {
-                    String traineeID = requests.get(holder.getAdapterPosition()).otherUserID;
-                    String trainingID = requests.get(holder.getAdapterPosition()).trainingID;
-                    databaseReference.child("Users").child(traineeID).child("trainings").child(trainingID).setValue(true);
-                    //add the trainee to the training participants list
-                    databaseReference.child("Trainings").
-                            child(trainingID).child("participants").child(traineeID).setValue(true);
-                    removeRequest(holder.getAdapterPosition());
-                    holder.reject.setVisibility(View.GONE);
-                    holder.apply.setVisibility(View.GONE);
+                    try {
+                        removeRequest(holder.getAdapterPosition());
+                        String traineeID = requests.get(holder.getAdapterPosition()).otherUserID;
+                        String trainingID = requests.get(holder.getAdapterPosition()).training.getTrainingID();
+                        databaseReference.child("Users").child(traineeID).child("trainings").child(trainingID).setValue(true);
+                        //add the trainee to the training participants list
+                        databaseReference.child("Trainings").
+                                child(trainingID).child("participants").child(traineeID).setValue(true);
+                        holder.reject.setVisibility(View.GONE);
+                        holder.apply.setVisibility(View.GONE);
 
-                    holder.message.setText("The training is approved");
-                    holder.message.setVisibility(View.VISIBLE);
+                        holder.message.setText("The training is approved");
+                        holder.message.setVisibility(View.VISIBLE);
+
+                        int currentParticipants= requests.get(holder.getAdapterPosition()).training.getParticipants().size();
+                        int maxParticipants= requests.get(holder.getAdapterPosition()).training.getMaxParticipants();
+                        if (currentParticipants==maxParticipants){
+                            databaseReference.child("Users").child(userID).child("requests").addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                   for (DataSnapshot reqID : snapshot.getChildren()){
+                                       Request r = reqID.getValue(Request.class);
+                                       if(r.getTrainingID().equals(trainingID)){
+                                           removeRequest(reqID.getKey(),traineeID);
+                                       }
+                                   }
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
+                        }
+                        for (int i=0;i<requests.size();i++){
+                            int currentPosition= holder.getAdapterPosition();
+                            String date= requests.get(currentPosition).training.getDate();
+                            String start =requests.get(currentPosition).training.getStartTraining();
+                            String end =requests.get(currentPosition).training.getEndTraining();
+
+                            if(i!=currentPosition){
+                                String otherDate= requests.get(i).training.getDate();
+                                if(otherDate!=date) {
+                                    String otherStart = requests.get(i).training.getStartTraining();
+                                    String otherEnd = requests.get(i).training.getEndTraining();
+                                    if(isOverlapping(start,end,otherStart,otherEnd)){
+                                        removeRequest(i);
+                                    }
+                                }
+
+
+
+                            }
+                        }
+                    }catch (NullPointerException e){
+                        Toast.makeText(context,"Something went wrong, please refresh the page",Toast.LENGTH_LONG);
+                    }
+
                 }
             });
             holder.reject.setOnClickListener(new View.OnClickListener() {
@@ -106,25 +164,133 @@ import java.util.ArrayList;
                 }
             });
 
+
+            holder.trainingTitle.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Training training = requests.get(holder.getAdapterPosition()).training;
+                    View dialogView =
+                            LayoutInflater.from(context).inflate(R.layout.more_details_dialog, null);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+
+                    builder.setView(dialogView);
+                    builder.setNegativeButton("Cancel", null);
+                    AlertDialog alert = builder.create();
+
+                    TextInputEditText text1 = dialogView.findViewById(R.id.title_dialog);
+                    text1.setText(training.getTitle());
+                    text1.setInputType(InputType.TYPE_NULL);
+                    text1.setKeyListener(null);
+
+                    TextInputEditText text2 = dialogView.findViewById(R.id.features_dialog);
+                    StringBuilder s = new StringBuilder();
+                    int sizeFeatures = training.getFeatures().size() - 1;
+                    for (String feature : training.getFeatures().keySet()) {
+                        s.append(training.getFeatures().get(feature)).append(", ");
+                    }
+
+                    text2.setText(s.toString());
+                    text2.setInputType(InputType.TYPE_NULL);
+                    text2.setKeyListener(null);
+
+                    TextInputEditText text3 = dialogView.findViewById(R.id.address_dialog);
+                    text3.setText(training.getAddress());
+                    text3.setInputType(InputType.TYPE_NULL);
+                    text3.setKeyListener(null);
+
+                    TextInputEditText text4 = dialogView.findViewById(R.id.date_dialog);
+                    text4.setText(training.getDate());
+                    text4.setInputType(InputType.TYPE_NULL);
+                    text4.setKeyListener(null);
+
+                    TextInputEditText text5 = dialogView.findViewById(R.id.starting_time_dialog);
+                    text5.setText(training.getStartTraining());
+                    text5.setInputType(InputType.TYPE_NULL);
+                    text5.setKeyListener(null);
+
+                    TextInputEditText text6 = dialogView.findViewById(R.id.ending_time_dialog);
+                    text6.setText(training.getEndTraining());
+                    text6.setInputType(InputType.TYPE_NULL);
+                    text6.setKeyListener(null);
+
+                    TextInputEditText text7 = dialogView.findViewById(R.id.price_dialog);
+                    text7.setText(training.getPrice() + "₪");
+                    text7.setInputType(InputType.TYPE_NULL);
+                    text7.setKeyListener(null);
+
+                    TextInputEditText text8 = dialogView.findViewById(R.id.description_dialog);
+                    text8.setText(training.getDetails());
+                    text8.setInputType(InputType.TYPE_NULL);
+                    text8.setKeyListener(null);
+
+                    alert.show();
+                    Button negativeButton = alert.getButton(AlertDialog.BUTTON_NEGATIVE);
+                    negativeButton.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alert.dismiss();
+                        }
+                    });
+                }
+            });
+
+
+        }
+
+
+
+        @RequiresApi(api = Build.VERSION_CODES.O)
+        public static boolean isOverlapping(String start1, String end1, String start2, String end2) {
+            LocalTime startTraining1 = LocalTime.parse(start1);
+            LocalTime endTraining1 = LocalTime.parse(end1);
+            LocalTime startTraining2 = LocalTime.parse(start2);
+            LocalTime endTraining2 = LocalTime.parse(end2);
+            return (startTraining1.isBefore(endTraining2) && startTraining2.isBefore(endTraining1));
+
         }
 
         private void removeRequest(int position){
             String requestID= requests.get(position).requestID;
             String traineeID= requests.get(position).otherUserID;
 
-            String trainingID = requests.get(position).trainingID;
+            String trainingID = requests.get(position).training.getTrainingID();
+            try{
+                //remove the request from the trainer requests list
+                databaseReference.child("Users").
+                        child(userID).child("requests").child(requestID).removeValue();
 
-            //remove the request from the trainer requests list
-            databaseReference.child("Users").
-                    child(userID).child("requests").child(requestID).removeValue();
+                //remove the request from the trainee requests list
+                databaseReference.child("Users").
+                        child(traineeID).child("requests").child(requestID).removeValue();
 
-            //remove the request from the trainee requests list
-            databaseReference.child("Users").
-                    child(traineeID).child("requests").child(requestID).removeValue();
+                //remove the request from the requests list
+                databaseReference.child("Requests").
+                        child(requestID).removeValue();
+            }catch (Exception e){
+                Toast.makeText(context,"Something went wrong, please refresh the page",Toast.LENGTH_LONG);
+            }
 
-            //remove the request from the requests list
-            databaseReference.child("Requests").
-                    child(requestID).removeValue();
+        }
+
+        private void removeRequest(String requestID,String traineeID){
+
+            try{
+                //remove the request from the trainer requests list
+                databaseReference.child("Users").
+                        child(userID).child("requests").child(requestID).removeValue();
+
+                //remove the request from the trainee requests list
+                databaseReference.child("Users").
+                        child(traineeID).child("requests").child(requestID).removeValue();
+
+                //remove the request from the requests list
+                databaseReference.child("Requests").
+                        child(requestID).removeValue();
+            }catch (Exception e){
+                Toast.makeText(context,"Something went wrong, please refresh the page",Toast.LENGTH_LONG);
+            }
+
         }
 
         @Override

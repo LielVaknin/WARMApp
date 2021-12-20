@@ -104,7 +104,15 @@ public class RequestsActivity extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user =  snapshot.getValue(User.class);
                 userType=user.getUserType();
-                setUpRequests();
+                if(!snapshot.hasChild("requests")){
+                    hasRequests=findViewById(R.id.has_requests1);
+                    hasRequests.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);
+                }
+                else{
+                    setUpRequests();
+                }
+
             }
 
             @Override
@@ -120,8 +128,9 @@ public class RequestsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.hasChildren()){
-                    hasRequests=findViewById(R.id.has_requests1);
+                    /*hasRequests=findViewById(R.id.has_requests1);
                     hasRequests.setVisibility(View.VISIBLE);
+                    progressBar.setVisibility(View.GONE);*/
                 }
                 else {
                     for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -198,7 +207,6 @@ public class RequestsActivity extends AppCompatActivity {
                 requestModel.otherUserID=traineeID;
                 requestModel.otherUserName=traineeName;
                 requestModel.otherUserPhone=trainee.getPhone();
-                requestModel.trainingID=trainingID;
                 getTrainingDetailsTrainer(trainingID,requestModel);
             }
 
@@ -233,13 +241,7 @@ public class RequestsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Training training=snapshot.getValue(Training.class);
-                String trainingTitle,trainingDate,trainingTime;
-                trainingTitle=training.getTitle();
-                trainingDate=training.getDate();
-                trainingTime=training.getStartTraining()+"-"+training.getEndTraining();
-                requestModel.trainingTitle=trainingTitle;
-                requestModel.trainingDate=trainingDate;
-                requestModel.trainingTime=trainingTime;
+                requestModel.training=training;
                 requests.add(requestModel);
                 showRows();
 
@@ -256,15 +258,9 @@ public class RequestsActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Training training=snapshot.getValue(Training.class);
-                String trainingTitle,trainingDate,trainingTime,trainerID;
-                trainingTitle=training.getTitle();
-                trainingDate=training.getDate();
-                trainingTime=training.getStartTraining()+"-"+training.getEndTraining();
-                requestModel.trainingTitle=trainingTitle;
-                requestModel.trainingDate=trainingDate;
-                requestModel.trainingTime=trainingTime;
+                String trainerID;
+                requestModel.training=training;
                 trainerID= training.getTrainerId();
-                requestModel.otherUserID=trainerID;
                 getTrainerDetails(trainerID,requestModel);
 
             }
