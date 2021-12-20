@@ -1,13 +1,16 @@
 package com.example.warmapp.traineeActivities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
@@ -19,6 +22,7 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.applandeo.materialcalendarview.EventDay;
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
 import com.example.warmapp.classes.AccountActivity;
@@ -51,13 +55,17 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Locale;
+import java.util.Objects;
 
 public class SearchActivity extends AppCompatActivity implements Serializable {
 
@@ -89,13 +97,14 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     MaterialDatePicker<Long> materialDatePicker;
 
     HashSet<String> userRequestsTrainings = new HashSet<>();
-    HashSet<String> userTrainings = new HashSet<>();
+    HashSet<String> userTrainingsID = new HashSet<>();
+    ArrayList<Training> userTrainings = new ArrayList<>();
 
     boolean titleSelected = true;
     boolean citySelected = true;
     boolean dateSelected = false;
     FirebaseAuth auth;
-    String userType ;
+    String userType;
     String userID;
     DatabaseReference databaseReference;
 
@@ -104,15 +113,15 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
-        auth= FirebaseAuth.getInstance();
-        userID=auth.getCurrentUser().getUid();
-        BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
+        auth = FirebaseAuth.getInstance();
+        userID = auth.getCurrentUser().getUid();
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.menu_search);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 Intent intent;
-                switch (item.getItemId()){
+                switch (item.getItemId()) {
                     case R.id.menu_profile:
 
                         intent = new Intent(SearchActivity.this, AccountActivity.class);
@@ -143,43 +152,41 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
                 return false;
 
 
-
             }
         });
 
 // Search
         recyclerView = findViewById(R.id.m_RecycleView);
         searchBtn = findViewById(R.id.serach_button);
-        progressBar=findViewById(R.id.search_progress_bar);
+        progressBar = findViewById(R.id.search_progress_bar);
         searchBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 progressBar.setVisibility(View.VISIBLE);
                 trainings.clear();
-                if(myAdapter != null) {
+                if (myAdapter != null) {
                     myAdapter.notifyDataSetChanged();
                 }
                 userRequestsTrainings.clear();
+                userTrainingsID.clear();
                 userTrainings.clear();
 
                 FirebaseDatabase.getInstance().getReference().child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        userType=snapshot.getValue(User.class).getUserType();
-                        Log.d("f",snapshot.hasChild("requests")+"");
-                        Log.d("f",snapshot.hasChild("trainings")+"");
-                        if(!snapshot.hasChild("requests")){
-                            if(!snapshot.hasChild("trainings")) {
+                        userType = snapshot.getValue(User.class).getUserType();
+                        Log.d("f", snapshot.hasChild("requests") + "");
+                        Log.d("f", snapshot.hasChild("trainings") + "");
+                        if (!snapshot.hasChild("requests")) {
+                            if (!snapshot.hasChild("trainings")) {
                                 findSelectedElements();
-                            }
-                            else{
+                            } else {
                                 getUserTrainings();
                             }
-                        }else{
-                            if(!snapshot.hasChild("trainings")){
+                        } else {
+                            if (!snapshot.hasChild("trainings")) {
                                 getUserRequests("found");
-                            }
-                            else{
+                            } else {
                                 getUserRequests("trainings");
                             }
                         }
@@ -190,7 +197,6 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
 
                     }
                 });
-
 
 
             }
@@ -280,19 +286,21 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
 //        recyclerView = findViewById(R.id.m_RecycleView);
 
         String[] titles = getResources().getStringArray(R.array.Titles);
-        ArrayAdapter<String> titleAdapter = new ArrayAdapter<>(SearchActivity.this, R.layout.list, titles);
+        ArrayAdapter<String> titleAdapter = new ArrayAdapter<>(SearchActivity.this, R.layout.spinner_dropdown_item, titles);
         autoCompleteTextViewTitle.setAdapter(titleAdapter);
 
         String[] cities = getResources().getStringArray(R.array.Cities);
-        ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(SearchActivity.this, R.layout.list, cities);
+        ArrayAdapter<String> cityAdapter = new ArrayAdapter<>(SearchActivity.this, R.layout.spinner_dropdown_item, cities);
         autoCompleteTextCity.setAdapter(cityAdapter);
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Trainings");
         trainings = new ArrayList<>();
     }
-    public void getUserRequests(String callback){
+
+    public void getUserRequests(String callback) {
         FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("requests").addListenerForSingleValueEvent(new ValueEventListener() {
-            int counter=0;
+            int counter = 0;
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot1) {
 
@@ -305,11 +313,10 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
                             counter++;
                             String requestTrainingID = snapshot.getValue(Request.class).getTrainingID();
                             userRequestsTrainings.add(requestTrainingID);
-                            if(counter==snapshot1.getChildrenCount()){
-                                if(callback.equals("trainings")){
+                            if (counter == snapshot1.getChildrenCount()) {
+                                if (callback.equals("trainings")) {
                                     getUserTrainings();
-                                }
-                                else{
+                                } else {
                                     findSelectedElements();
                                 }
                             }
@@ -326,39 +333,79 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
             }
 
 
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
         });
     }
+
+//    private void getUserTrainings() {
+//        FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("trainings").addListenerForSingleValueEvent(new ValueEventListener() {
+//            int counter=0;
+//            @Override
+//            public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                    counter++;
+//                    String trainingID = dataSnapshot.getKey();
+//                    userTrainingsID.add(trainingID);
+//                    if(counter==snapshot.getChildrenCount()) {
+//                        findSelectedElements();
+//                    }
+//                }
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//
+//            }
+//        });
+//
+//    }
+
     private void getUserTrainings() {
-        FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("trainings").addListenerForSingleValueEvent(new ValueEventListener() {
-            int counter=0;
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                    counter++;
-                    String trainingID = dataSnapshot.getKey();
-                    userTrainings.add(trainingID);
-                    if(counter==snapshot.getChildrenCount()) {
-                        findSelectedElements();
+        //get list uniqueID of user trainings
+        FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings")
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    int countTrainings = 0;
+
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshotMain) {
+                        for (DataSnapshot dataSnapshot : snapshotMain.getChildren()) {
+                            //over the list and get the training from database
+                            FirebaseDatabase.getInstance().getReference("Trainings").child(Objects.requireNonNull(dataSnapshot.getKey()))
+                                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            countTrainings++;
+                                            Training training = snapshot.getValue(Training.class);
+                                            userTrainings.add(training);
+                                            String trainingID = dataSnapshot.getKey();
+                                            userTrainingsID.add(trainingID);
+
+                                            if (countTrainings == snapshotMain.getChildrenCount()) {
+                                                findSelectedElements();
+                                            }
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) {
+
+                                        }
+                                    });
+                        }
                     }
-                }
 
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-
+                    }
+                });
     }
+
     public void filterDataBase(String city, String title, String date, List<Float> values) {
         databaseReference.addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.O)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 int countTrainings = 0;
@@ -389,7 +436,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
                         hasFeatures = false;
                     }
 
-                    if ( training.getParticipants()==null ||(training.getParticipants().size() < training.getMaxParticipants()) ) {
+                    if (training.getParticipants() == null || (training.getParticipants().size() < training.getMaxParticipants())) {
                         if (selectedChips.isEmpty() && !titleSelected && !citySelected && !dateSelected && training.getPrice() >= values.get(0) && training.getPrice() <= values.get(1)) {
                             flag = true;
                             setTrainingModel(trainingModel, training);
@@ -432,12 +479,15 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
     public void setTrainingModel(TrainingModel trainingModel, Training training) {
         trainingModel.training = training;
         if (userRequestsTrainings.contains(training.getTrainingID())) {
             trainingModel.trainingStatus = "request";
-        } else if (userTrainings.contains(training.getTrainingID())) {
+        } else if (userTrainingsID.contains(training.getTrainingID())) {
             trainingModel.trainingStatus = "apply";
+        } else if (checkTrainingIsOverlapping(training)) {
+            trainingModel.trainingStatus = "block";
         }
         String trainerId = training.getTrainerId();
         FirebaseDatabase.getInstance().getReference().child("Users").child(trainerId).get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
@@ -457,8 +507,32 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
         });
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    private boolean checkTrainingIsOverlapping(Training training) {
+        for (int i = 0; i < userTrainings.size(); i++) {
+            if (training.getDate().equals(userTrainings.get(i).getDate())) {
+                String startTrainingEqualDate = userTrainings.get(i).getStartTraining();
+                String endTrainingEqualDate = userTrainings.get(i).getEndTraining();
+                if (isOverlapping(startTrainingEqualDate, endTrainingEqualDate, training.getStartTraining(), training.getEndTraining())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.O)
+    public static boolean isOverlapping(String start1, String end1, String start2, String end2) {
+        LocalTime startTraining1 = LocalTime.parse(start1);
+        LocalTime endTraining1 = LocalTime.parse(end1);
+        LocalTime startTraining2 = LocalTime.parse(start2);
+        LocalTime endTraining2 = LocalTime.parse(end2);
+        return (startTraining1.isBefore(endTraining2) && startTraining2.isBefore(endTraining1));
+
+    }
+
     public void findSelectedElements() {
-        Log.d("find","one more");
+        Log.d("find", "one more");
         String city = autoCompleteTextCity.getText().toString();
         String title = autoCompleteTextViewTitle.getText().toString();
         String date = mDatePickerBtn.getText().toString();
@@ -468,7 +542,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
 
     public void setAdapter() {
         Log.d("adapter:", "" + trainings.size());
-        myAdapter = new MyAdapter(this, trainings,userType);
+        myAdapter = new MyAdapter(this, trainings, userType);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));

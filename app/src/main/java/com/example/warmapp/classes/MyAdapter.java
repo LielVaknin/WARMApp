@@ -17,14 +17,10 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.warmapp.R;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -48,7 +44,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.training2, parent, false);
+        View view = inflater.inflate(R.layout.training, parent, false);
         return new MyAdapter.MyViewHolder(view);
     }
 
@@ -73,6 +69,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
             holder.requestTraining.setImageResource(R.drawable.ic_baseline_check_circle_outline_24);
             holder.requestTraining.setClickable(false);
             holder.requestTraining.setEnabled(false);
+        }
+        else{
+            holder.requestTraining.setImageResource(R.drawable.ic_plus_circle);
+            holder.requestTraining.setClickable(true);
+            holder.requestTraining.setEnabled(true);
         }
 
         holder.moreDetailsBtn.setOnClickListener(new View.OnClickListener() {
@@ -148,6 +149,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         holder.requestTraining.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (trainings.get(position).trainingStatus.equals("block")) {
+                    Toast t = Toast.makeText(context, "The training overlaps with existing training", Toast.LENGTH_LONG);
+                    t.show();
+                    return;
+                }
                 View dailogView =
                         LayoutInflater.from(context).inflate(R.layout.request_training_dialog, null);
 

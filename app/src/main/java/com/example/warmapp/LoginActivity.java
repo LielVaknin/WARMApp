@@ -157,7 +157,7 @@ public class LoginActivity extends AppCompatActivity {
         });
 
     }
-//    //if user login already
+    //if user login already
     @Override
     protected void onStart() {
         super.onStart();
