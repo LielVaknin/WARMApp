@@ -3,6 +3,8 @@ package com.example.warmapp.classes;
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,10 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.warmapp.R;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -51,15 +57,34 @@ public class MySearchAdapter extends RecyclerView.Adapter<MySearchAdapter.MyView
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
         DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference();
-        if(userType.equals("trainer")){
-            holder.requestTraining.setVisibility(View.INVISIBLE);
-        }
         Training training = trainings.get(position).training;
+        String trainerID = training.getTrainerId();
+        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+        StorageReference photoReference= storageReference.child(trainerID + ".jpg");
+
         String trainerName = trainings.get(position).trainerName;
-        holder.trainerImage.setImageResource(R.drawable.ic_user);
         holder.tvTitle.setText(trainings.get(position).training.getTitle());
         holder.tvCity.setText(trainings.get(position).training.getCity());
         holder.tvTrainerName.setText(trainerName);
+
+        final long ONE_MEGABYTE = 1024 * 1024;
+        photoReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+            @Override
+            public void onSuccess(byte[] bytes) {
+                Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                holder.trainerImage.setImageBitmap(bmp);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                Toast.makeText(context.getApplicationContext(), "No Such file or Path found!!", Toast.LENGTH_LONG).show();
+            }
+        });
+
+        if(userType.equals("trainer")){
+            holder.requestTraining.setVisibility(View.INVISIBLE);
+        }
+
 
         if(trainings.get(position).trainingStatus.equals("request")){
             holder.requestTraining.setImageResource(R.drawable.ic_clock_1);

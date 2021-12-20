@@ -30,16 +30,11 @@
 
         <com.mikhaellopez.circularimageview.CircularImageView
             android:id="@+id/trainer_image"
-            android:layout_width="113dp"
-            android:layout_height="121dp"
+            android:layout_width="120dp"
+            android:layout_height="110dp"
             android:layout_marginStart="4dp"
             android:layout_marginTop="8dp"
             android:padding="5dp"
-            app:civ_border_color="@color/black"
-            app:civ_border_width="4dp"
-            app:civ_shadow="true"
-            app:civ_shadow_color="@color/black"
-            app:civ_shadow_radius="1dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:srcCompat="@drawable/ic_user">
