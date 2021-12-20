@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WARMApp">
+
         <activity
             android:name=".SearchTrainerProfileActivity"
             android:exported="false" />
@@ -22,9 +23,6 @@
             android:exported="true" />
         <activity
             android:name=".trainerActivities.RequestsActivity"
-            android:exported="true" />
-        <activity
-            android:name=".traineeActivities.TraineeRequestsActivity"
             android:exported="true" />
         <activity
             android:name=".classes.TrainerProfile"

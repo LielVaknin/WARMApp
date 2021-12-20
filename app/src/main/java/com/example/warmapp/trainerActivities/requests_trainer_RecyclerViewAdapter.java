@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
 import android.text.InputType;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,11 +18,15 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
+import android.app.Notification;
 import androidx.recyclerview.widget.RecyclerView;
 import com.example.warmapp.R;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.RequestModel;
 import com.example.warmapp.classes.Training;
+import com.example.warmapp.classes.User;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -41,13 +46,16 @@ import java.util.ArrayList;
         DatabaseReference databaseReference;
         FirebaseAuth auth;
         String userID;
+        private NotificationManagerCompat notificationManager;
 
         public requests_trainer_RecyclerViewAdapter(Context context, ArrayList<RequestModel> requests){
             this.context=context;
             this.requests=requests;
             databaseReference= FirebaseDatabase.getInstance().getReference();
             auth= FirebaseAuth.getInstance();
+
             userID=auth.getCurrentUser().getUid();
+            notificationManager = NotificationManagerCompat.from(context);
         }
 
         @NonNull
@@ -87,6 +95,7 @@ import java.util.ArrayList;
                         //add the trainee to the training participants list
                         databaseReference.child("Trainings").
                                 child(trainingID).child("participants").child(traineeID).setValue(true);
+
                         holder.reject.setVisibility(View.GONE);
                         holder.apply.setVisibility(View.GONE);
 
@@ -102,7 +111,7 @@ import java.util.ArrayList;
                                    for (DataSnapshot reqID : snapshot.getChildren()){
                                        Request r = reqID.getValue(Request.class);
                                        if(r.getTrainingID().equals(trainingID)){
-                                           removeRequest(reqID.getKey(),traineeID);
+                                           removeRequest(reqID.getKey(),traineeID,userID);
                                        }
                                    }
                                 }
@@ -113,26 +122,75 @@ import java.util.ArrayList;
                                 }
                             });
                         }
-                        for (int i=0;i<requests.size();i++){
-                            int currentPosition= holder.getAdapterPosition();
-                            String date= requests.get(currentPosition).training.getDate();
-                            String start =requests.get(currentPosition).training.getStartTraining();
-                            String end =requests.get(currentPosition).training.getEndTraining();
+                        int currentPosition= holder.getAdapterPosition();
+                        String date= requests.get(currentPosition).training.getDate();
+                        String start =requests.get(currentPosition).training.getStartTraining();
+                        String end =requests.get(currentPosition).training.getEndTraining();
+                        databaseReference.child("Users").child(traineeID).child("requests").addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    String requestID = dataSnapshot.getKey();
+                                    if(requestID!=requests.get(currentPosition).requestID) {
+                                        databaseReference.child("Requests").child(requestID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                            @Override
+                                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                Request request = snapshot.getValue(Request.class);
+                                                String trainingID = request.getTrainingID();
+                                                databaseReference.child("Trainings").child(trainingID).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                    @Override
+                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                        Training training = snapshot.getValue(Training.class);
+                                                        String otherDate= training.getDate();
+                                                        if(otherDate.equals(holder.trainingDate.getText().toString())){
+                                                            String otherStart = training.getStartTraining();
+                                                            String otherEnd = training.getEndTraining();
+                                                            if(isOverlapping(start,end,otherStart,otherEnd)){
+                                                                removeRequest(requestID,traineeID,training.getTrainerId());
+                                                               /* databaseReference.child("Users").child(training.getTrainerId()).addListenerForSingleValueEvent(new ValueEventListener() {
+                                                                    @Override
+                                                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                                                        User trainer=snapshot.getValue(User.class);
+                                                                        String trainerName= trainer.getFirstName() + " "+trainer.getLastName();
+                                                                        String title = "Request Status";
+                                                                        String message = "Request for "+training.getTitle() + " with "+trainerName +" is canceled (overlapping)";
+                                                                    }
 
-                            if(i!=currentPosition){
-                                String otherDate= requests.get(i).training.getDate();
-                                if(otherDate!=date) {
-                                    String otherStart = requests.get(i).training.getStartTraining();
-                                    String otherEnd = requests.get(i).training.getEndTraining();
-                                    if(isOverlapping(start,end,otherStart,otherEnd)){
-                                        removeRequest(i);
+                                                                    @Override
+                                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                                    }
+                                                                });*/
+
+                                                            }
+
+                                                        }
+
+                                                    }
+
+                                                    @Override
+                                                    public void onCancelled(@NonNull DatabaseError error) {
+
+                                                    }
+                                                });
+                                            }
+
+                                            @Override
+                                            public void onCancelled(@NonNull DatabaseError error) {
+
+                                            }
+
+                                        });
                                     }
                                 }
-
-
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
 
                             }
-                        }
+
+                        });
+
                     }catch (NullPointerException e){
                         Toast.makeText(context,"Something went wrong, please refresh the page",Toast.LENGTH_LONG);
                     }
@@ -273,12 +331,12 @@ import java.util.ArrayList;
 
         }
 
-        private void removeRequest(String requestID,String traineeID){
+        private void removeRequest(String requestID,String traineeID,String trainerID){
 
             try{
                 //remove the request from the trainer requests list
                 databaseReference.child("Users").
-                        child(userID).child("requests").child(requestID).removeValue();
+                        child(trainerID).child("requests").child(requestID).removeValue();
 
                 //remove the request from the trainee requests list
                 databaseReference.child("Users").
@@ -293,12 +351,18 @@ import java.util.ArrayList;
 
         }
 
-        @Override
+        public void sendEmail(String title,String message) {
+
+        }
+
+            @Override
         public int getItemCount() {
             return requests.size();
         }
 
         public static class myViewHolder extends RecyclerView.ViewHolder{
+
+
 
             ImageView traineeImage;
             TextView traineeName,paymentMethod,trainingTitle,trainingDate,trainingTime,trainerPhone,message;

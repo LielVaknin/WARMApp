@@ -54,7 +54,6 @@ public class RequestsActivity extends AppCompatActivity {
         requests=new ArrayList<>();
         auth= FirebaseAuth.getInstance();
         userID=auth.getCurrentUser().getUid();
-
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.menu_requests);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
