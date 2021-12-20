@@ -206,6 +206,7 @@ public class RequestsActivity extends AppCompatActivity {
                 requestModel.otherUserID=traineeID;
                 requestModel.otherUserName=traineeName;
                 requestModel.otherUserPhone=trainee.getPhone();
+
                 getTrainingDetailsTrainer(trainingID,requestModel);
             }
 

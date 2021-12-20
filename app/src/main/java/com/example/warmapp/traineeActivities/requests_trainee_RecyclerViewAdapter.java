@@ -160,7 +160,7 @@ public class requests_trainee_RecyclerViewAdapter extends RecyclerView.Adapter<r
 
     private void removeRequest(int position){
         String requestID= requests.get(position).requestID;
-        String trainerID= requests.get(position).otherUserID;
+        String trainerID= requests.get(position).training.getTrainerId();
         String trainingID = requests.get(position).training.getTrainingID();
 
         //remove the request from the trainee requests list

@@ -1,5 +1,7 @@
 package com.example.warmapp.classes;
 
+import android.widget.ImageView;
+
 public class RequestModel {
 
     public Training training;
