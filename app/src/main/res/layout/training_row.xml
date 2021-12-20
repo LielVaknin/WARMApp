@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:text="City"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/trainer_image"
             app:layout_constraintTop_toBottomOf="@+id/tv_trainer_name" />
 
         <TextView
@@ -47,7 +47,7 @@
             android:textColor="@color/black"
             android:textSize="20sp"
             android:textStyle="bold"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/trainer_image"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
@@ -57,11 +57,11 @@
             android:layout_marginTop="2dp"
             android:text="trainerName"
             android:textColor="@color/black"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toEndOf="@+id/trainer_image"
             app:layout_constraintTop_toBottomOf="@+id/tvTitle" />
 
         <com.mikhaellopez.circularimageview.CircularImageView
-            android:id="@+id/imageView"
+            android:id="@+id/trainer_image"
             android:layout_width="99dp"
             android:layout_height="96dp"
             android:layout_marginStart="16dp"

@@ -7,7 +7,7 @@
     tools:context=".classes.TrainerProfile">
 
     <com.mikhaellopez.circularimageview.CircularImageView
-        android:id="@+id/imageView"
+        android:id="@+id/trainer_image"
         android:layout_width="128dp"
         android:layout_height="132dp"
         android:layout_marginTop="108dp"
@@ -41,9 +41,9 @@
         android:layout_height="34dp"
         android:text=" Alex Aminov"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/imageView"
-        app:layout_constraintStart_toStartOf="@+id/imageView"
-        app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        app:layout_constraintEnd_toEndOf="@+id/trainer_image"
+        app:layout_constraintStart_toStartOf="@+id/trainer_image"
+        app:layout_constraintTop_toBottomOf="@+id/trainer_image" />
 
     <TextView
         android:id="@+id/textView9"

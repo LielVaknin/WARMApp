@@ -8,7 +8,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.annotation.SuppressLint;
-import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
@@ -22,11 +21,10 @@ import android.widget.CompoundButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.applandeo.materialcalendarview.EventDay;
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
 import com.example.warmapp.classes.AccountActivity;
-import com.example.warmapp.classes.MyAdapter;
+import com.example.warmapp.classes.MySearchAdapter;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.TrainingModel;
@@ -55,11 +53,9 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.io.Serializable;
 import java.text.NumberFormat;
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -70,7 +66,7 @@ import java.util.Objects;
 public class SearchActivity extends AppCompatActivity implements Serializable {
 
     RecyclerView recyclerView;
-    MyAdapter myAdapter;
+    MySearchAdapter myAdapter;
     ArrayList<TrainingModel> trainings;
 
     Button mDatePickerBtn;
@@ -542,7 +538,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
 
     public void setAdapter() {
         Log.d("adapter:", "" + trainings.size());
-        myAdapter = new MyAdapter(this, trainings, userType);
+        myAdapter = new MySearchAdapter(this, trainings, userType);
         recyclerView.setAdapter(myAdapter);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.addItemDecoration(new DividerItemDecoration(recyclerView.getContext(), DividerItemDecoration.VERTICAL));

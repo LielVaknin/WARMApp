@@ -24,7 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
+public class MySearchAdapter extends RecyclerView.Adapter<MySearchAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<TrainingModel> trainings;
@@ -32,7 +32,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     String userType;
     String userID;
 
-    public MyAdapter(Context context, ArrayList<TrainingModel> trainings,String userType) {
+    public MySearchAdapter(Context context, ArrayList<TrainingModel> trainings, String userType) {
         this.context = context;
         this.trainings = trainings;
         auth= FirebaseAuth.getInstance();
@@ -44,8 +44,8 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
     @Override
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(context);
-        View view = inflater.inflate(R.layout.training, parent, false);
-        return new MyAdapter.MyViewHolder(view);
+        View view = inflater.inflate(R.layout.training_row, parent, false);
+        return new MySearchAdapter.MyViewHolder(view);
     }
 
     @Override
@@ -227,7 +227,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.MyViewHolder> {
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            trainerImage = itemView.findViewById(R.id.imageView);
+            trainerImage = itemView.findViewById(R.id.trainer_image);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvCity = itemView.findViewById(R.id.tvCity);
             tvTrainerName = itemView.findViewById(R.id.tv_trainer_name);

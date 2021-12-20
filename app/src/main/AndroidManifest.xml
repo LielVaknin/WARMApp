@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.WARMApp">
         <activity
+            android:name=".SearchTrainerProfileActivity"
+            android:exported="false" />
+        <activity
             android:name=".classes.AccountActivity"
             android:exported="false" />
         <activity
@@ -46,8 +49,7 @@
         </activity>
         <activity
             android:name=".traineeActivities.SearchActivity"
-            android:exported="true">
-        </activity>
+            android:exported="true"></activity>
     </application>
 
 </manifest>
