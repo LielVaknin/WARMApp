@@ -2,6 +2,8 @@ package com.example.warmapp.classes;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,18 +14,26 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warmapp.R;
+import com.example.warmapp.trainerActivities.CalendarActivity;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.MyViewHolder> {
 
     Context context;
     ArrayList<Training> trainings;
+    String userID;
+    String userType;
 
-    public MyTrainingsAdapter(Context context, ArrayList<Training> trainings){
+    public MyTrainingsAdapter(Context context, ArrayList<Training> trainings, String userType, String userID) {
         this.context = context;
         this.trainings = trainings;
+        this.userID = userID;
+        this.userType = userType;
     }
 
     @NonNull
@@ -45,7 +55,7 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
 
         String type = trainings.get(position).getTitle();
         holder.textViewType.setText(type);
-        setTypeIcon(holder,type);
+        setTypeIcon(holder, type);
 
         String trainingTime = trainings.get(position).getStartTraining() + " - " + trainings.get(position).getEndTraining();
         holder.textViewTime.setText(trainingTime);
@@ -55,11 +65,10 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
         holder.cancelTraining.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                showCancelTrainingDialog();
+                showCancelTrainingDialog(trainings.get(position));
             }
         });
     }
-
 
 
     @Override
@@ -68,21 +77,59 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
     }
 
     private void setTypeIcon(MyViewHolder holder, String type) {
-        holder.imageViewType.setImageResource(R.drawable.apply_icon);
+        holder.imageViewType.setImageResource(R.drawable.ic_user);
     }
 
     private void showMoreDetailsDialog(Training training) {
 
     }
 
-    private void showCancelTrainingDialog() {
-
+    private void showCancelTrainingDialog(Training training) {
+        MaterialAlertDialogBuilder builder = new MaterialAlertDialogBuilder(context, R.style.MaterialAlertDialog_rounded);
+        builder.setTitle("Cancel Training");
+        builder.setMessage("Are you sure you want to cancel the training?");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                cancelTraining(training);
+                Intent intent = new Intent(context, CalendarActivity.class);
+                context.startActivity(intent);
+            }
+        });
+        builder.setNegativeButton("No", null);
+        builder.show();
     }
 
-    public static class MyViewHolder extends RecyclerView.ViewHolder{
+    private void cancelTraining(Training training) {
+        if (userType.equals("trainer")) {
+            //get list from training of participants
+            ArrayList<String> trainingUsers = new ArrayList<>();
+            if(training.getParticipants() != null){
+                for (Map.Entry<String, Boolean> entry : training.getParticipants().entrySet()) {
+                    trainingUsers.add(entry.getKey());
+                }
+            }
+            //remove all participants from the training
+            for (int i = 0; i < trainingUsers.size(); i++) {
+                FirebaseDatabase.getInstance().getReference("Users").child(trainingUsers.get(i)).child("trainings")
+                        .child(training.getTrainingID()).removeValue();
+            }
+            //remove the training
+            FirebaseDatabase.getInstance().getReference("Trainings").child(training.getTrainingID()).removeValue();
+        } else {
+            //remove user from participants list in the training
+            FirebaseDatabase.getInstance().getReference("Trainings").child(training.getTrainingID()).child("participants")
+                    .child(userID).removeValue();
+        }
+        //remove the training from user/trainer trainings list
+        FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings")
+                .child(training.getTrainingID()).removeValue();
+    }
 
-        ImageView imageViewType,moreDetails;
-        TextView textViewType,textViewTime,textViewAddress,textViewCity;
+    public static class MyViewHolder extends RecyclerView.ViewHolder {
+
+        ImageView imageViewType, moreDetails;
+        TextView textViewType, textViewTime, textViewAddress, textViewCity;
         MaterialButton cancelTraining;
 
         public MyViewHolder(@NonNull View itemView) {

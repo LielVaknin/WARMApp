@@ -17,7 +17,6 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
 import android.text.InputType;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,6 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
 import android.widget.ImageView;
-import android.widget.ProgressBar;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -34,10 +32,10 @@ import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
-import com.example.warmapp.SignUpActivity;
 import com.example.warmapp.classes.AccountActivity;
 import com.example.warmapp.classes.MyTrainingsAdapter;
 import com.example.warmapp.classes.Training;
+import com.example.warmapp.classes.User;
 import com.example.warmapp.traineeActivities.SearchActivity;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.button.MaterialButton;
@@ -83,7 +81,6 @@ public class CalendarActivity extends AppCompatActivity {
     private List<EventDay> events;
     private Dialog dialogAddTraining;
     private ProgressDialog progressDialog;
-    private Boolean hasTrainings;
 
     //dialog add training
     private ImageView exitIcon;
@@ -123,7 +120,7 @@ public class CalendarActivity extends AppCompatActivity {
     //firebase
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final String userID = Objects.requireNonNull(auth.getCurrentUser()).getUid();
-    private String userType;
+    private User user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -134,14 +131,15 @@ public class CalendarActivity extends AppCompatActivity {
         initViews();
         setUpBottomNavigation();
         checkTrainerOrTrainee();
-        putTrainingsDayOnCalendar();
 
         calendarView.setOnDayClickListener(new OnDayClickListener() {
             @Override
             public void onDayClick(@NonNull EventDay eventDay) {
-                calendar = eventDay.getCalendar();
-                String date = simpleDateFormat.format(calendar.getTime());
-                showTrainingsOnSelectedDate(date);
+                if (userTrainings != null) {
+                    calendar = eventDay.getCalendar();
+                    String date = simpleDateFormat.format(calendar.getTime());
+                    showTrainingsOnSelectedDate(date);
+                }
             }
         });
 
@@ -201,17 +199,24 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void checkTrainerOrTrainee() {
-        FirebaseDatabase.getInstance().getReference("Users").child(userID).child("userType")
+        progressDialog = new ProgressDialog(CalendarActivity.this);
+        progressDialog.setMessage("Loading");
+        progressDialog.show();
+
+        FirebaseDatabase.getInstance().getReference("Users").child(userID)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                userType = snapshot.getValue(String.class);
+                user = snapshot.getValue(User.class);
                 //if trainer show add training button
-                if (Objects.requireNonNull(userType).equals("trainer")) {
+                if (Objects.requireNonNull(user).getUserType().equals("trainer")) {
                     addTrainingButtonDialog.setVisibility(View.VISIBLE);
                 }
+                //if have trainings to trainer or trainee
                 if(snapshot.hasChild("trainings")){
-                    hasTrainings=true;
+                    putTrainingsDayOnCalendar();
+                }else {
+                    progressDialog.dismiss();
                 }
             }
 
@@ -223,10 +228,6 @@ public class CalendarActivity extends AppCompatActivity {
     }
 
     private void putTrainingsDayOnCalendar() {
-        progressDialog = new ProgressDialog(CalendarActivity.this);
-        progressDialog.setMessage("Loading");
-        progressDialog.show();
-
         events = new ArrayList<>();
         userTrainings = new ArrayList<>();
 
@@ -284,7 +285,7 @@ public class CalendarActivity extends AppCompatActivity {
         recyclerViewMyTrainings.setLayoutManager(new LinearLayoutManager(this));
 
         trainingsToShowOnThisDate = new ArrayList<>();
-        myTrainingsAdapter = new MyTrainingsAdapter(this, trainingsToShowOnThisDate);
+        myTrainingsAdapter = new MyTrainingsAdapter(this, trainingsToShowOnThisDate, user.getUserType(), userID);
         recyclerViewMyTrainings.setAdapter(myTrainingsAdapter);
 
         for(int i = 0; i < userTrainings.size(); i++){
@@ -293,7 +294,6 @@ public class CalendarActivity extends AppCompatActivity {
             }
         }
         myTrainingsAdapter.notifyDataSetChanged();
-
     }
 
     @SuppressLint("UseCompatLoadingForDrawables")

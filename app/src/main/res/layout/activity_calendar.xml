@@ -33,6 +33,7 @@
         android:contentDescription="addTraining"
         android:focusable="true"
         app:backgroundTint="#B2DFDB"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/recycle_view_my_trainings"
         app:layout_constraintEnd_toEndOf="@+id/calendarView"
         app:layout_constraintHorizontal_bias="0.0"
