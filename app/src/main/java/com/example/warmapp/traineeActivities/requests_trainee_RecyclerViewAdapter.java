@@ -59,6 +59,7 @@ public class requests_trainee_RecyclerViewAdapter extends RecyclerView.Adapter<r
         holder.trainingTime.setText(requests.get(position).training.getStartTraining()+"-"+requests.get(position).training.getEndTraining());
         holder.trainingTitle.setText(requests.get(position).training.getTitle());
         holder.paymentMethod.setText(requests.get(position).paymentMethod);
+        holder.trainerImage.setImageBitmap(requests.get(position).otherUserPhoto);
         holder.cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

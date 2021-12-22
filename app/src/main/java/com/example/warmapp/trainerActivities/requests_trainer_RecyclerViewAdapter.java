@@ -75,6 +75,7 @@ import java.util.ArrayList;
             holder.trainingTitle.setText(requests.get(position).training.getTitle());
             holder.paymentMethod.setText(requests.get(position).paymentMethod);
             holder.trainerPhone.setText(requests.get(position).otherUserPhone);
+            holder.traineeImage.setImageBitmap(requests.get(position).otherUserPhoto);
             holder.trainerPhone.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

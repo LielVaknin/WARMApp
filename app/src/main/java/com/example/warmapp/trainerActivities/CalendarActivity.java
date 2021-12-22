@@ -32,7 +32,7 @@ import com.applandeo.materialcalendarview.EventDay;
 import com.applandeo.materialcalendarview.listeners.OnDayClickListener;
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
-import com.example.warmapp.classes.AccountActivity;
+import com.example.warmapp.AccountActivity;
 import com.example.warmapp.classes.MyTrainingsAdapter;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.User;

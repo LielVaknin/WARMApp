@@ -25,18 +25,12 @@
 
             <com.mikhaellopez.circularimageview.CircularImageView
                 android:id="@+id/request_trainer_image"
-                android:layout_width="55dp"
-                android:layout_height="58dp"
-                android:layout_marginStart="6dp"
-                app:civ_border_color="@color/black"
-                app:civ_border_width="4dp"
-                app:civ_shadow="true"
-                app:civ_shadow_color="@color/black"
-                app:civ_shadow_radius="1dp"
+                android:layout_width="65dp"
+                android:layout_height="65dp"
+                android:layout_marginStart="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.188"
                 app:srcCompat="@drawable/ic_user"></com.mikhaellopez.circularimageview.CircularImageView>
 
             <TextView
@@ -44,13 +38,14 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="2dp"
+                android:layout_marginTop="10dp"
                 android:fontFamily="@font/outfitregular"
                 android:text="trainer"
                 android:textColor="#000000"
                 android:textSize="19sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/request_trainer_image"
-                app:layout_constraintTop_toTopOf="@+id/request_trainer_image" />
+                app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
                 android:id="@+id/request_training_title2"

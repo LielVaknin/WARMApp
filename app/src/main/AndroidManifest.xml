@@ -17,7 +17,7 @@
             android:name=".SearchTrainerProfileActivity"
             android:exported="false" />
         <activity
-            android:name=".classes.AccountActivity"
+            android:name=".AccountActivity"
             android:exported="false" />
         <activity
             android:name=".trainerActivities.CalendarActivity"

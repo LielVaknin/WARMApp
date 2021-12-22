@@ -21,7 +21,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
-import com.example.warmapp.classes.AccountActivity;
+import com.example.warmapp.AccountActivity;
 import com.example.warmapp.classes.MySearchAdapter;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.Training;

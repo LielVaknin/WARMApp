@@ -1,5 +1,6 @@
 package com.example.warmapp.classes;
 
+import android.graphics.Bitmap;
 import android.widget.ImageView;
 
 public class RequestModel {
@@ -12,5 +13,6 @@ public class RequestModel {
             otherUserPhone,
             paymentMethod;
     public float trainerRate;
+    public Bitmap otherUserPhoto;
 
 }

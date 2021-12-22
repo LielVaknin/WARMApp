@@ -7,6 +7,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -15,7 +17,7 @@ import android.widget.TextView;
 
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
-import com.example.warmapp.classes.AccountActivity;
+import com.example.warmapp.AccountActivity;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.RequestModel;
 import com.example.warmapp.classes.Training;
@@ -24,6 +26,8 @@ import com.example.warmapp.classes.UserTrainee;
 import com.example.warmapp.classes.UserTrainer;
 import com.example.warmapp.traineeActivities.SearchActivity;
 import com.example.warmapp.traineeActivities.requests_trainee_RecyclerViewAdapter;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -32,6 +36,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 
@@ -206,8 +212,23 @@ public class RequestsActivity extends AppCompatActivity {
                 requestModel.otherUserID=traineeID;
                 requestModel.otherUserName=traineeName;
                 requestModel.otherUserPhone=trainee.getPhone();
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                StorageReference photoReference=storageReference.child(traineeID+".jpg");
+                final long ONE_MEGABYTE = 1024 * 1024;
+                photoReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        requestModel.otherUserPhoto=bmp;
+                        getTrainingDetailsTrainer(trainingID,requestModel);
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        getTrainingDetailsTrainer(trainingID,requestModel);
+                    }
+                });
 
-                getTrainingDetailsTrainer(trainingID,requestModel);
             }
 
             @Override
@@ -217,16 +238,33 @@ public class RequestsActivity extends AppCompatActivity {
         });
     }
 
-    private void getTrainerDetails(String traineeID,RequestModel requestModel) {
-        firebaseReference.child("Users").child(traineeID).addListenerForSingleValueEvent(new ValueEventListener() {
+    private void getTrainerDetails(String trainerID,RequestModel requestModel) {
+        firebaseReference.child("Users").child(trainerID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 UserTrainer trainer = snapshot.getValue(UserTrainer.class);
                 String trainerName= trainer.getFirstName() + " "+trainer.getLastName();
                 requestModel.otherUserName=trainerName;
                 requestModel.trainerRate=trainer.getRating();
-                requests.add(requestModel);
-                showRows();
+                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                StorageReference photoReference=storageReference.child(trainerID+".jpg");
+                final long ONE_MEGABYTE = 1024 * 1024;
+                photoReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        requestModel.otherUserPhoto=bmp;
+                        requests.add(requestModel);
+                        showRows();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        requests.add(requestModel);
+                        showRows();
+                    }
+                });
+
             }
 
             @Override

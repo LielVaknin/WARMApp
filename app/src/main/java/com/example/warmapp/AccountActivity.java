@@ -1,4 +1,4 @@
-package com.example.warmapp.classes;
+package com.example.warmapp;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -9,20 +9,15 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.Application;
-import android.content.ActivityNotFoundException;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
-import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
@@ -30,10 +25,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.warmapp.HomeActivity;
-import com.example.warmapp.LoginActivity;
-import com.example.warmapp.R;
-import com.example.warmapp.SignUpActivity;
+import com.example.warmapp.classes.User;
 import com.example.warmapp.traineeActivities.SearchActivity;
 import com.example.warmapp.trainerActivities.CalendarActivity;
 import com.example.warmapp.trainerActivities.RequestsActivity;
