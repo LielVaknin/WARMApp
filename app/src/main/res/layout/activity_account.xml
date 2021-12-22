@@ -6,111 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".classes.AccountActivity">
 
-<!--    <TextView-->
-<!--        android:id="@+id/account_user_name"-->
-<!--        android:layout_width="wrap_content"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="50dp"-->
-<!--        android:text="user name"-->
-<!--        android:textSize="20sp"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toTopOf="parent" />-->
 
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/title_dialog_il"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="20dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        app:hintTextColor="#388E3C"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/account_user_name"-->
-<!--        app:layout_constraintHorizontal_bias="0.446"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/account_user_name"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/account_user_name"-->
-<!--        app:startIconDrawable="@drawable/ic_fitness_center_black_24dp">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/account_first_name"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/edit_text_bg"-->
-<!--            android:hint="@string/first_name" />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/features_dialog_il"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        android:layout_marginStart="16dp"-->
-<!--        android:layout_marginEnd="16dp"-->
-<!--        app:hintTextColor="#388E3C"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/title_dialog_il"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/title_dialog_il"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/title_dialog_il"-->
-<!--        app:startIconDrawable="@drawable/ic_activity_1">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/account_last_name"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/edit_text_bg"-->
-<!--            android:hint="@string/last_name" />/>-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/address_dialog_il"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:hintTextColor="#388E3C"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/features_dialog_il"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/features_dialog_il"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/features_dialog_il"-->
-<!--        app:startIconDrawable="@drawable/ic_map_pin_1">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/account_phone"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/edit_text_bg"-->
-<!--            android:hint="Phone Number" />-->
-<!--    </com.google.android.material.textfield.TextInputLayout>-->
-
-
-<!--    <com.google.android.material.textfield.TextInputLayout-->
-<!--        android:id="@+id/date_dialog_il"-->
-<!--        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"-->
-<!--        android:layout_width="300dp"-->
-<!--        android:layout_height="wrap_content"-->
-<!--        app:hintTextColor="#388E3C"-->
-<!--        app:layout_constraintEnd_toEndOf="@+id/address_dialog_il"-->
-<!--        app:layout_constraintStart_toStartOf="@+id/address_dialog_il"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/address_dialog_il"-->
-<!--        app:startIconDrawable="@drawable/ic_calendar">-->
-
-<!--        <com.google.android.material.textfield.TextInputEditText-->
-<!--            android:id="@+id/account_password"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:background="@drawable/edit_text_bg"-->
-<!--            android:hint="Password" />-->
-<!--</com.google.android.material.textfield.TextInputLayout>-->
-
-
-    <Button
-        android:id="@+id/log_out"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:backgroundTint="#801313"
-        android:text="log out"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.481" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -123,5 +19,169 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
+        android:layout_width="413dp"
+        android:layout_height="238dp"
+        android:background="#DDDADA"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <com.mikhaellopez.circularimageview.CircularImageView
+            android:id="@+id/account_profile_photo"
+            android:layout_width="175dp"
+            android:layout_height="203dp"
+            app:civ_border="false"
+            app:civ_shadow="false"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.63"
+            app:srcCompat="@drawable/ic_user" />
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/account_change_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="-5dp"
+            android:layout_marginBottom="-5dp"
+            android:clickable="true"
+            android:contentDescription="change profile photo"
+            android:focusable="true"
+            android:visibility="visible"
+            app:backgroundTint="#B2DFDB"
+            app:layout_constraintBottom_toBottomOf="@+id/account_profile_photo"
+            app:layout_constraintEnd_toEndOf="@+id/account_profile_photo"
+            app:maxImageSize="45dp"
+            app:srcCompat="@drawable/camera_icon" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <Button
+        android:id="@+id/log_out"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="196dp"
+        android:backgroundTint="#801313"
+        android:text="log out"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="2dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="20dp"
+        android:orientation="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/log_out"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="190dp"
+                android:layout_height="40sp"
+                android:layout_gravity="center_horizontal"
+                android:fontFamily="@font/outfitregular"
+                android:gravity="center_vertical|left"
+                android:text="First Name"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/account_first_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_right_arrow"
+                android:fontFamily="@font/outfitregular"
+                android:gravity="right|center_vertical"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="190dp"
+                android:layout_height="40sp"
+                android:fontFamily="@font/outfitregular"
+                android:gravity="center_vertical"
+                android:text="Last Name"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/account_last_name"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_right_arrow"
+                android:gravity="right|center_vertical"
+                 />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="190dp"
+                android:layout_height="40sp"
+                android:fontFamily="@font/outfitregular"
+                android:gravity="center_vertical"
+                android:text="Email"
+                android:textColor="@color/black"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/account_email"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:drawableRight="@drawable/ic_right_arrow"
+                android:fontFamily="@font/outfitregular"
+                android:gravity="right|center_vertical"
+                 />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/account_change_password"
+            android:layout_width="match_parent"
+            android:layout_height="40sp"
+            android:drawableRight="@drawable/ic_right_arrow"
+            android:fontFamily="@font/outfitregular"
+            android:gravity="center_vertical"
+            android:text="Change Password"
+            android:textColor="#000000"
+            android:textSize="20sp" />
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/account_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="218dp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/constraintLayout" />
 </androidx.constraintlayout.widget.ConstraintLayout>
