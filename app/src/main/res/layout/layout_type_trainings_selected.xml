@@ -22,7 +22,7 @@
 
 
             <ImageView
-                android:id="@+id/image_card_type"
+                android:id="@+id/type_trainings_selected_image_card_type"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginStart="32dp"
@@ -42,7 +42,7 @@
                 android:textSize="16sp"
                 app:layout_constraintEnd_toStartOf="@+id/type_trainings_selected_image_card_details"
                 app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toEndOf="@+id/image_card_type"
+                app:layout_constraintStart_toEndOf="@+id/type_trainings_selected_image_card_type"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
@@ -51,8 +51,8 @@
                 android:layout_height="20dp"
                 android:layout_marginTop="14dp"
                 android:src="@drawable/ic_clock"
-                app:layout_constraintStart_toStartOf="@+id/image_card_type"
-                app:layout_constraintTop_toBottomOf="@+id/image_card_type" />
+                app:layout_constraintStart_toStartOf="@+id/type_trainings_selected_image_card_type"
+                app:layout_constraintTop_toBottomOf="@+id/type_trainings_selected_image_card_type" />
 
             <TextView
                 android:id="@+id/type_trainings_selected_text_card_time"
@@ -123,12 +123,13 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/constraintLayout"
                 android:layout_width="15dp"
                 android:layout_height="140dp"
                 android:layout_marginEnd="15dp"
                 android:background="#e0f2f1"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/image_card_type"
+                app:layout_constraintEnd_toStartOf="@+id/type_trainings_selected_image_card_type"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
@@ -142,13 +143,23 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="49dp"
                 android:layout_marginEnd="16dp"
-                android:backgroundTint="#801313"
-                android:text="@string/cancel"
+                android:backgroundTint="#0BA5B3"
+                android:text="add"
                 android:textSize="16dp"
                 android:textStyle="bold"
                 app:cornerRadius="18dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/type_trainings_selected_image_card_details" />
+
+            <ProgressBar
+                android:id="@+id/type_trainings_selected_progress_bar"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:visibility="gone"/>
 
 
         </androidx.constraintlayout.widget.ConstraintLayout>

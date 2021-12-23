@@ -3,6 +3,7 @@ package com.example.warmapp.traineeActivities;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.view.WindowCompat;
 import androidx.recyclerview.widget.DividerItemDecoration;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,7 +23,7 @@ import android.widget.Toast;
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
 import com.example.warmapp.SearchTrainerProfileActivity;
-import com.example.warmapp.classes.AccountActivity;
+import com.example.warmapp.AccountActivity;
 import com.example.warmapp.classes.MySearchAdapter;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.Training;
@@ -107,6 +108,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_search);
         switchToTrainerSearchBtn = findViewById(R.id.switch_to_trainer_search);
         switchToTrainerSearchBtn.setOnClickListener(new View.OnClickListener() {

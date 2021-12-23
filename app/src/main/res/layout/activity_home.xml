@@ -6,12 +6,99 @@
     android:layout_height="match_parent"
     tools:context=".HomeActivity">
 
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/home_activity_circular_image_view"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/example_pic"
+        app:civ_border_width="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/home_activity_hi_name_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="51dp"
+        android:fontFamily="sans-serif-black"
+        android:text="Hi Name!"
+        android:textSize="60sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/home_activity_welcome_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/outfitregular"
+        android:text="Welcome Back"
+        android:textSize="48sp"
+        app:layout_constraintEnd_toEndOf="@+id/home_activity_hi_name_text"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/home_activity_hi_name_text"
+        app:layout_constraintTop_toBottomOf="@+id/home_activity_hi_name_text" />
+
+    <TextView
+        android:id="@+id/home_activity_categories_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="Categories:"
+        android:textSize="16sp"
+        app:layout_constraintStart_toStartOf="@+id/home_activity_welcome_text"
+        app:layout_constraintTop_toBottomOf="@+id/home_activity_welcome_text" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_activity_type_trainings_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_activity_categories_text" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_activity_type_trainings_show_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="140dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_activity_type_trainings_recycler_view" />
+
+
+    <TextView
+        android:id="@+id/home_activity_your_trainings_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="245dp"
+        android:layout_marginEnd="263dp"
+        android:text="Your Trainings:"
+        android:textSize="16sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/home_activity_categories_text" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/home_activity_your_trainings_recycler_view"
+        android:layout_width="match_parent"
+        android:layout_height="200dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/home_activity_your_trainings_text"
+        app:layout_constraintTop_toBottomOf="@+id/home_activity_your_trainings_text" />
+
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
+        style="@style/ThemeOverlay.App.BottomNavigationView"
+        android:elevation="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>

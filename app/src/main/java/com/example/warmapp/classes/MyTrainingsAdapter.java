@@ -1,6 +1,7 @@
 package com.example.warmapp.classes;
 
 import android.annotation.SuppressLint;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -28,6 +29,11 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
     ArrayList<Training> trainings;
     String userID;
     String userType;
+
+    //dialog
+    Dialog dialogMoreDetails;
+    ImageView imageViewExitIcon;
+    TextView textViewParticipants, textViewFeatures, textViewPrice, textViewDetails;
 
     public MyTrainingsAdapter(Context context, ArrayList<Training> trainings, String userType, String userID) {
         this.context = context;
@@ -80,8 +86,50 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
         holder.imageViewType.setImageResource(R.drawable.ic_user);
     }
 
+    @SuppressLint({"UseCompatLoadingForDrawables", "SetTextI18n"})
     private void showMoreDetailsDialog(Training training) {
+        dialogMoreDetails = new Dialog(context);
+        dialogMoreDetails.setContentView(R.layout.layout_more_details_dialog);
+        dialogMoreDetails.getWindow().setBackgroundDrawable(context.getResources().getDrawable(R.drawable.edit_text_bg));
+        dialogMoreDetails.getWindow().setLayout(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+        dialogMoreDetails.setCancelable(false);
+        dialogMoreDetails.getWindow().getAttributes().windowAnimations = R.style.animation;
+        dialogMoreDetails.show();
 
+        initViewsDialog();
+
+        imageViewExitIcon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialogMoreDetails.dismiss();
+            }
+        });
+
+        StringBuilder features = new StringBuilder();
+        int count = 0;
+        for (String feature : training.getFeatures().keySet()) {
+            count++;
+            features.append(feature);
+            if (count != training.getFeatures().keySet().size()){
+                features.append(", ");
+            }
+        }
+        if (training.getParticipants() == null){
+            textViewParticipants.setText("0");
+        }else {
+            textViewParticipants.setText(training.getParticipants().size() + "");
+        }
+        textViewFeatures.setText(features.toString());
+        textViewPrice.setText(training.getPrice() + "");
+        textViewDetails.setText(training.getDetails());
+    }
+
+    private void initViewsDialog() {
+        imageViewExitIcon = dialogMoreDetails.findViewById(R.id.more_details_calendar_exit_dialog);
+        textViewParticipants = dialogMoreDetails.findViewById(R.id.more_details_calendar_text_participants);
+        textViewFeatures = dialogMoreDetails.findViewById(R.id.more_details_calendar_text_features);
+        textViewPrice = dialogMoreDetails.findViewById(R.id.more_details_calendar_text_price);
+        textViewDetails = dialogMoreDetails.findViewById(R.id.more_details_calendar_text_details);
     }
 
     private void showCancelTrainingDialog(Training training) {
@@ -136,12 +184,12 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
             super(itemView);
 
             imageViewType = itemView.findViewById(R.id.image_card_type);
-            textViewType = itemView.findViewById(R.id.text_card_type);
-            textViewTime = itemView.findViewById(R.id.text_card_time);
-            textViewAddress = itemView.findViewById(R.id.text_card_address);
-            textViewCity = itemView.findViewById(R.id.text_card_city);
-            moreDetails = itemView.findViewById(R.id.image_card_details);
-            cancelTraining = itemView.findViewById(R.id.button_card_cancel);
+            textViewType = itemView.findViewById(R.id.type_trainings_selected_text_card_type);
+            textViewTime = itemView.findViewById(R.id.type_trainings_selected_text_card_time);
+            textViewAddress = itemView.findViewById(R.id.type_trainings_selected_text_card_address);
+            textViewCity = itemView.findViewById(R.id.type_trainings_selected_text_card_city);
+            moreDetails = itemView.findViewById(R.id.type_trainings_selected_image_card_details);
+            cancelTraining = itemView.findViewById(R.id.type_trainings_selected_button_card_cancel);
         }
     }
 }
