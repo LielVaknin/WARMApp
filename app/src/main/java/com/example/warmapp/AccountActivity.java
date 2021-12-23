@@ -27,6 +27,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.warmapp.classes.User;
+import com.example.warmapp.classes.UserTrainee;
+import com.example.warmapp.classes.UserTrainer;
 import com.example.warmapp.traineeActivities.SearchActivity;
 import com.example.warmapp.trainerActivities.CalendarActivity;
 import com.example.warmapp.trainerActivities.RequestsActivity;
@@ -41,6 +43,8 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -58,7 +62,8 @@ public class AccountActivity extends AppCompatActivity {
     String userID;
     Button logOut;
     DatabaseReference databaseReference,userReference;
-    TextView firstName,lastName,email,changePassword;
+    TextView firstName,lastName,email,changePassword,phone,description,descriptionTitle;
+    ImageView iconDescription;
     ProgressBar progressBar;
     FloatingActionButton changePhoto;
     ImageView profilePhoto;
@@ -115,6 +120,10 @@ public class AccountActivity extends AppCompatActivity {
         firstName=findViewById(R.id.account_first_name);
         lastName=findViewById(R.id.account_last_name);
         email=findViewById(R.id.account_email);
+        description=findViewById(R.id.account_description);
+        descriptionTitle=findViewById(R.id.TextViewDescription);
+        iconDescription=findViewById(R.id.imageViewDescription);
+        phone=findViewById(R.id.account_phone);
         changePassword= findViewById(R.id.account_change_password);
         progressBar=findViewById(R.id.account_progress_bar);
         changePhoto= findViewById(R.id.account_change_photo);
@@ -227,10 +236,17 @@ public class AccountActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 User user = snapshot.getValue(User.class);
+                userType=user.getUserType();
                 firstName.setText(user.getFirstName());
                 lastName.setText(user.getLastName());
                 email.setText(user.getMail());
-
+                phone.setText(user.getPhone());
+                if(userType.equals("trainer")){
+                    description.setText(snapshot.getValue(UserTrainer.class).getDescription());
+                    iconDescription.setVisibility(View.VISIBLE);
+                    descriptionTitle.setVisibility(View.VISIBLE);
+                    description.setVisibility(View.VISIBLE);
+                }
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference();
                 StorageReference photoReference=storageReference.child(userID+".jpg");
                 final long ONE_MEGABYTE = 1024 * 1024;
@@ -279,7 +295,7 @@ public class AccountActivity extends AppCompatActivity {
 
                 TextInputLayout changeDetails = dialogView.findViewById(R.id.change_details);
                 TextInputEditText newDetails=dialogView.findViewById(R.id.change_details_edit);
-                newDetails.setHint(firstName.getText().toString());
+                newDetails.setText(firstName.getText().toString());
                 Button positiveButton =alert.getButton(AlertDialog.BUTTON_POSITIVE);
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -317,7 +333,7 @@ public class AccountActivity extends AppCompatActivity {
 
                 TextInputLayout changeDetails = dialogView.findViewById(R.id.change_details);
                 TextInputEditText newDetails=dialogView.findViewById(R.id.change_details_edit);
-                newDetails.setHint(lastName.getText().toString());
+                newDetails.setText(lastName.getText().toString());
                 Button positiveButton =alert.getButton(AlertDialog.BUTTON_POSITIVE);
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -355,7 +371,7 @@ public class AccountActivity extends AppCompatActivity {
 
                 TextInputLayout changeDetails = dialogView.findViewById(R.id.change_details);
                 TextInputEditText newDetails=dialogView.findViewById(R.id.change_details_edit);
-                newDetails.setHint(email.getText().toString());
+                newDetails.setText(email.getText().toString());
                 Button positiveButton =alert.getButton(AlertDialog.BUTTON_POSITIVE);
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -366,8 +382,66 @@ public class AccountActivity extends AppCompatActivity {
                         }
                         else{
                             String newEmail =newDetails.getText().toString();
-                            userReference.child("mail").setValue(newDetails.getText().toString());
-                            lastName.setText(newEmail);
+                                auth.getCurrentUser().updateEmail(newEmail).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()){
+                                            userReference.child("mail").setValue(newDetails.getText().toString());
+                                            userReference.child("mail").setValue(newDetails.getText().toString());
+                                            email.setText(newEmail);
+                                            alert.dismiss();
+                                            Toast.makeText(AccountActivity.this,"Your Changes Saved",Toast.LENGTH_SHORT).show();
+                                        }
+                                        else{
+                                            if(task.getException()!=null){
+                                                if (task.getException().getClass()==FirebaseAuthInvalidCredentialsException.class){
+                                                    Toast.makeText(AccountActivity.this,"Invalid Email Address",Toast.LENGTH_SHORT).show();
+                                                }else if(task.getException().getClass()==FirebaseAuthUserCollisionException.class){
+                                                    Toast.makeText(AccountActivity.this,"Email Address Is Already Taken",Toast.LENGTH_SHORT).show();
+                                                }
+                                            }
+
+                                        }
+                                    }
+                                });
+
+
+                        }
+                    }
+                });
+            }
+        });
+
+        phone.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View dialogView =
+                        LayoutInflater.from(AccountActivity.this).inflate(R.layout.layout_change_personal_details, null);
+                TextView title = dialogView.findViewById(R.id.change_details_title);
+                title.setText("Change Your Phone Number");
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+
+                builder.setView(dialogView);
+                builder.setNegativeButton("Cancel", null);
+                builder.setPositiveButton("Save", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                TextInputLayout changeDetails = dialogView.findViewById(R.id.change_details);
+                TextInputEditText newDetails=dialogView.findViewById(R.id.change_details_edit);
+                newDetails.setText(phone.getText().toString());
+                Button positiveButton =alert.getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(newDetails.getText().toString().equals("")){
+                            alert.dismiss();
+                            Toast.makeText(AccountActivity.this,"No Changes Detected",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            String newPhone =newDetails.getText().toString();
+                            userReference.child("phone").setValue(newDetails.getText().toString());
+                            phone.setText(newPhone);
                             alert.dismiss();
                             Toast.makeText(AccountActivity.this,"Your Changes Saved",Toast.LENGTH_SHORT).show();
                         }
@@ -376,6 +450,42 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
+        description.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                View dialogView =
+                        LayoutInflater.from(AccountActivity.this).inflate(R.layout.layout_change_personal_details, null);
+                TextView title = dialogView.findViewById(R.id.change_details_title);
+                title.setText("Change Your Description");
+                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+                builder.setView(dialogView);
+                builder.setNegativeButton("Cancel", null);
+                builder.setPositiveButton("Save", null);
+                AlertDialog alert = builder.create();
+                alert.show();
+
+                TextInputLayout changeDetails = dialogView.findViewById(R.id.change_details);
+                TextInputEditText newDetails=dialogView.findViewById(R.id.change_details_edit);
+                newDetails.setText(description.getText().toString());
+                Button positiveButton =alert.getButton(AlertDialog.BUTTON_POSITIVE);
+                positiveButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        if(newDetails.getText().toString().equals("")){
+                            alert.dismiss();
+                            Toast.makeText(AccountActivity.this,"No Changes Detected",Toast.LENGTH_SHORT).show();
+                        }
+                        else{
+                            String newDescription =newDetails.getText().toString();
+                            userReference.child("Description").setValue(newDetails.getText().toString());
+                            description.setText(newDescription);
+                            alert.dismiss();
+                            Toast.makeText(AccountActivity.this,"Your Changes Saved",Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+            }
+        });
         setChangePasswordListener();
     }
 
