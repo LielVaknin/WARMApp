@@ -4,19 +4,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".classes.TrainerProfile">
+    tools:context=".classes.TrainerProfileActivity">
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/trainer_image"
-        android:layout_width="128dp"
-        android:layout_height="132dp"
-        android:layout_marginTop="108dp"
+        android:layout_width="115dp"
+        android:layout_height="126dp"
+        android:layout_marginTop="4dp"
         android:padding="5dp"
-        app:civ_border_color="@color/black"
-        app:civ_border_width="4dp"
-        app:civ_shadow="true"
-        app:civ_shadow_color="@color/black"
-        app:civ_shadow_radius="1dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
@@ -25,11 +20,12 @@
     </com.mikhaellopez.circularimageview.CircularImageView>
 
     <RatingBar
-        android:id="@+id/ratingBar"
+        android:id="@+id/rating_average"
         android:layout_width="238dp"
         android:layout_height="48dp"
         android:layout_marginTop="4dp"
         android:numStars="5"
+        android:rating="0"
         app:layout_constraintEnd_toEndOf="@+id/name"
         app:layout_constraintHorizontal_bias="0.508"
         app:layout_constraintStart_toStartOf="@+id/name"
@@ -46,51 +42,117 @@
         app:layout_constraintTop_toBottomOf="@+id/trainer_image" />
 
     <TextView
-        android:id="@+id/textView9"
+        android:id="@+id/description"
         android:layout_width="326dp"
         android:layout_height="88dp"
         android:text="I am fitness trainer and I can help you to loss 10 pounds before summer"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/ratingBar"
-        app:layout_constraintStart_toStartOf="@+id/ratingBar"
-        app:layout_constraintTop_toBottomOf="@+id/ratingBar" />
+        app:layout_constraintEnd_toEndOf="@+id/rating_average"
+        app:layout_constraintStart_toStartOf="@+id/rating_average"
+        app:layout_constraintTop_toBottomOf="@+id/rating_average" />
 
     <TextView
-        android:id="@+id/textView11"
-        android:layout_width="30dp"
-        android:layout_height="32dp"
-        android:layout_marginTop="272dp"
+        android:id="@+id/rating_average_number"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="160dp"
         android:text="4.5"
         android:textSize="20sp"
-        app:layout_constraintEnd_toStartOf="@+id/ratingBar"
-        app:layout_constraintHorizontal_bias="0.956"
+        app:layout_constraintEnd_toStartOf="@+id/rating_average"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/textView12"
+        android:id="@+id/phone_number"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        android:layout_marginTop="4dp"
         android:drawableStart="@drawable/ic_phone"
         android:text="0546889956"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView9"
+        app:layout_constraintEnd_toEndOf="@+id/description"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView9"
-        app:layout_constraintTop_toBottomOf="@+id/textView9" />
+        app:layout_constraintStart_toStartOf="@+id/description"
+        app:layout_constraintTop_toBottomOf="@+id/description" />
 
     <TextView
-        android:id="@+id/textView13"
+        android:id="@+id/mail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:drawableStart="@drawable/ic_mail"
         android:text="Alexaminov@gmail.com"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="@+id/textView12"
+        app:layout_constraintEnd_toEndOf="@+id/phone_number"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/textView12"
-        app:layout_constraintTop_toBottomOf="@+id/textView12" />
+        app:layout_constraintStart_toStartOf="@+id/phone_number"
+        app:layout_constraintTop_toBottomOf="@+id/phone_number" />
+
+
+    <RatingBar
+        android:id="@+id/rate_trainer"
+        android:layout_width="246dp"
+        android:layout_height="54dp"
+        android:layout_marginTop="16dp"
+        android:numStars="5"
+        android:rating="3.5"
+        android:scaleX=".5"
+        android:scaleY=".5"
+        android:transformPivotX="0dp"
+        android:transformPivotY="0dp"
+        app:layout_constraintEnd_toEndOf="@+id/reviews_recyclerView"
+        app:layout_constraintHorizontal_bias="0.175"
+        app:layout_constraintStart_toStartOf="@+id/reviews_recyclerView"
+        app:layout_constraintTop_toBottomOf="@+id/reviews_recyclerView" />
+
+    <EditText
+        android:id="@+id/search_trainer_edtxt"
+        android:layout_width="339dp"
+        android:layout_height="99dp"
+        android:layout_marginTop="52dp"
+        android:background="@drawable/search_trainer_bg"
+        android:ems="10"
+        android:hint="Add review ..."
+        android:inputType="textPersonName"
+        android:paddingStart="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/rate_trainer"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/rate_trainer"
+        app:layout_constraintTop_toBottomOf="@+id/reviews_recyclerView" />
+
+    <Button
+        android:id="@+id/post_btn"
+        android:layout_width="84dp"
+        android:layout_height="42dp"
+        android:layout_marginTop="4dp"
+        android:backgroundTint="#e0f2f1"
+        android:text="post"
+        android:textColor="@color/black"
+        app:layout_constraintEnd_toEndOf="@+id/search_trainer_edtxt"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/search_trainer_edtxt"
+        app:layout_constraintTop_toBottomOf="@+id/search_trainer_edtxt" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/reviews_recyclerView"
+        android:layout_width="383dp"
+        android:layout_height="140dp"
+        android:background="@drawable/search_trainer_bg"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.571"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trainees_reviews" />
+
+    <TextView
+        android:id="@+id/trainees_reviews"
+        android:layout_width="161dp"
+        android:layout_height="28dp"
+        android:layout_marginTop="4dp"
+        android:text="Trainees reviews"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/mail" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

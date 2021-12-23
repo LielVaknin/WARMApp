@@ -15,7 +15,7 @@
 
         <activity
             android:name=".SearchTrainerProfileActivity"
-            android:exported="false" />
+            android:exported="true" />
         <activity
             android:name=".AccountActivity"
             android:exported="false" />
@@ -26,8 +26,8 @@
             android:name=".trainerActivities.RequestsActivity"
             android:exported="true" />
         <activity
-            android:name=".classes.TrainerProfile"
-            android:exported="false" />
+            android:name=".classes.TrainerProfileActivity"
+            android:exported="true" />
         <activity
             android:name=".LoginActivity"
             android:exported="false" />

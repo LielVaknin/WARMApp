@@ -7,10 +7,10 @@
     tools:context=".SearchTrainerProfileActivity">
 
     <EditText
-        android:id="@+id/search_trainer_bar"
-        android:layout_width="403dp"
-        android:layout_height="52dp"
-        android:layout_marginTop="10dp"
+        android:id="@+id/search_trainer_edtxt"
+        android:layout_width="375dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="16dp"
         android:background="@drawable/search_trainer_bg"
         android:drawableStart="@drawable/ic_baseline_search_24"
         android:ems="10"
@@ -20,29 +20,44 @@
         android:paddingStart="16dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/return_to_search_training" />
+        app:layout_constraintTop_toBottomOf="@+id/switch_to_training_search" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/trainers_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_width="409dp"
+        android:layout_height="435dp"
         android:layout_marginTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_trainer_bar"
+        app:layout_constraintTop_toBottomOf="@+id/search_trainer_edtxt"
         app:layout_constraintVertical_bias="0.0" />
 
     <Button
-        android:id="@+id/return_to_search_training"
-        android:layout_width="325dp"
-        android:layout_height="53dp"
-        android:layout_marginTop="8dp"
-        android:background="@color/grey_400"
-        android:text="Back to training search"
+        android:id="@+id/switch_to_training_search"
+        android:layout_width="377dp"
+        android:layout_height="57dp"
+        android:layout_marginTop="16dp"
+        android:backgroundTint="#e0f2f1"
+        android:text="Switch to training search"
+        android:textColor="@color/black"
         app:icon="@drawable/ic_arrow_left"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/search_trainer_btn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="Search"
+        android:textColor="@color/black"
+        android:backgroundTint="#e0f2f1"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/trainers_recyclerview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

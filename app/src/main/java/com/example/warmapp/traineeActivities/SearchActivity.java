@@ -21,7 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
-import com.example.warmapp.AccountActivity;
+import com.example.warmapp.SearchTrainerProfileActivity;
+import com.example.warmapp.classes.AccountActivity;
 import com.example.warmapp.classes.MySearchAdapter;
 import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.Training;
@@ -66,6 +67,7 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     MySearchAdapter myAdapter;
     ArrayList<TrainingModel> trainings;
 
+    Button switchToTrainerSearchBtn;
     Button mDatePickerBtn;
     Button searchBtn;
     RangeSlider rangeSlider;
@@ -106,6 +108,14 @@ public class SearchActivity extends AppCompatActivity implements Serializable {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_search);
+        switchToTrainerSearchBtn = findViewById(R.id.switch_to_trainer_search);
+        switchToTrainerSearchBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(SearchActivity.this,SearchTrainerProfileActivity.class);
+                startActivity(intent);
+            }
+        });
         auth = FirebaseAuth.getInstance();
         userID = auth.getCurrentUser().getUid();
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);

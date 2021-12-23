@@ -47,4 +47,6 @@ dependencies {
     implementation 'com.michaelmuenzer.android:ScrollableNumberPicker:0.2.2'
     implementation 'com.applandeo:material-calendar-view:1.9.0-rc03'
     implementation 'com.mikhaellopez:circularimageview:4.3.0'
+    // FirebaseUI for Firebase Realtime Database
+    implementation 'com.firebaseui:firebase-ui-database:8.0.0'
 }
