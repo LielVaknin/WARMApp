@@ -49,7 +49,7 @@ public class SearchTrainingsAdapter extends RecyclerView.Adapter<SearchTrainings
 
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, @SuppressLint("RecyclerView") int position) {
-        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), android.R.anim.fade_in);
+        Animation animation = AnimationUtils.loadAnimation(holder.itemView.getContext(), android.R.anim.slide_in_left);
 
         holder.tvTitle.setText(trainings.get(position).getTraining().getTitle());
         holder.tvCity.setText(trainings.get(position).getTraining().getCity());

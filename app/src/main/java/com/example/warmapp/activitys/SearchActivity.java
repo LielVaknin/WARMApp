@@ -161,22 +161,8 @@ public class SearchActivity extends AppCompatActivity {
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
                 if (radioButton.getText().toString().equals("Search Trainer")) {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setVisibility(View.GONE);
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        }
-                    },2000);
                     fireBaseTrainerSearch(searchText);
                 } else {
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            progressBar.setVisibility(View.GONE);
-                            getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                        }
-                    },5000);
                     fireBaseTrainingSearch(searchText);
                 }
             }
@@ -447,14 +433,18 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     public void setTrainingModel() {
+        int countTrainings = 0;
         for (HashMap.Entry<String, HashMap<String, Training>> trainingID : allTrainings.entrySet()) {
+            countTrainings++;
             for (HashMap.Entry<String, Training> trainerNameAndTraining : trainingID.getValue().entrySet()) {
                 Training training = trainerNameAndTraining.getValue();
                 String trainingIDKey = trainingID.getKey();
                 String trainerName = trainerNameAndTraining.getKey();
                 final long ONE_MEGABYTE = 1024 * 1024;
+                int finalCountTrainings = countTrainings;
                 FirebaseStorage.getInstance().getReference().child(trainerNameAndTraining.getValue().getTrainerId() + ".jpg").getBytes(ONE_MEGABYTE)
                         .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+
                             @RequiresApi(api = Build.VERSION_CODES.O)
                             @SuppressLint("NotifyDataSetChanged")
                             @Override
@@ -474,7 +464,11 @@ public class SearchActivity extends AppCompatActivity {
                                     trainingModel = new TrainingModel(training, trainingIDKey, trainerName, trainerImage, "can register");
                                     trainings.add(trainingModel);
                                 }
-                                searchTrainingsAdapter.notifyDataSetChanged();
+                                if (finalCountTrainings == allTrainings.size()) {
+                                    progressBar.setVisibility(View.GONE);
+                                    getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                                    searchTrainingsAdapter.notifyDataSetChanged();
+                                }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
                     @Override
@@ -506,14 +500,20 @@ public class SearchActivity extends AppCompatActivity {
 
         FirebaseDatabase.getInstance().getReference().child("Users").orderByChild("userType").equalTo("trainer")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
+                    int countTrainers;
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            countTrainers++;
                             String trainerID = dataSnapshot.getKey();
                             UserTrainer userTrainer = dataSnapshot.getValue(UserTrainer.class);
                             if (Objects.requireNonNull(userTrainer).getLastName().toLowerCase().contains(searchText.toLowerCase())
                                     || userTrainer.getFirstName().toLowerCase().contains(searchText.toLowerCase())) {
                                 setTrainerModel(userTrainer, trainerID);
+                            }
+                            if (countTrainers == snapshot.getChildrenCount()){
+                                progressBar.setVisibility(View.GONE);
+                                getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             }
                         }
                     }

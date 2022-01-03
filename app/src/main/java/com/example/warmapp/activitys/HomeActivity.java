@@ -9,6 +9,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.TextView;
@@ -19,6 +21,7 @@ import com.example.warmapp.adapters.TypesTrainingsAdapter;
 import com.example.warmapp.adapters.UpdateRVTrainingsByType;
 import com.example.warmapp.adapters.MyTrainingsAdapter;
 import com.example.warmapp.classes.Training;
+import com.example.warmapp.classes.TrainingModel;
 import com.example.warmapp.classes.TypesTrainings;
 import com.example.warmapp.classes.User;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -43,10 +46,9 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
     private TypesTrainingsAdapter typesTrainingsAdapter;
     private DynamicTrainingsAdapter dynamicTrainingsAdapter;
     private MyTrainingsAdapter myTrainingsAdapter;
-    private ArrayList<Training> userTrainings;
+    private ArrayList<TrainingModel> userTrainings;
     private ArrayList<TypesTrainings> types;
     private String[] titles;
-    private ProgressDialog progressDialog;
 
     //firebase
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
@@ -114,17 +116,23 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
         });
     }
 
+    @SuppressLint("SetTextI18n")
     private void updateUserDetails() {
+        byte[] byteArray = getIntent().getByteArrayExtra("userImage");
+        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        if (bmp != null){
+            circularUserImageView.setImageBitmap(bmp);
+        }
+
+        String userName = getIntent().getStringExtra("firstName");
+        textViewName.setText("Hi " + userName + "!");
+
         FirebaseDatabase.getInstance().getReference("Users").child(userID)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @SuppressLint("SetTextI18n")
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         user = snapshot.getValue(User.class);
-                        textViewName.setText("Hi " + Objects.requireNonNull(user).getFirstName() + "!");
-                        //TODO::circularUserImageView
-
-//                        showUserTrainings();
+                        showUserTrainings();
                     }
 
                     @Override
@@ -139,9 +147,9 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
         recyclerViewYourTrainings.setHasFixedSize(true);
         recyclerViewYourTrainings.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
-//        userTrainings = new ArrayList<>();
-//        myTrainingsAdapter = new MyTrainingsAdapter(this, userTrainings, "trainer", userID);
-//        recyclerViewYourTrainings.setAdapter(myTrainingsAdapter);
+        userTrainings = new ArrayList<>();
+        myTrainingsAdapter = new MyTrainingsAdapter(this, userTrainings, "trainer", userID);
+        recyclerViewYourTrainings.setAdapter(myTrainingsAdapter);
 
         //over trainings user and get the training from database
         if (user.getTrainings() != null) {
@@ -151,8 +159,7 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 Training training = snapshot.getValue(Training.class);
-                                userTrainings.add(training);
-                                //Log.d("training", Objects.requireNonNull(training).toString());
+//                                userTrainings.add(training);
                                 myTrainingsAdapter.notifyDataSetChanged();
                             }
 
@@ -176,11 +183,11 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
         recyclerViewTypeTrainings.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewTypeTrainings.setAdapter(typesTrainingsAdapter);
 
-//        ArrayList<Training> trainingsType = new ArrayList<>();
-//
-//        dynamicTrainingsAdapter = new DynamicTrainingsAdapter(this,trainingsType);
+        ArrayList<Training> trainingsType = new ArrayList<>();
+
+        dynamicTrainingsAdapter = new DynamicTrainingsAdapter(this,trainingsType);
         recyclerViewShowTypeTrainings.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
-//        recyclerViewShowTypeTrainings.setAdapter(dynamicTrainingsAdapter);
+        recyclerViewShowTypeTrainings.setAdapter(dynamicTrainingsAdapter);
 
     }
 
