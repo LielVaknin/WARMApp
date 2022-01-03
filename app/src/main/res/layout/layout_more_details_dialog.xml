@@ -7,7 +7,7 @@
     android:padding="16dp">
 
     <ImageView
-        android:id="@+id/more_details_calendar_exit_dialog"
+        android:id="@+id/more_details_dialog_exit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
@@ -19,11 +19,11 @@
 
 
     <TextView
-        android:id="@+id/txt_complete_the_following_steps"
+        android:id="@+id/more_details_dialog_text_header"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="43dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="50dp"
         android:text="More details for training:"
         android:textSize="16sp"
@@ -33,93 +33,204 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/more_details_calendar_image_participants"
+    <com.mikhaellopez.circularimageview.CircularImageView
+        android:id="@+id/more_details_dialog_trainer_image"
+        android:layout_width="45dp"
+        android:layout_height="45dp"
+        android:layout_marginStart="62dp"
+        android:layout_marginTop="16dp"
+        app:civ_border_color="@color/white"
+        app:civ_border_width="1dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_header"
+        app:srcCompat="@drawable/example_pic" />
+
+    <TextView
+        android:id="@+id/more_details_dialog_trainer_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
+        android:fontFamily="@font/fo"
+        android:text="Name"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_trainer_image"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_header" />
+
+    <ImageView
+        android:id="@+id/more_details_dialog_image_type"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="70dp"
         android:src="@drawable/ic_user"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/more_details_calendar_exit_dialog" />
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_exit" />
 
 
     <TextView
-        android:id="@+id/more_details_calendar_text_participants"
+        android:id="@+id/more_details_dialog_text_type"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="5dp"
-        android:layout_marginTop="72dp"
-        android:layout_marginEnd="270dp"
-        android:text="1"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/more_details_calendar_image_participants"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <ImageView
-        android:id="@+id/more_details_calendar_image_features"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_activity"
-        app:layout_constraintEnd_toStartOf="@+id/more_details_calendar_text_features"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/more_details_calendar_image_participants"
-        app:layout_constraintTop_toBottomOf="@+id/more_details_calendar_image_participants" />
-
-    <TextView
-        android:id="@+id/more_details_calendar_text_features"
-        android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="116dp"
-        android:text="features"
-        app:layout_constraintStart_toEndOf="@+id/more_details_calendar_image_features"
+        android:layout_marginTop="100dp"
+        android:text="yoga"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_type"
         app:layout_constraintTop_toTopOf="parent" />
 
     <ImageView
-        android:id="@+id/more_details_calendar_image_price"
+        android:id="@+id/more_details_dialog_image_date"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_calendar"
+        app:layout_constraintStart_toStartOf="@+id/more_details_dialog_image_type"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_type" />
+
+
+    <TextView
+        android:id="@+id/more_details_dialog_text_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="18dp"
+        android:text="Date"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_date"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_type" />
+
+    <ImageView
+        android:id="@+id/more_details_dialog_image_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_map"
+        app:layout_constraintStart_toStartOf="@+id/more_details_dialog_image_date"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_image_date" />
+
+    <TextView
+        android:id="@+id/more_details_dialog_text_city"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="22dp"
+        android:text="City"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_city"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_date" />
+
+    <ImageView
+        android:id="@+id/more_details_dialog_image_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_map_pin"
+        app:layout_constraintStart_toStartOf="@+id/more_details_dialog_image_city"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_image_city" />
+
+    <TextView
+        android:id="@+id/more_details_dialog_text_address"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
+        android:text="Address"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_address"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_city" />
+
+    <ImageView
+        android:id="@+id/more_details_dialog_image_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_clock"
+        app:layout_constraintStart_toStartOf="@+id/more_details_dialog_image_address"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_image_address" />
+
+    <TextView
+        android:id="@+id/more_details_dialog_text_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="22dp"
+        android:text="Time"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_time"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_address" />
+
+    <ImageView
+        android:id="@+id/more_details_dialog_image_price"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
         android:src="@drawable/ic_credit_card_black_24dp"
-        app:layout_constraintStart_toStartOf="@+id/more_details_calendar_image_features"
-        app:layout_constraintTop_toBottomOf="@+id/more_details_calendar_text_features" />
-
-
-    <TextView
-        android:id="@+id/more_details_calendar_text_price"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="22dp"
-        android:layout_marginTop="24dp"
-        android:layout_marginEnd="264dp"
-        android:text="price"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/more_details_calendar_image_price"
-        app:layout_constraintTop_toBottomOf="@+id/more_details_calendar_text_features" />
-
-    <ImageView
-        android:id="@+id/more_details_calendar_image_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="26dp"
-        android:src="@drawable/ic_file_text"
-        app:layout_constraintStart_toStartOf="@+id/more_details_calendar_image_price"
-        app:layout_constraintTop_toBottomOf="@+id/more_details_calendar_image_price" />
+        app:layout_constraintStart_toStartOf="@+id/more_details_dialog_image_time"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_image_time" />
 
     <TextView
-        android:id="@+id/more_details_calendar_text_details"
-        android:layout_width="300dp"
+        android:id="@+id/more_details_dialog_text_price"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="256dp"
+        android:layout_marginTop="20dp"
+        android:text="Price"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_price"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_time" />
+
+    <ImageView
+        android:id="@+id/more_details_dialog_image_participants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_users"
+        app:layout_constraintStart_toStartOf="@+id/more_details_dialog_image_price"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_image_price" />
+
+    <TextView
+        android:id="@+id/more_details_dialog_text_participants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
+        android:text="Participants"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_details"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_price" />
+
+    <ImageView
+        android:id="@+id/more_details_dialog_image_features"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_activity"
+        app:layout_constraintStart_toStartOf="@+id/more_details_dialog_image_participants"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_image_participants" />
+
+    <TextView
+        android:id="@+id/more_details_dialog_text_features"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="380dp"
+        android:text="features"
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_features"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/more_details_dialog_image_details"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        android:src="@drawable/ic_file_text"
+        app:layout_constraintStart_toStartOf="@+id/more_details_dialog_image_features"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_features" />
+
+    <TextView
+        android:id="@+id/more_details_dialog_text_details"
+        android:layout_width="260dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="20dp"
         android:text="details"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/more_details_calendar_image_details"
-        app:layout_constraintTop_toBottomOf="@+id/more_details_calendar_text_price" />
+        app:layout_constraintStart_toEndOf="@+id/more_details_dialog_image_details"
+        app:layout_constraintTop_toBottomOf="@+id/more_details_dialog_text_features" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

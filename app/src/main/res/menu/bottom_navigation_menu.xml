@@ -10,7 +10,7 @@
         android:id="@+id/menu_search"
         android:enabled="true"
         android:title="Search"
-        android:icon="@drawable/ic_search_1"/>
+        android:icon="@drawable/ic_search"/>
     <item
         android:id="@+id/menu_home"
         android:enabled="true"

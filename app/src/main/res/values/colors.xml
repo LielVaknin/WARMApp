@@ -12,4 +12,6 @@
     <color name="teal_900">#004D40</color>
     <color name="grey_400">#bdbdbd</color>
     <color name="grey_500">#9e9e9e</color>
+    <color name="grey_600">#757575</color>
+    <color name="grey_a_200">#eeeeee</color>
 </resources>

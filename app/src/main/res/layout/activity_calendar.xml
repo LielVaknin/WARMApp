@@ -4,55 +4,75 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".trainerActivities.CalendarActivity">
+    tools:context=".activitys.CalendarActivity"
+    android:background="@drawable/activity_background">
 
-    <com.applandeo.materialcalendarview.CalendarView
-        android:id="@+id/calendarView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="480dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:headerColor="#e0f2f1"
-        app:headerLabelColor="@color/black"
-        app:abbreviationsBarColor="#e0f2f1"
-        app:abbreviationsLabelsColor="@color/black"
-        app:pagesColor="@color/white"
-        app:highlightedDaysLabelsColor="@color/blue_dark"
-        app:todayLabelColor="@color/teal_200"
-        app:selectionColor="@color/blue_dark" />
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.applandeo.materialcalendarview.CalendarView
+            android:id="@+id/calendarView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            app:abbreviationsBarColor="#e0f2f1"
+            app:abbreviationsLabelsColor="@color/black"
+            app:headerColor="#e0f2f1"
+            app:headerLabelColor="@color/black"
+            app:highlightedDaysLabelsColor="@color/blue_dark"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:pagesColor="@color/white"
+            app:selectionColor="@color/blue_dark"
+            app:todayLabelColor="@color/teal_200" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/button_add_training"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
+        android:layout_marginStart="325dp"
+        android:layout_marginTop="420dp"
         android:clickable="true"
-        android:contentDescription="addTraining"
+        android:contentDescription="@string/add_training"
         android:focusable="true"
+        android:visibility="visible"
         app:backgroundTint="#B2DFDB"
-        android:visibility="gone"
-        app:layout_constraintBottom_toTopOf="@+id/recycle_view_my_trainings"
-        app:layout_constraintEnd_toEndOf="@+id/calendarView"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/calendarView"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:maxImageSize="45dp"
         app:srcCompat="@drawable/ic_plus" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycle_view_my_trainings"
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="280dp"
-        android:layout_marginTop="54dp"
-        android:clipToPadding="false"
-        android:paddingTop="2dp"
-        android:paddingBottom="2dp"
+        android:layout_height="360dp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/calendarView" />
+        app:layout_constraintStart_toStartOf="parent">
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycle_view_my_trainings"
+            android:layout_width="match_parent"
+            android:layout_height="300dp"
+            android:layout_marginBottom="70dp"
+            android:clipToPadding="false"
+            android:paddingTop="2dp"
+            android:paddingBottom="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"

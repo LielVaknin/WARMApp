@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_sheet_add_review"
+        android:layout_width="match_parent"
+        android:layout_height="300dp"
+        android:background="@drawable/bottom_sheet_background"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/bottom_sheet_add_review_image_view_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_minus_bigger" />
+
+        <RatingBar
+            android:id="@+id/bottom_sheet_add_review_rating_bar_trainer"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="60dp"
+            android:layout_marginEnd="60dp"
+            android:numStars="5"
+            android:stepSize="0.5"
+            android:rating="2.5"
+            android:progressTint="#fdd835"
+            android:isIndicator="false"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.481"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_add_review_image_view_close" />
+
+        <EditText
+            android:id="@+id/bottom_sheet_add_review_text_review"
+            android:layout_width="339dp"
+            android:layout_height="99dp"
+            android:background="@drawable/search_trainer_bg"
+            android:hint="Add review ..."
+            app:layout_constraintEnd_toEndOf="@+id/bottom_sheet_add_review_rating_bar_trainer"
+            app:layout_constraintStart_toStartOf="@+id/bottom_sheet_add_review_rating_bar_trainer"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_add_review_rating_bar_trainer" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bottom_sheet_add_review_post_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:backgroundTint="#00796b"
+            android:text="post"
+            android:textColor="@color/white"
+            app:cornerRadius="20dp"
+            app:layout_constraintEnd_toEndOf="@+id/bottom_sheet_add_review_text_review"
+            app:layout_constraintStart_toStartOf="@+id/bottom_sheet_add_review_text_review"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_add_review_text_review" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

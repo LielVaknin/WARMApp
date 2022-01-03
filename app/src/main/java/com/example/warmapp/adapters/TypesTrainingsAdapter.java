@@ -1,21 +1,17 @@
 package com.example.warmapp.adapters;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.warmapp.HomeActivity;
 import com.example.warmapp.R;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.TypesTrainings;
@@ -26,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 
 public class TypesTrainingsAdapter extends RecyclerView.Adapter<TypesTrainingsAdapter.TypesTrainingsHolder> {

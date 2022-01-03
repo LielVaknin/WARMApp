@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/bottom_sheet_search_filters"
+        android:layout_width="match_parent"
+        android:layout_height="450dp"
+        android:background="@drawable/bottom_sheet_background"
+        tools:ignore="MissingConstraints">
+
+        <ImageView
+            android:id="@+id/bottom_sheet_search_filters_image_view_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/ic_minus_bigger" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bottom_sheet_search_filters_input_layout_title"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_search_filters_image_view_close"
+            app:startIconDrawable="@drawable/ic_align_left">
+
+            <AutoCompleteTextView
+                android:id="@+id/bottom_sheet_search_filters_auto_complete_title"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:completionThreshold="1"
+                android:hint="Title" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/bottom_sheet_search_filters_input_layout_city"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
+            android:layout_width="350dp"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_search_filters_input_layout_title"
+            app:startIconDrawable="@drawable/ic_map_pin">
+
+            <AutoCompleteTextView
+                android:id="@+id/bottom_sheet_search_filters_auto_complete_city"
+                android:layout_width="350dp"
+                android:layout_height="wrap_content"
+                android:background="@drawable/edit_text_bg"
+                android:completionThreshold="1"
+                android:hint="City" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <HorizontalScrollView
+            android:id="@+id/features_chip"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:scrollbars="none"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_search_filters_input_layout_city">
+
+
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/bottom_sheet_search_filters_chip_group"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:singleLine="true"
+                android:padding="5dp">
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_group_training"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Group training"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_outdoor_training"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Outdoor training"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_for_men_only"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="For men only"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_for_women_only"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="For women only"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_youth"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Youth"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_children"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Children"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_for_pregnant_women"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="For pregnant women"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_postpartum_women"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Postpartum women"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_preparation_for_competitions"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Preparation for competitions"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+
+                <com.google.android.material.chip.Chip
+                    android:id="@+id/bottom_sheet_search_filters_chip_injury_rehabilitation"
+                    style="@style/Widget.MaterialComponents.Chip.Filter"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Injury rehabilitation"
+                    android:textSize="16sp"
+                    app:chipBackgroundColor="@color/white"
+                    app:chipStrokeColor="@color/grey_400"
+                    app:chipStrokeWidth="2dp"/>
+            </com.google.android.material.chip.ChipGroup>
+
+        </HorizontalScrollView>
+
+        <Button
+            android:id="@+id/bottom_sheet_search_filters_date_picker_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
+            android:backgroundTint="@color/grey_a_200"
+            android:text="Select a date"
+            android:fontFamily="@font/outfitregular"
+            android:textColor="@color/black"
+            app:cornerRadius="15dp"
+            app:icon="@drawable/ic_calendar"
+            app:iconTint="#000000"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/features_chip" />
+
+        <TextView
+            android:id="@+id/bottom_sheet_search_filters_zero"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="6dp"
+            android:layout_marginBottom="2dp"
+            android:text="0₪"
+            android:textSize="15sp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_sheet_search_filters_slider_range"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_search_filters_date_picker_button"
+            app:layout_constraintVertical_bias="1.0" />
+
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="41dp"
+            android:layout_height="18dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="3dp"
+            android:text="500₪"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/bottom_sheet_search_filters_slider_range"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_search_filters_date_picker_button"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/bottom_sheet_search_filters_price"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:layout_marginTop="4dp"
+            android:text="price:"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toStartOf="@+id/textView6"
+            app:layout_constraintHorizontal_bias="0.53"
+            app:layout_constraintStart_toEndOf="@+id/bottom_sheet_search_filters_zero"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_search_filters_date_picker_button" />
+
+        <com.google.android.material.slider.RangeSlider
+            android:id="@+id/bottom_sheet_search_filters_slider_range"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="28dp"
+            app:values="@array/rangeSliderValues"
+            android:valueFrom="0"
+            android:valueTo="500"
+            android:stepSize="5.0"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/bottom_sheet_search_filters_date_picker_button" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/bottom_sheet_search_filters_save_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="24dp"
+            android:backgroundTint="#00796b"
+            android:text="save"
+            android:textColor="@color/white"
+            app:cornerRadius="20dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

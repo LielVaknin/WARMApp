@@ -4,275 +4,136 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".traineeActivities.SearchActivity">
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/menu_drop2"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="152dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:startIconDrawable="@drawable/ic_fitness_center_black_24dp">
-
-        <AutoCompleteTextView
-            android:id="@+id/drop_titles"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_bg"
-            android:completionThreshold="1"
-            android:hint="Title" />
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <com.google.android.material.textfield.TextInputLayout
-        android:id="@+id/menu_drop"
-        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.Dense.ExposedDropdownMenu"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="12dp"
-        android:layout_marginEnd="16dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu_drop2"
-        app:startIconDrawable="@drawable/ic_map_pin_1">
-
-        <AutoCompleteTextView
-            android:id="@+id/drop_cities"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="@drawable/edit_text_bg"
-            android:completionThreshold="1"
-            android:hint="City" />
-
-    </com.google.android.material.textfield.TextInputLayout>
-
-    <Button
-        android:id="@+id/serach_button"
-        android:layout_width="122dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#e0f2f1"
-        android:focusable="false"
-        android:focusableInTouchMode="false"
-        android:text="Search"
-        android:textColor="@color/black"
-        android:textIsSelectable="true"
-        app:cornerRadius="15dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sliderRange" />
-
-    <com.google.android.material.slider.RangeSlider
-        android:id="@+id/sliderRange"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="28dp"
-        android:value="20.0"
-        android:valueFrom="0"
-        android:valueTo="500"
-        app:haloColor="@color/grey_400"
-        app:labelStyle="@style/Widget.App.Tooltip"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_btn"
-        app:thumbColor="@color/black"
-        app:tickColor="@color/grey_400"
-        app:values="@array/rangeSliderValues"
-        app:trackColorActive="@color/black"/>
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/m_RecycleView"
-        android:layout_width="394dp"
-        android:layout_height="192dp"
-        app:layout_constraintBottom_toTopOf="@id/bottom_navigation"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/serach_button"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <Button
-        android:id="@+id/date_picker_btn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:backgroundTint="#e0f2f1"
-        android:text="Select a date"
-        android:textColor="@color/black"
-        app:cornerRadius="15dp"
-        app:icon="@drawable/ic_calendar"
-        app:iconTint="#000000"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/features_chip" />
-
-    <HorizontalScrollView
-        android:id="@+id/features_chip"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
-        android:scrollbars="none"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/menu_drop">
-
-
-        <com.google.android.material.chip.ChipGroup
-            android:id="@+id/chipGroup"
-            android:layout_width="391dp"
-            android:layout_height="47dp"
-            android:layout_marginStart="12dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView3"
-            app:singleLine="true">
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/group_training"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Group training"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/outdoor_training"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Outdoor training"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/for_men_only"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="For men only"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/for_women_only"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="For women only"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/youth"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Youth"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/children"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Children"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/for_pregnant_women"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="For pregnant women"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/postpartum_women"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Postpartum women"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/preparation_for_competitions"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Preparation for competitions"
-                app:chipBackgroundColor="#e0f2f1" />
-
-            <com.google.android.material.chip.Chip
-                android:id="@+id/injury_rehabilitation"
-                style="@style/Widget.MaterialComponents.Chip.Filter"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Injury rehabilitation"
-                app:chipBackgroundColor="#e0f2f1" />
-        </com.google.android.material.chip.ChipGroup>
-    </HorizontalScrollView>
+    android:background="@drawable/activity_background"
+    tools:context=".activitys.SearchActivity">
 
     <TextView
-        android:id="@+id/training_search"
-        android:layout_width="256dp"
-        android:layout_height="47dp"
-        android:layout_marginTop="96dp"
-        android:text="Training search"
+        android:id="@+id/search_activity_search_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="50dp"
+        android:fontFamily="@font/fo"
+        android:text="@string/search"
         android:textColor="@color/black"
-        android:textSize="30dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.103"
+        android:textSize="30sp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/textView5"
+    <RadioGroup
+        android:id="@+id/search_activity_radio_group"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="6dp"
-        android:layout_marginBottom="2dp"
-        android:text="0₪"
-        android:textSize="15sp"
-        app:layout_constraintBottom_toTopOf="@+id/sliderRange"
+        android:layout_marginStart="8dp"
+        android:orientation="horizontal"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_btn"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/search_activity_search_text">
 
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="41dp"
-        android:layout_height="18dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginBottom="3dp"
-        android:text="500₪"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toTopOf="@+id/sliderRange"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_btn"
-        app:layout_constraintVertical_bias="0.0" />
+        <RadioButton
+            android:id="@+id/search_activity_radio_search_training"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:checked="true"
+            android:text="@string/search_training"
+            android:textSize="16sp" />
 
-    <TextView
-        android:id="@+id/textView7"
+        <RadioButton
+            android:id="@+id/search_activity_radio_search_trainer"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:text="@string/search_trainer"
+            android:textSize="16sp" />
+    </RadioGroup>
+
+    <ImageView
+        android:id="@+id/search_activity_filters_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="103dp"
+        android:contentDescription="@string/search_training"
+        app:layout_constraintStart_toEndOf="@+id/search_activity_radio_group"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_sliders" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/search_activity_layout_search"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="320dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:hint="@string/search"
+        app:endIconMode="clear_text"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_activity_radio_group"
+        app:startIconDrawable="@drawable/ic_search">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/search_activity_edit_search"
+            android:layout_width="320dp"
+            android:layout_height="wrap_content"
+            android:background="@drawable/edit_text_bg"
+            android:inputType="textFilter" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/search_activity_search_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
-        android:layout_marginTop="4dp"
-        android:text="price:"
-        android:textSize="16sp"
-        app:layout_constraintEnd_toStartOf="@+id/textView6"
-        app:layout_constraintHorizontal_bias="0.53"
-        app:layout_constraintStart_toEndOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/date_picker_btn" />
+        android:layout_marginTop="142dp"
+        android:backgroundTint="#26a69a"
+        android:contentDescription="@string/search"
+        app:layout_constraintStart_toEndOf="@+id/search_activity_layout_search"
+        app:layout_constraintTop_toTopOf="parent"
+        app:maxImageSize="35dp"
+        app:srcCompat="@drawable/ic_search" />
+
+    <HorizontalScrollView
+        android:id="@+id/horizontalScrollView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scrollbars="none"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_activity_layout_search">
+
+        <com.google.android.material.chip.ChipGroup
+            android:id="@+id/search_activity_chip_group_selected_filters"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:scrollbars="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/search_activity_layout_search"
+            app:singleLine="true">
+
+        </com.google.android.material.chip.ChipGroup>
+    </HorizontalScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/search_activity_recycle_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="65dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/horizontalScrollView" />
+
+    <ProgressBar
+        android:id="@+id/search_activity_progress_bar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="250dp"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_activity_layout_search" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottom_navigation"
@@ -283,26 +144,5 @@
         app:layout_constraintStart_toStartOf="parent"
         app:menu="@menu/bottom_navigation_menu" />
 
-    <ProgressBar
-        android:id="@+id/search_progress_bar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/m_RecycleView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/serach_button" />
 
-    <Button
-        android:id="@+id/switch_to_trainer_search"
-        android:layout_width="377dp"
-        android:layout_height="57dp"
-        android:layout_marginTop="16dp"
-        android:backgroundTint="#e0f2f1"
-        android:text="switch to trainer search"
-        android:textColor="@color/black"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

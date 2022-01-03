@@ -23,7 +23,6 @@
     <string name="reset">Reset</string>
     <string name="cancel">Cancel</string>
     <string name="enter_email_to_reset_the_password">Enter email to reset the password:</string>
-    <string name="description">Description :</string>
     <string name="price">Price :</string>
     <string name="starting_time">Starting time :</string>
     <string name="address">Address :</string>
@@ -32,6 +31,24 @@
     <string name="ending_time">Ending time:</string>
     <string name="title">Title :</string>
     <string name="features">Features :</string>
+    <string name="search">Search</string>
+    <string name="search_training">Search Training</string>
+    <string name="search_trainer">Search Trainer</string>
+    <string name="todo">TODO</string>
 
+    //activity account
+    <string name="profile">Profile</string>
+    <string name="phone">Phone</string>
+    <string name="change_password">Change Password</string>
+    <string name="description">Description</string>
+    <string name="log_out">log out</string>
+    <string name="change_profile_photo">change profile photo</string>
+
+    //calendar activity
+    <string name="add_training">addTraining</string>
+
+    //request activity
+    <string name="requests">Requests</string>
+    <string name="no_requests_found">No Requests Found</string>
 
 </resources>
