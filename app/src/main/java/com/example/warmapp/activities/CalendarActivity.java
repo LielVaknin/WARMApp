@@ -1,4 +1,4 @@
-package com.example.warmapp.activitys;
+package com.example.warmapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;

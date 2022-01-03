@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.app.ActivityOptions;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.util.Log;
 import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,8 +21,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warmapp.R;
 import com.example.warmapp.classes.TrainerModel;
-import com.example.warmapp.activitys.TrainerProfileActivity;
+import com.example.warmapp.activities.TrainerProfileActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class SearchTrainerProfileAdapter extends RecyclerView.Adapter<SearchTrainerProfileAdapter.MyViewHolder> {
@@ -28,9 +31,11 @@ public class SearchTrainerProfileAdapter extends RecyclerView.Adapter<SearchTrai
     Context context;
     ArrayList<TrainerModel> trainers;
 
+
     public SearchTrainerProfileAdapter(Context context, ArrayList<TrainerModel> trainers) {
         this.context = context;
         this.trainers = trainers;
+
     }
 
     @NonNull
@@ -62,7 +67,6 @@ public class SearchTrainerProfileAdapter extends RecyclerView.Adapter<SearchTrai
                 pairs[1] = new Pair<View,String>(holder.trainerName,"trainer_name");
                 pairs[2] = new Pair<View,String>(holder.trainerRatingNumber,"trainer_rating");
                 pairs[3] = new Pair<View,String>(holder.trainerDescription,"trainer_description");
-
                 ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation((Activity) context,pairs);
 
                 myIntent.putExtra("trainerId", trainers.get(position).getTrainerID());
@@ -71,6 +75,12 @@ public class SearchTrainerProfileAdapter extends RecyclerView.Adapter<SearchTrai
                 myIntent.putExtra("description", trainers.get(position).getUserTrainer().getDescription());
                 myIntent.putExtra("phone", trainers.get(position).getUserTrainer().getPhone());
                 myIntent.putExtra("mail", trainers.get(position).getUserTrainer().getMail());
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                trainers.get(position).getTrainerImage().compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                byte[]byteArray = stream.toByteArray();
+                myIntent.putExtra("userImage",byteArray);
+                Log.d("j","here");
+                //myIntent.putExtra("userType", userType);
                 context.startActivity(myIntent,activityOptions.toBundle());
             }
         });

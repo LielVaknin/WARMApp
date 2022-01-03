@@ -35,11 +35,14 @@ public class TypesTrainingsAdapter extends RecyclerView.Adapter<TypesTrainingsAd
     private String[] titles;
     private ArrayList<Training> typeTrainings;
     private ProgressDialog progressDialog;
+    private MaterialCardView lastPosition;
 
     public TypesTrainingsAdapter(Context context, ArrayList<TypesTrainings> types, UpdateRVTrainingsByType updateRVTrainingsByType){
         this.context = context;
         this.types = types;
         this.updateRVTrainingsByType = updateRVTrainingsByType;
+        this.lastPosition=null;
+
     }
 
     @NonNull
@@ -60,14 +63,17 @@ public class TypesTrainingsAdapter extends RecyclerView.Adapter<TypesTrainingsAd
         holder.imageViewType.setImageResource(currentType.getImage());
         holder.textViewType.setText(currentType.getText());
 
-
         holder.materialCardView.setOnClickListener(new View.OnClickListener() {
             @SuppressLint("NotifyDataSetChanged")
             @Override
             public void onClick(View v) {
+                if(lastPosition!=null){
+                    lastPosition.setStrokeWidth(0);
+
+                }
                 holder.materialCardView.setStrokeWidth(5);
                 holder.materialCardView.setStrokeColor(R.color.teal_200);//not same color
-                selectedType = position;
+                selectedType = holder.getAdapterPosition();
                 notifyDataSetChanged();
 
                 progressDialog = new ProgressDialog(context);
@@ -75,7 +81,7 @@ public class TypesTrainingsAdapter extends RecyclerView.Adapter<TypesTrainingsAd
                 progressDialog.show();
 
                 typeTrainings.clear();
-                getTypeTrainings(position);
+                getTypeTrainings(selectedType);
 
             }
         });

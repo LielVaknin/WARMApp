@@ -1,4 +1,4 @@
-package com.example.warmapp.activitys;
+package com.example.warmapp.activities;
 
 import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
@@ -33,6 +33,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.google.android.material.card.MaterialCardView;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.textfield.TextInputEditText;
@@ -59,6 +60,7 @@ public class AccountActivity extends AppCompatActivity {
     Button logOut;
     DatabaseReference databaseReference,userReference;
     TextView firstName,lastName,email,changePassword,phone,description,descriptionTitle;
+    MaterialCardView firstNameCard,lastNameCard,emailCard,changePasswordCard,phoneCard,descriptionCard;
     ImageView iconDescription;
     FloatingActionButton changePhoto;
     ImageView profilePhoto;
@@ -113,13 +115,18 @@ public class AccountActivity extends AppCompatActivity {
         userID= auth.getCurrentUser().getUid();
         userReference=databaseReference.child("Users").child(userID);
         firstName=findViewById(R.id.activity_account_first_name_arrow);
+        firstNameCard=findViewById(R.id.activity_account_first_name_material_card_view);
         lastName=findViewById(R.id.activity_account_last_name_arrow);
+        lastNameCard=findViewById(R.id.activity_account_last_name_material_card_view);
         email=findViewById(R.id.activity_account_mail_arrow);
+        emailCard=findViewById(R.id.activity_account_mail_material_card_view);
         description=findViewById(R.id.activity_account_description_arrow);
+        descriptionCard=findViewById(R.id.activity_account_description_material_card_view);
         descriptionTitle=findViewById(R.id.activity_account_text_view_description);
         iconDescription=findViewById(R.id.activity_account_image_view_description);
         phone=findViewById(R.id.activity_account_phone_arrow);
-        changePassword= findViewById(R.id.activity_account_text_view_password);
+        phoneCard = findViewById(R.id.activity_account_phone_material_card_view);
+        changePasswordCard= findViewById(R.id.activity_account_password_material_card_view);
         changePhoto= findViewById(R.id.activity_account_change_photo);
         profilePhoto=findViewById(R.id.activity_account_profile_photo);
         getPersonalDetails();
@@ -237,9 +244,7 @@ public class AccountActivity extends AppCompatActivity {
                 phone.setText(user.getPhone());
                 if(userType.equals("trainer")){
                     description.setText(snapshot.getValue(UserTrainer.class).getDescription());
-                    iconDescription.setVisibility(View.VISIBLE);
-                    descriptionTitle.setVisibility(View.VISIBLE);
-                    description.setVisibility(View.VISIBLE);
+                    descriptionCard.setVisibility(View.VISIBLE);
                 }
                 StorageReference storageReference = FirebaseStorage.getInstance().getReference();
                 StorageReference photoReference=storageReference.child(userID+".jpg");
@@ -271,7 +276,7 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void setButtonsListeners() {
-        firstName.setOnClickListener(new View.OnClickListener() {
+        firstNameCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View dialogView =
@@ -309,7 +314,7 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
-        lastName.setOnClickListener(new View.OnClickListener() {
+        lastNameCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View dialogView =
@@ -324,7 +329,6 @@ public class AccountActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
 
-                TextInputLayout changeDetails = dialogView.findViewById(R.id.change_details);
                 TextInputEditText newDetails=dialogView.findViewById(R.id.change_details_edit);
                 newDetails.setText(lastName.getText().toString());
                 Button positiveButton =alert.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -347,7 +351,7 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
-        email.setOnClickListener(new View.OnClickListener() {
+        emailCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View dialogView =
@@ -362,7 +366,6 @@ public class AccountActivity extends AppCompatActivity {
                 AlertDialog alert = builder.create();
                 alert.show();
 
-                TextInputLayout changeDetails = dialogView.findViewById(R.id.change_details);
                 TextInputEditText newDetails=dialogView.findViewById(R.id.change_details_edit);
                 newDetails.setText(email.getText().toString());
                 Button positiveButton =alert.getButton(AlertDialog.BUTTON_POSITIVE);
@@ -405,7 +408,7 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
-        phone.setOnClickListener(new View.OnClickListener() {
+        phoneCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View dialogView =
@@ -443,7 +446,7 @@ public class AccountActivity extends AppCompatActivity {
             }
         });
 
-        description.setOnClickListener(new View.OnClickListener() {
+        descriptionCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View dialogView =
@@ -483,7 +486,7 @@ public class AccountActivity extends AppCompatActivity {
     }
 
     private void setChangePasswordListener() {
-        changePassword.setOnClickListener(new View.OnClickListener() {
+        changePasswordCard.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 View dialogView =

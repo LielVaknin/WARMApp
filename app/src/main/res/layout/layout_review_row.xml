@@ -34,7 +34,7 @@
             </androidx.constraintlayout.widget.ConstraintLayout>
 
             <com.mikhaellopez.circularimageview.CircularImageView
-                android:id="@+id/trainer_image"
+                android:id="@+id/trainee_image_review"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginStart="6dp"
@@ -57,7 +57,7 @@
                 android:textColor="@color/black"
                 android:textSize="18sp"
                 android:transitionName="trainer_name"
-                app:layout_constraintStart_toEndOf="@+id/trainer_image"
+                app:layout_constraintStart_toEndOf="@+id/trainee_image_review"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <TextView
@@ -69,7 +69,7 @@
                 android:fontFamily="@font/outfitregular"
                 android:text="Review"
                 android:transitionName="trainer_description"
-                app:layout_constraintStart_toEndOf="@+id/trainer_image"
+                app:layout_constraintStart_toEndOf="@+id/trainee_image_review"
                 app:layout_constraintTop_toBottomOf="@+id/trainee_name" />
 
             <ImageView

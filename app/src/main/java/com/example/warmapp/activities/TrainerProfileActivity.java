@@ -1,4 +1,4 @@
-package com.example.warmapp.activitys;
+package com.example.warmapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -11,6 +11,7 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 import android.renderscript.Allocation;
@@ -41,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Objects;
 
 public class TrainerProfileActivity extends AppCompatActivity {
@@ -48,11 +50,14 @@ public class TrainerProfileActivity extends AppCompatActivity {
     ImageView trainerImage;
     TextView trainerName, description, phone, mail;
     String userID;
+    String userType;
     String userName;
     FirebaseAuth auth;
     RecyclerView reviewsRecyclerView;
     float ratingAv;
     TextView ratingAverageNumber;
+    ImageView phoneButton;
+    ImageView mailButton;
     String trainerId;
     Bitmap bmp;
     ImageView imageViewBlur;
@@ -67,6 +72,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
 
     TrainerProfileAdapter myAdapter;
     ArrayList<Review> reviews;
+    HashMap<String,Bitmap> profileImages;
 
     float myRating = 0;
     int countReviews = 0;
@@ -91,12 +97,14 @@ public class TrainerProfileActivity extends AppCompatActivity {
         reviewsRecyclerView = findViewById(R.id.reviews_recyclerView);
         ratingAverageNumber = findViewById(R.id.rating_average_number);
         imageViewAddReview = findViewById(R.id.trainer_profile_edit_image);
-        imageViewBlur = findViewById(R.id.image_blur);
-
+        imageViewBlur = findViewById(R.id.image_blur_trainer_profile);
+        phoneButton=findViewById(R.id.profile_phone_icon);
+        mailButton =findViewById(R.id.profile_mail_icon);
 
         reviews = new ArrayList<>();
-
+        profileImages= new HashMap<>();
         Intent intent = getIntent();
+
         trainerId = intent.getStringExtra("trainerId");
         String fName = intent.getStringExtra("firstName");
         String lName = intent.getStringExtra("lastName");
@@ -108,30 +116,27 @@ public class TrainerProfileActivity extends AppCompatActivity {
         description.setText(trainerDescription);
 //        phone.setText(trainerPhone);
 //        mail.setText(trainerMail);
+        phoneButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
-        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-        StorageReference photoReference = storageReference.child(trainerId + ".jpg");
-        final long ONE_MEGABYTE = 1024 * 1024;
-        photoReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-            @Override
-            public void onSuccess(byte[] bytes) {
-                bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                trainerImage.setImageBitmap(bmp);
-                Bitmap final_Bitmap = BlurImage(bmp);
-                imageViewBlur.setImageBitmap(final_Bitmap);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-                Toast.makeText(getApplicationContext(), "No Such file or Path found!!", Toast.LENGTH_LONG).show();
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" +trainerPhone));
+                startActivity(intent);
+
             }
         });
 
+        byte[] byteArray = intent.getByteArrayExtra("userImage");
+        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        trainerImage.setImageBitmap(bmp);
+        imageViewBlur.setImageBitmap(BlurImage(bmp));
 
         FirebaseDatabase.getInstance().getReference().child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 userName = Objects.requireNonNull(snapshot.getValue(User.class)).getFirstName() + " " + Objects.requireNonNull(snapshot.getValue(User.class)).getLastName();
+                userType = Objects.requireNonNull(snapshot.getValue(User.class)).getUserType();
             }
 
             @Override
@@ -157,10 +162,25 @@ public class TrainerProfileActivity extends AppCompatActivity {
                                     sumRatings += review.getRating();
                                     countReviews++;
                                     reviews.add(review);
-                                    setAdapter();
-                                    if (countReviews == snapshot1.getChildrenCount()) {
-                                        setAverageRating();
-                                    }
+                                    StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                                    StorageReference photoReference = storageReference.child(review.getTraineeId() + ".jpg");
+                                    final long ONE_MEGABYTE = 1024 * 1024;
+                                    photoReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                                        @Override
+                                        public void onSuccess(byte[] bytes) {
+                                            Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                                            profileImages.put(review.getTraineeId(),bmp);
+                                            setAdapter();
+                                            if (countReviews == snapshot1.getChildrenCount()) {
+                                                setAverageRating();
+                                            }
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception exception) {
+                                        }
+                                    });
+
                                 }
 
                                 @Override
@@ -235,10 +255,10 @@ public class TrainerProfileActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if(!pressPostBtn) {
-                    bottomSheetView.findViewById(R.id.bottom_sheet_add_review_post_button).setEnabled(false);
-                    Toast.makeText(TrainerProfileActivity.this, "You have already written a review", Toast.LENGTH_SHORT).show();
-                    bottomSheetDialog.dismiss();
-                    return;
+                        bottomSheetView.findViewById(R.id.bottom_sheet_add_review_post_button).setEnabled(false);
+                        Toast.makeText(TrainerProfileActivity.this, "You have already written a review", Toast.LENGTH_SHORT).show();
+                        bottomSheetDialog.dismiss();
+                        return;
                 }
                 String getUniqueReviewID = FirebaseDatabase.getInstance().getReference("Reviews").push().getKey();
                 Review review = new Review(myRating, reviewBox.getText().toString(), userID, userName);
@@ -248,8 +268,11 @@ public class TrainerProfileActivity extends AppCompatActivity {
             }
         });
 
+
         bottomSheetDialog.setContentView(bottomSheetView);
         bottomSheetDialog.show();
+
+
         //bottomSheetDialog.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_DIM_BEHIND);
     }
 
@@ -293,7 +316,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
     }
 
     public void setAdapter() {
-        myAdapter = new TrainerProfileAdapter(this, reviews);
+        myAdapter = new TrainerProfileAdapter(this, reviews,profileImages);
         reviewsRecyclerView.setAdapter(myAdapter);
         reviewsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
     }

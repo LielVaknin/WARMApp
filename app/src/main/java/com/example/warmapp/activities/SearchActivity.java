@@ -1,4 +1,4 @@
-package com.example.warmapp.activitys;
+package com.example.warmapp.activities;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
@@ -36,6 +36,7 @@ import com.example.warmapp.classes.Request;
 import com.example.warmapp.classes.TrainerModel;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.TrainingModel;
+import com.example.warmapp.classes.User;
 import com.example.warmapp.classes.UserTrainer;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -120,7 +121,7 @@ public class SearchActivity extends AppCompatActivity {
 
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final String userID = Objects.requireNonNull(auth.getCurrentUser()).getUid();
-
+    private String userType;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -163,7 +164,7 @@ public class SearchActivity extends AppCompatActivity {
                 if (radioButton.getText().toString().equals("Search Trainer")) {
                     fireBaseTrainerSearch(searchText);
                 } else {
-                    fireBaseTrainingSearch(searchText);
+                    getUserDetails(searchText);
                 }
             }
         });
@@ -224,13 +225,29 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    private void getUserDetails(String searchText){
+        FirebaseDatabase.getInstance().getReference().child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                User user = snapshot.getValue(User.class);
+                userType = user.getUserType();
+                fireBaseTrainingSearch(searchText);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     private void fireBaseTrainingSearch(String searchText) {
         //init recycleView
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         trainings = new ArrayList<>();
-        searchTrainingsAdapter = new SearchTrainingsAdapter(this, trainings);
+        searchTrainingsAdapter = new SearchTrainingsAdapter(this, trainings,userType);
         recyclerView.setAdapter(searchTrainingsAdapter);
 
         allTrainings = new HashMap<>();
@@ -461,7 +478,7 @@ public class SearchActivity extends AppCompatActivity {
                                     trainingModel = new TrainingModel(training, trainingIDKey, trainerName, trainerImage, "overlapping");
                                     trainings.add(trainingModel);
                                 } else {
-                                    trainingModel = new TrainingModel(training, trainingIDKey, trainerName, trainerImage, "can register");
+                                    trainingModel = new TrainingModel(training, trainingIDKey, trainerName, trainerImage, "");
                                     trainings.add(trainingModel);
                                 }
                                 if (finalCountTrainings == allTrainings.size()) {
@@ -576,9 +593,9 @@ public class SearchActivity extends AppCompatActivity {
         autoCompleteTextViewCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ArrayList<String> citys = new ArrayList<>();
-                citys.add(parent.getItemAtPosition(position).toString());
-                selectedFilters.put("citys", citys);
+                ArrayList<String> cities = new ArrayList<>();
+                cities.add(parent.getItemAtPosition(position).toString());
+                selectedFilters.put("cities", cities);
             }
         });
 

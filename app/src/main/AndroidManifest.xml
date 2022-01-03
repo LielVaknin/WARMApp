@@ -14,28 +14,28 @@
         android:theme="@style/Theme.WARMApp">
 
         <activity
-            android:name=".activitys.AccountActivity"
+            android:name=".activities.AccountActivity"
             android:exported="false" />
         <activity
-            android:name=".activitys.CalendarActivity"
+            android:name=".activities.CalendarActivity"
             android:exported="true" />
         <activity
-            android:name=".activitys.RequestsActivity"
+            android:name=".activities.RequestsActivity"
             android:exported="true" />
         <activity
-            android:name=".activitys.TrainerProfileActivity"
+            android:name=".activities.TrainerProfileActivity"
             android:exported="true" />
         <activity
-            android:name=".activitys.LoginActivity"
+            android:name=".activities.LoginActivity"
             android:exported="false" />
         <activity
-            android:name=".activitys.HomeActivity"
+            android:name=".activities.HomeActivity"
             android:exported="true" />
         <activity
-            android:name=".activitys.SignUpActivity"
+            android:name=".activities.SignUpActivity"
             android:exported="false" />
         <activity
-            android:name=".activitys.SplashActivity"
+            android:name=".activities.SplashActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -44,7 +44,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".activitys.SearchActivity"
+            android:name=".activities.SearchActivity"
             android:exported="true" />
     </application>
 

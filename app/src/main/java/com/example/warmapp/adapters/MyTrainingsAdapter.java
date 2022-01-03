@@ -19,7 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.warmapp.R;
 import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.TrainingModel;
-import com.example.warmapp.activitys.CalendarActivity;
+import com.example.warmapp.activities.CalendarActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
 import com.google.firebase.database.FirebaseDatabase;

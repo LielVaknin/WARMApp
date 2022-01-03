@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activitys.TrainerProfileActivity">
+    tools:context=".activities.TrainerProfileActivity">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/layout_pic_profile"
@@ -17,7 +17,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
-            android:id="@+id/image_blur"
+            android:id="@+id/image_blur_trainer_profile"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scaleType="fitXY"
@@ -35,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="650dp"
         android:layout_marginTop="200dp"
-        android:background="@drawable/activity_profile_background"
+        android:background="@drawable/activity_background"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -144,7 +144,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/profile_phone_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -154,13 +154,13 @@
             app:srcCompat="@drawable/ic_phone_gray" />
 
         <ImageView
-            android:id="@+id/imageView7"
+            android:id="@+id/profile_mail_icon"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
             android:layout_marginBottom="14dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView6"
+            app:layout_constraintStart_toEndOf="@+id/profile_phone_icon"
             app:srcCompat="@drawable/ic_mail_gray" />
 
 
