@@ -513,12 +513,19 @@ public class SearchActivity extends AppCompatActivity {
         int countTrainings = 0;
         for (HashMap.Entry<String, HashMap<String, Training>> trainingID : allTrainings.entrySet()) {
             countTrainings++;
+            if(countTrainings==6){
+                Log.d("f,","f");
+            }
+            Log.d("count",""+countTrainings);
+            int countTrainerName=0;
             for (HashMap.Entry<String, Training> trainerNameAndTraining : trainingID.getValue().entrySet()) {
+                countTrainerName++;
                 Training training = trainerNameAndTraining.getValue();
                 String trainingIDKey = trainingID.getKey();
                 String trainerName = trainerNameAndTraining.getKey();
                 final long ONE_MEGABYTE = 1024 * 1024;
                 int finalCountTrainings = countTrainings;
+                int finalCountTrainerName = countTrainerName;
                 FirebaseStorage.getInstance().getReference().child(trainerNameAndTraining.getValue().getTrainerId() + ".jpg").getBytes(ONE_MEGABYTE)
                         .addOnSuccessListener(new OnSuccessListener<byte[]>() {
 
@@ -528,6 +535,8 @@ public class SearchActivity extends AppCompatActivity {
                             public void onSuccess(byte[] bytes) {
                                 Bitmap trainerImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                                 TrainingModel trainingModel;
+                                Log.d("g","ddddd");
+
                                 if (userTrainingsID.contains(trainingID.getKey())) {
                                     trainingModel = new TrainingModel(training, trainingIDKey, trainerName, trainerImage, "registered");
                                     trainings.add(trainingModel);
@@ -541,10 +550,14 @@ public class SearchActivity extends AppCompatActivity {
                                     trainingModel = new TrainingModel(training, trainingIDKey, trainerName, trainerImage, "");
                                     trainings.add(trainingModel);
                                 }
-                                if (finalCountTrainings == allTrainings.size()) {
+                                if (finalCountTrainings == allTrainings.size() && finalCountTrainerName ==trainingID.getValue().entrySet().size()) {
                                     progressBar.setVisibility(View.GONE);
                                     getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
-                                    searchTrainingsAdapter.notifyDataSetChanged();
+                                    searchTrainingsAdapter = new SearchTrainingsAdapter(SearchActivity.this, trainings,userType);
+                                    recyclerView.setAdapter(searchTrainingsAdapter);
+                                    //searchTrainingsAdapter.notifyDataSetChanged();
+
+
                                 }
                             }
                         }).addOnFailureListener(new OnFailureListener() {
