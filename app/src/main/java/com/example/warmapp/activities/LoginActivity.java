@@ -6,8 +6,12 @@ import androidx.core.view.WindowCompat;
 
 import android.annotation.SuppressLint;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
@@ -17,12 +21,21 @@ import com.example.warmapp.R;
 import com.example.warmapp.classes.User;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+
+import java.io.ByteArrayOutputStream;
+import java.util.Objects;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -34,8 +47,11 @@ public class LoginActivity extends AppCompatActivity {
     Dialog dialog;
     MaterialButton login;
     TextView signup;
+    private ProgressDialog progressDialog;
 
     FirebaseAuth auth;
+    private String userID;
+    private User user;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -129,15 +145,66 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onComplete(@NonNull Task<AuthResult> task) {
                 if (task.isSuccessful()){
-                    Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
-                    startActivity(intent);
-                    finish();
+                    progressDialog = new ProgressDialog(LoginActivity.this);
+                    progressDialog.setMessage("Loading");
+                    progressDialog.show();
+                    userID = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+                    getUser();
                 }
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Toast.makeText(LoginActivity.this,e.getMessage(),Toast.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    private void getUser() {
+        FirebaseDatabase.getInstance().getReference("Users").child(userID)
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @SuppressLint("SetTextI18n")
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        user = snapshot.getValue(User.class);
+                        getUserImage();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void getUserImage() {
+        final long ONE_MEGABYTE = 1024 * 1024;
+        FirebaseStorage.getInstance().getReference().child(userID + ".jpg").getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        if (bytes == null){
+                            progressDialog.dismiss();
+                            Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                            intent.putExtra("firstName", user.getFirstName());
+                            startActivity(intent);
+                            finish();
+                        }
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        byte[] byteArray = stream.toByteArray();
+                        progressDialog.dismiss();
+                        Intent intent = new Intent(LoginActivity.this, HomeActivity.class);
+                        intent.putExtra("firstName", user.getFirstName());
+                        intent.putExtra("userImage",byteArray);
+                        startActivity(intent);
+                        finish();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
             }
         });
     }

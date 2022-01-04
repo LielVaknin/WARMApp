@@ -28,7 +28,7 @@ import java.util.Objects;
 @SuppressLint("CustomSplashScreen")
 public class SplashActivity extends AppCompatActivity {
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
-    private final String userID = Objects.requireNonNull(auth.getCurrentUser()).getUid();
+    private String userID;
     private User user;
 
     byte[] byteArray;
@@ -43,6 +43,7 @@ public class SplashActivity extends AppCompatActivity {
         setContentView(R.layout.activity_splash);
 
         if (auth.getCurrentUser() != null) {
+            userID = auth.getCurrentUser().getUid();
             getUser();
             getUserImage();
         } else {
@@ -55,25 +56,6 @@ public class SplashActivity extends AppCompatActivity {
                 }
             }, splash_timeout);
         }
-    }
-
-    private void getUserImage() {
-        final long ONE_MEGABYTE = 1024 * 1024;
-        FirebaseStorage.getInstance().getReference().child(userID + ".jpg").getBytes(ONE_MEGABYTE)
-                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @SuppressLint("NotifyDataSetChanged")
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
-                        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-                        byteArray = stream.toByteArray();
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception exception) {
-            }
-        });
     }
 
     private void getUser() {
@@ -103,4 +85,24 @@ public class SplashActivity extends AppCompatActivity {
                     }
                 });
     }
+
+    private void getUserImage() {
+        final long ONE_MEGABYTE = 1024 * 1024;
+        FirebaseStorage.getInstance().getReference().child(userID + ".jpg").getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                        bmp.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+                        byteArray = stream.toByteArray();
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
+    }
+
 }

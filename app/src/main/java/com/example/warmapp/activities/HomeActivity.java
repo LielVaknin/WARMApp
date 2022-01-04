@@ -9,10 +9,14 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.warmapp.R;
@@ -24,6 +28,9 @@ import com.example.warmapp.classes.Training;
 import com.example.warmapp.classes.TrainingModel;
 import com.example.warmapp.classes.TypesTrainings;
 import com.example.warmapp.classes.User;
+import com.example.warmapp.classes.UserTrainer;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,8 +38,10 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.Objects;
 
@@ -49,11 +58,14 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
     private ArrayList<TrainingModel> userTrainings;
     private ArrayList<TypesTrainings> types;
     private String[] titles;
+    private ProgressBar progressBarMyTrainings;
 
     //firebase
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final String userID = Objects.requireNonNull(auth.getCurrentUser()).getUid();
     private User user;
+    private Bitmap userImage;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +74,13 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
         setContentView(R.layout.activity_home);
 
         initViews();
+        getIntents();
         setUpBottomNavigation();
         updateUserDetails();
         initTypesList();
 
     }
+
 
     private void initViews() {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
@@ -75,6 +89,19 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
         recyclerViewShowTypeTrainings = findViewById(R.id.home_activity_type_trainings_show_recycler_view);
         circularUserImageView = findViewById(R.id.home_activity_circular_image_view);
         textViewName = findViewById(R.id.home_activity_hi_name_text);
+        progressBarMyTrainings = findViewById(R.id.home_activity_your_trainings_progress_bar);
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void getIntents() {
+        byte[] byteArray = getIntent().getByteArrayExtra("userImage");
+        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        if (userImage != null){
+            circularUserImageView.setImageBitmap(userImage);
+        }
+
+        userName = getIntent().getStringExtra("firstName");
+        textViewName.setText("Hi " + userName + "!");
     }
 
     private void setUpBottomNavigation() {
@@ -87,26 +114,31 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
                 switch (item.getItemId()) {
                     case R.id.menu_profile:
                         intent = new Intent(HomeActivity.this, AccountActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_search:
                         intent = new Intent(HomeActivity.this, SearchActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_schedule:
                         intent = new Intent(HomeActivity.this, CalendarActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_requests:
                         intent = new Intent(HomeActivity.this, RequestsActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_home:
                         intent = new Intent(HomeActivity.this, HomeActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
@@ -116,17 +148,16 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
         });
     }
 
-    @SuppressLint("SetTextI18n")
+    private void sendToIntent(Intent intent) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        intent.putExtra("firstName", userName);
+        intent.putExtra("userImage",byteArray);
+    }
+
     private void updateUserDetails() {
-        byte[] byteArray = getIntent().getByteArrayExtra("userImage");
-        Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        if (bmp != null){
-            circularUserImageView.setImageBitmap(bmp);
-        }
-
-        String userName = getIntent().getStringExtra("firstName");
-        textViewName.setText("Hi " + userName + "!");
-
+        progressBarMyTrainings.setVisibility(View.VISIBLE);
         FirebaseDatabase.getInstance().getReference("Users").child(userID)
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
@@ -148,19 +179,21 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
         recyclerViewYourTrainings.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
 
         userTrainings = new ArrayList<>();
-        myTrainingsAdapter = new MyTrainingsAdapter(this, userTrainings, "trainer", userID);
+        myTrainingsAdapter = new MyTrainingsAdapter(this, userTrainings, user.getUserType(), userID);
         recyclerViewYourTrainings.setAdapter(myTrainingsAdapter);
 
         //over trainings user and get the training from database
+        int countTrainings = 0;
         if (user.getTrainings() != null) {
             for (String training : user.getTrainings().keySet()) {
+                countTrainings++;
+                int finalCountTrainings = countTrainings;
                 FirebaseDatabase.getInstance().getReference("Trainings").child(training)
                         .addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
                                 Training training = snapshot.getValue(Training.class);
-//                                userTrainings.add(training);
-                                myTrainingsAdapter.notifyDataSetChanged();
+                                getTrainerName(Objects.requireNonNull(training),finalCountTrainings);
                             }
 
                             @Override
@@ -172,18 +205,59 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
         }
     }
 
+    private void getTrainerName(Training training, int finalCountTrainings) {
+        FirebaseDatabase.getInstance().getReference().child("Users").child(training.getTrainerId())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        UserTrainer userTrainer = snapshot.getValue(UserTrainer.class);
+                        setTrainingModel(training,userTrainer,finalCountTrainings);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void setTrainingModel(Training training, UserTrainer userTrainer, int finalCountTrainings) {
+        final long ONE_MEGABYTE = 1024 * 1024;
+        FirebaseStorage.getInstance().getReference().child(training.getTrainerId() + ".jpg").getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        String trainerName = userTrainer.getFirstName() + " " + userTrainer.getLastName();
+                        Bitmap trainerImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        TrainingModel trainingModel = new TrainingModel(training,training.getTrainingID(),trainerName,trainerImage,"");
+                        userTrainings.add(trainingModel);
+                        if (finalCountTrainings == user.getTrainings().size()){
+                            progressBarMyTrainings.setVisibility(View.GONE);
+                            myTrainingsAdapter.notifyDataSetChanged();
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+            }
+        });
+    }
+
     private void initTypesList() {
         types = new ArrayList<>();
         titles = getResources().getStringArray(R.array.Titles);
-        for (String title : titles) {
-            types.add(new TypesTrainings(R.drawable.ic_activity, title));
+        int imageType;
+        for (int i = 0; i < titles.length; i++){
+            imageType = this.getResources().getIdentifier("sport_" + i, "drawable", this.getPackageName());
+            types.add(new TypesTrainings(imageType, titles[i]));
         }
 
         typesTrainingsAdapter = new TypesTrainingsAdapter(this,types,this);
         recyclerViewTypeTrainings.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         recyclerViewTypeTrainings.setAdapter(typesTrainingsAdapter);
 
-        ArrayList<Training> trainingsType = new ArrayList<>();
+        ArrayList<TrainingModel> trainingsType = new ArrayList<>();
 
         dynamicTrainingsAdapter = new DynamicTrainingsAdapter(this,trainingsType);
         recyclerViewShowTypeTrainings.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
@@ -193,7 +267,7 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
 
     @SuppressLint("NotifyDataSetChanged")
     @Override
-    public void callback(int position, ArrayList<Training> trainings) {
+    public void callback(int position, ArrayList<TrainingModel> trainings) {
         dynamicTrainingsAdapter = new DynamicTrainingsAdapter(this,trainings);
         dynamicTrainingsAdapter.notifyDataSetChanged();
         recyclerViewShowTypeTrainings.setAdapter(dynamicTrainingsAdapter);

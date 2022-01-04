@@ -39,6 +39,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 public class RequestsActivity extends AppCompatActivity {
@@ -50,6 +51,8 @@ public class RequestsActivity extends AppCompatActivity {
     String userType;
     FirebaseAuth auth;
     ProgressBar progressBar;
+    private Bitmap userImage;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,6 +64,7 @@ public class RequestsActivity extends AppCompatActivity {
         requests=new ArrayList<>();
         auth= FirebaseAuth.getInstance();
         userID=auth.getCurrentUser().getUid();
+        getIntents();
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.menu_requests);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -71,16 +75,19 @@ public class RequestsActivity extends AppCompatActivity {
                 switch (item.getItemId()){
                     case R.id.menu_profile:
                         intent = new Intent(RequestsActivity.this, AccountActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_search:
                         intent = new Intent(RequestsActivity.this, SearchActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_schedule:
                         intent = new Intent(RequestsActivity.this, CalendarActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
@@ -88,6 +95,7 @@ public class RequestsActivity extends AppCompatActivity {
                         return true;
                     case R.id.menu_home:
                         intent = new Intent(RequestsActivity.this, HomeActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
@@ -103,6 +111,21 @@ public class RequestsActivity extends AppCompatActivity {
         getUserType();
 
 
+    }
+
+    @SuppressLint("SetTextI18n")
+    private void getIntents() {
+        byte[] byteArray = getIntent().getByteArrayExtra("userImage");
+        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        userName = getIntent().getStringExtra("firstName");
+    }
+
+    private void sendToIntent(Intent intent) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        intent.putExtra("firstName", userName);
+        intent.putExtra("userImage",byteArray);
     }
 
     private void getUserType() {

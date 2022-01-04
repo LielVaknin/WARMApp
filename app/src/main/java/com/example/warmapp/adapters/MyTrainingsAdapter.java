@@ -22,6 +22,7 @@ import com.example.warmapp.classes.TrainingModel;
 import com.example.warmapp.activities.CalendarActivity;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.dialog.MaterialAlertDialogBuilder;
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.FirebaseDatabase;
 import com.mikhaellopez.circularimageview.CircularImageView;
 
@@ -71,6 +72,8 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
         holder.textViewType.setText(type);
         setTypeIcon(holder, type);
 
+        holder.circularImageTrainer.setImageBitmap(trainings.get(position).getTrainerImage());
+        holder.textViewTrainerName.setText(trainings.get(position).getTrainerName());
         String trainingTime = trainings.get(position).getTraining().getStartTraining() + " - " + trainings.get(position).getTraining().getEndTraining();
         holder.textViewTime.setText(trainingTime);
         holder.textViewAddress.setText(trainings.get(position).getTraining().getAddress());
@@ -200,20 +203,23 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
 
     public static class MyViewHolder extends RecyclerView.ViewHolder {
 
+        CircularImageView circularImageTrainer;
         ImageView imageViewType, moreDetails;
-        TextView textViewType, textViewTime, textViewAddress, textViewCity;
-        MaterialButton cancelTraining;
+        TextView textViewType, textViewTime, textViewAddress, textViewCity, textViewTrainerName;
+        FloatingActionButton cancelTraining;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageViewType = itemView.findViewById(R.id.image_card_type);
-            textViewType = itemView.findViewById(R.id.type_trainings_selected_text_card_type);
-            textViewTime = itemView.findViewById(R.id.type_trainings_selected_text_card_time);
-            textViewAddress = itemView.findViewById(R.id.type_trainings_selected_text_card_address);
-            textViewCity = itemView.findViewById(R.id.type_trainings_selected_text_card_city);
-            moreDetails = itemView.findViewById(R.id.type_trainings_selected_image_card_details);
-            cancelTraining = itemView.findViewById(R.id.type_trainings_selected_button_card_cancel);
+            circularImageTrainer = itemView.findViewById(R.id.layout_my_trainings_trainer_image);
+            textViewTrainerName = itemView.findViewById(R.id.layout_my_trainings_trainer_name);
+            imageViewType = itemView.findViewById(R.id.layout_my_trainings_image_type);
+            textViewType = itemView.findViewById(R.id.layout_my_trainings_text_type);
+            textViewTime = itemView.findViewById(R.id.layout_my_trainings_text_time);
+            textViewAddress = itemView.findViewById(R.id.layout_my_trainings_text_address);
+            textViewCity = itemView.findViewById(R.id.layout_my_trainings_text_city);
+            moreDetails = itemView.findViewById(R.id.layout_my_trainings_image_details);
+            cancelTraining = itemView.findViewById(R.id.layout_my_trainings_button_cancel);
         }
     }
 }

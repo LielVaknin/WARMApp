@@ -61,6 +61,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 
+import java.io.ByteArrayOutputStream;
 import java.text.NumberFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -122,6 +123,8 @@ public class SearchActivity extends AppCompatActivity {
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final String userID = Objects.requireNonNull(auth.getCurrentUser()).getUid();
     private String userType;
+    private Bitmap userImage;
+    private String userName;
 
     @SuppressLint("UseCompatLoadingForDrawables")
     @Override
@@ -130,6 +133,7 @@ public class SearchActivity extends AppCompatActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_search);
 
+        getIntents();
         initViews();
         setUpBottomNavigation();
 
@@ -178,6 +182,13 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
+    private void getIntents() {
+        byte[] byteArray = getIntent().getByteArrayExtra("userImage");
+        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        userName = getIntent().getStringExtra("firstName");
+    }
+
     private void initViews() {
         bottomNavigationView = findViewById(R.id.bottom_navigation);
         radioGroup = findViewById(R.id.search_activity_radio_group);
@@ -187,6 +198,14 @@ public class SearchActivity extends AppCompatActivity {
         imageViewFiltersSearch = findViewById(R.id.search_activity_filters_button);
         progressBar = findViewById(R.id.search_activity_progress_bar);
         chipGroupSelectedFilters = findViewById(R.id.search_activity_chip_group_selected_filters);
+    }
+
+    private void sendToIntent(Intent intent) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        intent.putExtra("firstName", userName);
+        intent.putExtra("userImage",byteArray);
     }
 
     private void setUpBottomNavigation() {
@@ -199,6 +218,7 @@ public class SearchActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.menu_profile:
                         intent = new Intent(SearchActivity.this, AccountActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
@@ -206,16 +226,19 @@ public class SearchActivity extends AppCompatActivity {
                         return true;
                     case R.id.menu_schedule:
                         intent = new Intent(SearchActivity.this, CalendarActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_requests:
                         intent = new Intent(SearchActivity.this, RequestsActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_home:
                         intent = new Intent(SearchActivity.this, HomeActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
@@ -736,6 +759,7 @@ public class SearchActivity extends AppCompatActivity {
         materialDatePicker.addOnPositiveButtonClickListener(new MaterialPickerOnPositiveButtonClickListener() {
             @Override
             public void onPositiveButtonClick(Object selection) {
+                mDatePickerBtn.setText(simpleDateFormat.format(selection));
                 date.add(simpleDateFormat.format(selection));
                 selectedFilters.put("date", date);
             }

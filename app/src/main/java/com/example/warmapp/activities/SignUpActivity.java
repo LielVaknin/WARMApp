@@ -156,7 +156,8 @@ public class SignUpActivity extends AppCompatActivity {
                                 databaseReference.child(userID).child("userType").setValue(userType);
                             }
                             Toast.makeText(SignUpActivity.this, "Registering User successful", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(SignUpActivity.this, CalendarActivity.class);
+                            Intent intent = new Intent(SignUpActivity.this, HomeActivity.class);
+                            intent.putExtra("firstName", firstName);
                             startActivity(intent);
                             finish();
                         } else {

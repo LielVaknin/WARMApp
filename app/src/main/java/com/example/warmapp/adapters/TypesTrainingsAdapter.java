@@ -3,6 +3,8 @@ package com.example.warmapp.adapters;
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +16,17 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.warmapp.R;
 import com.example.warmapp.classes.Training;
+import com.example.warmapp.classes.TrainingModel;
 import com.example.warmapp.classes.TypesTrainings;
+import com.example.warmapp.classes.UserTrainer;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.card.MaterialCardView;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
 
 import java.util.ArrayList;
 import java.util.Objects;
@@ -33,7 +40,7 @@ public class TypesTrainingsAdapter extends RecyclerView.Adapter<TypesTrainingsAd
     private boolean check = true;
     private boolean select = true;
     private String[] titles;
-    private ArrayList<Training> typeTrainings;
+    private ArrayList<TrainingModel> typeTrainings;
     private ProgressDialog progressDialog;
     private MaterialCardView lastPosition;
 
@@ -103,26 +110,63 @@ public class TypesTrainingsAdapter extends RecyclerView.Adapter<TypesTrainingsAd
 
     private void getTypeTrainings(int position) {
         typeTrainings.clear();
-        FirebaseDatabase.getInstance().getReference("Trainings").addListenerForSingleValueEvent(new ValueEventListener() {
+        FirebaseDatabase.getInstance().getReference("Trainings").orderByChild("title").equalTo(titles[position])
+                .addListenerForSingleValueEvent(new ValueEventListener() {
             int countTrainings = 0;
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if (snapshot.getValue() == null){
+                    progressDialog.dismiss();
+                }
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
                     countTrainings++;
                     Training training = dataSnapshot.getValue(Training.class);
-                    if (Objects.requireNonNull(training).getTitle().equals(titles[position])){
-                        typeTrainings.add(training);
-                    }
-                    if (countTrainings == snapshot.getChildrenCount()) {
-                        progressDialog.dismiss();
-                        updateRVTrainingsByType.callback(position,typeTrainings);
-                    }
+                    getTrainerName(Objects.requireNonNull(training),countTrainings,snapshot.getChildrenCount(),position);
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
+            }
+        });
+    }
+
+    private void getTrainerName(Training training, int countTrainings, long childrenCount, int position) {
+        FirebaseDatabase.getInstance().getReference().child("Users").child(training.getTrainerId())
+                .addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        UserTrainer userTrainer = snapshot.getValue(UserTrainer.class);
+                        setTrainingModel(training,userTrainer,countTrainings,childrenCount,position);
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
+
+    private void setTrainingModel(Training training, UserTrainer userTrainer, int countTrainings, long childrenCount, int position) {
+        final long ONE_MEGABYTE = 1024 * 1024;
+        FirebaseStorage.getInstance().getReference().child(training.getTrainerId() + ".jpg").getBytes(ONE_MEGABYTE)
+                .addOnSuccessListener(new OnSuccessListener<byte[]>() {
+                    @SuppressLint("NotifyDataSetChanged")
+                    @Override
+                    public void onSuccess(byte[] bytes) {
+                        String trainerName = userTrainer.getFirstName() + " " + userTrainer.getLastName();
+                        Bitmap trainerImage = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                        TrainingModel trainingModel = new TrainingModel(training,training.getTrainingID(),trainerName,trainerImage,"");
+                        typeTrainings.add(trainingModel);
+                        if (countTrainings == childrenCount){
+                            progressDialog.dismiss();
+                            updateRVTrainingsByType.callback(position,typeTrainings);
+                        }
+                    }
+                }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
             }
         });
     }

@@ -63,6 +63,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPicker;
 import com.michaelmuenzer.android.scrollablennumberpicker.ScrollableNumberPickerListener;
 
+import java.io.ByteArrayOutputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalTime;
@@ -125,6 +126,8 @@ public class CalendarActivity extends AppCompatActivity {
     private final FirebaseAuth auth = FirebaseAuth.getInstance();
     private final String userID = Objects.requireNonNull(auth.getCurrentUser()).getUid();
     private User user;
+    private Bitmap userImage;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -132,6 +135,7 @@ public class CalendarActivity extends AppCompatActivity {
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_calendar);
 
+        getIntents();
         initViews();
         setUpBottomNavigation();
         checkTrainerOrTrainee();
@@ -166,6 +170,21 @@ public class CalendarActivity extends AppCompatActivity {
         recyclerViewMyTrainings = findViewById(R.id.recycle_view_my_trainings);
     }
 
+    @SuppressLint("SetTextI18n")
+    private void getIntents() {
+        byte[] byteArray = getIntent().getByteArrayExtra("userImage");
+        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        userName = getIntent().getStringExtra("firstName");
+    }
+
+    private void sendToIntent(Intent intent) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        intent.putExtra("firstName", userName);
+        intent.putExtra("userImage",byteArray);
+    }
+
     private void setUpBottomNavigation() {
         bottomNavigationView.setSelectedItemId(R.id.menu_schedule);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -176,11 +195,13 @@ public class CalendarActivity extends AppCompatActivity {
                 switch (item.getItemId()) {
                     case R.id.menu_profile:
                         intent = new Intent(CalendarActivity.this, AccountActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_search:
                         intent = new Intent(CalendarActivity.this, SearchActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
@@ -188,11 +209,13 @@ public class CalendarActivity extends AppCompatActivity {
                         return true;
                     case R.id.menu_requests:
                         intent = new Intent(CalendarActivity.this, RequestsActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_home:
                         intent = new Intent(CalendarActivity.this, HomeActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;

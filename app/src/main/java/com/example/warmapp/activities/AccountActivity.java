@@ -8,6 +8,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.WindowCompat;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
@@ -67,12 +68,15 @@ public class AccountActivity extends AppCompatActivity {
     ActivityResultLauncher<Intent> launchCameraActivity;
     ActivityResultLauncher<Intent> launchSelectGalleryActivity;
     static final int REQUEST_IMAGE_CAPTURE = 1;
+    private Bitmap userImage;
+    private String userName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_account);
+        getIntents();
         BottomNavigationView bottomNavigationView =findViewById(R.id.bottom_navigation);
         bottomNavigationView.setSelectedItemId(R.id.menu_profile);
         bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
@@ -84,21 +88,25 @@ public class AccountActivity extends AppCompatActivity {
                         return true;
                     case R.id.menu_search:
                         intent = new Intent(AccountActivity.this, SearchActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_schedule:
                         intent = new Intent(AccountActivity.this, CalendarActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_requests:
                         intent = new Intent(AccountActivity.this, RequestsActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
                     case R.id.menu_home:
                         intent = new Intent(AccountActivity.this, HomeActivity.class);
+                        sendToIntent(intent);
                         startActivity(intent);
                         finish();
                         return true;
@@ -129,6 +137,7 @@ public class AccountActivity extends AppCompatActivity {
         changePasswordCard= findViewById(R.id.activity_account_password_material_card_view);
         changePhoto= findViewById(R.id.activity_account_change_photo);
         profilePhoto=findViewById(R.id.activity_account_profile_photo);
+        profilePhoto.setImageBitmap(userImage);
         getPersonalDetails();
         launchCameraActivity= registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -197,6 +206,21 @@ public class AccountActivity extends AppCompatActivity {
 
     }
 
+    @SuppressLint("SetTextI18n")
+    private void getIntents() {
+        byte[] byteArray = getIntent().getByteArrayExtra("userImage");
+        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        userName = getIntent().getStringExtra("firstName");
+    }
+
+    private void sendToIntent(Intent intent) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+        byte[] byteArray = stream.toByteArray();
+        intent.putExtra("firstName", userName);
+        intent.putExtra("userImage",byteArray);
+    }
+
     private void changeProfilePhoto(){
         changePhoto.setOnClickListener(new View.OnClickListener() {
 
@@ -246,21 +270,21 @@ public class AccountActivity extends AppCompatActivity {
                     description.setText(snapshot.getValue(UserTrainer.class).getDescription());
                     descriptionCard.setVisibility(View.VISIBLE);
                 }
-                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
-                StorageReference photoReference=storageReference.child(userID+".jpg");
-                final long ONE_MEGABYTE = 1024 * 1024;
-                photoReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
-                    @Override
-                    public void onSuccess(byte[] bytes) {
-                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                        profilePhoto.setImageBitmap(bmp);
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception exception) {
-
-                    }
-                });
+//                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+//                StorageReference photoReference=storageReference.child(userID+".jpg");
+//                final long ONE_MEGABYTE = 1024 * 1024;
+//                photoReference.getBytes(ONE_MEGABYTE).addOnSuccessListener(new OnSuccessListener<byte[]>() {
+//                    @Override
+//                    public void onSuccess(byte[] bytes) {
+//                        Bitmap bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+//                        profilePhoto.setImageBitmap(bmp);
+//                    }
+//                }).addOnFailureListener(new OnFailureListener() {
+//                    @Override
+//                    public void onFailure(@NonNull Exception exception) {
+//
+//                    }
+//                });
 
 
                 changeProfilePhoto();
