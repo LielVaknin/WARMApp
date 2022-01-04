@@ -32,8 +32,8 @@
     <string name="title">Title :</string>
     <string name="features">Features :</string>
     <string name="search">Search</string>
-    <string name="search_training">Search Training</string>
-    <string name="search_trainer">Search Trainer</string>
+    <string name="search_training">Training Search</string>
+    <string name="search_trainer">Trainer Search</string>
     <string name="todo">TODO</string>
 
     //activity account
