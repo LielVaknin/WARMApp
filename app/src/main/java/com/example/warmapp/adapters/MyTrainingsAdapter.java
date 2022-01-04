@@ -120,16 +120,18 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
 
         StringBuilder features = new StringBuilder();
         int count = 0;
-        for (String feature : trainingModel.getTraining().getFeatures().keySet()) {
-            count++;
-            features.append(feature);
-            if (count != trainingModel.getTraining().getFeatures().keySet().size()){
-                features.append(", ");
+        if (trainingModel.getTraining().getFeatures() != null) {
+            for (String feature : trainingModel.getTraining().getFeatures().keySet()) {
+                count++;
+                features.append(feature);
+                if (count != trainingModel.getTraining().getFeatures().keySet().size()) {
+                    features.append(", ");
+                }
             }
         }
-        if (trainingModel.getTraining().getParticipants() == null){
+        if (trainingModel.getTraining().getParticipants() == null) {
             textViewTrainingParticipants.setText("0");
-        }else {
+        } else {
             textViewTrainingParticipants.setText(trainingModel.getTraining().getParticipants().size() + "");
         }
         textViewTrainerName.setText(trainingModel.getTrainerName());
@@ -179,7 +181,7 @@ public class MyTrainingsAdapter extends RecyclerView.Adapter<MyTrainingsAdapter.
         if (userType.equals("trainer")) {
             //get list from training of participants
             ArrayList<String> trainingUsers = new ArrayList<>();
-            if(training.getParticipants() != null){
+            if (training.getParticipants() != null) {
                 for (Map.Entry<String, Boolean> entry : training.getParticipants().entrySet()) {
                     trainingUsers.add(entry.getKey());
                 }
