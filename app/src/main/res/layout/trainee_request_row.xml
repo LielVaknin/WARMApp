@@ -62,21 +62,12 @@
                 android:id="@+id/request_training_title2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="10dp"
                 android:fontFamily="@font/outfitregular"
                 android:text="Title"
-                app:layout_constraintStart_toEndOf="@+id/trainee_request_image_type"
-                app:layout_constraintTop_toBottomOf="@+id/request_trainer_name" />
-
-            <ImageView
-                android:id="@+id/trainee_request_image_type"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="1dp"
+                android:textSize="20sp"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/request_trainer_image"
-                app:layout_constraintTop_toBottomOf="@+id/request_trainer_name"
-                app:srcCompat="@drawable/ic_user" />
+                app:layout_constraintTop_toBottomOf="@+id/request_trainer_name" />
 
             <TextView
                 android:id="@+id/request_training_date2"
@@ -93,10 +84,9 @@
                 android:id="@+id/trainee_request_image_date"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="4dp"
                 app:layout_constraintStart_toEndOf="@+id/request_trainer_image"
-                app:layout_constraintTop_toBottomOf="@+id/trainee_request_image_type"
-                app:srcCompat="@drawable/ic_calendar" />
+                app:srcCompat="@drawable/ic_calendar"
+                tools:layout_editor_absoluteY="64dp" />
 
             <TextView
                 android:id="@+id/request_training_time2"
@@ -149,8 +139,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 app:layout_constraintEnd_toStartOf="@+id/request_payment_method2"
-                app:layout_constraintTop_toTopOf="@+id/trainee_request_image_type"
-                app:srcCompat="@drawable/ic_credit_card_black_24dp" />
+                app:srcCompat="@drawable/ic_credit_card_black_24dp"
+                tools:layout_editor_absoluteY="36dp" />
 
             <ImageView
                 android:id="@+id/more_details_button"

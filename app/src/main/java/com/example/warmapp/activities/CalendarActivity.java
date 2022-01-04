@@ -173,16 +173,23 @@ public class CalendarActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void getIntents() {
         byte[] byteArray = getIntent().getByteArrayExtra("userImage");
-        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        if(byteArray!=null) {
+            userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+        }
         userName = getIntent().getStringExtra("firstName");
     }
 
     private void sendToIntent(Intent intent) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
+        if(userImage!=null) {
+            userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            intent.putExtra("userImage",byteArray);
+        }
+
         intent.putExtra("firstName", userName);
-        intent.putExtra("userImage",byteArray);
+
     }
 
     private void setUpBottomNavigation() {

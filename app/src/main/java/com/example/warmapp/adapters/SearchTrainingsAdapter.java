@@ -64,6 +64,8 @@ public class SearchTrainingsAdapter extends RecyclerView.Adapter<SearchTrainings
 
         holder.tvTitle.setText(trainings.get(position).getTraining().getTitle());
         holder.tvCity.setText(trainings.get(position).getTraining().getCity());
+        holder.tvDate.setText(trainings.get(position).getTraining().getDate());
+        holder.tvTime.setText(trainings.get(position).getTraining().getStartTraining()+"-"+trainings.get(position).getTraining().getEndTraining());
         holder.tvTrainerName.setText(trainings.get(position).getTrainerName());
         holder.trainerImage.setImageBitmap(trainings.get(position).getTrainerImage());
         holder.itemView.setAnimation(animation);
@@ -233,7 +235,7 @@ public class SearchTrainingsAdapter extends RecyclerView.Adapter<SearchTrainings
 
         FloatingActionButton requestTraining;
         ImageView trainerImage,moreDetailsBtn;
-        TextView tvTitle, tvCity, tvTrainerName;
+        TextView tvTitle, tvCity, tvTrainerName, tvDate,tvTime;
 
         public MyViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -241,6 +243,8 @@ public class SearchTrainingsAdapter extends RecyclerView.Adapter<SearchTrainings
             trainerImage = itemView.findViewById(R.id.trainer_image);
             tvTitle = itemView.findViewById(R.id.tvTitle);
             tvCity = itemView.findViewById(R.id.tvCity);
+            tvDate= itemView.findViewById(R.id.tvDate);
+            tvTime= itemView.findViewById(R.id.tvTime);
             tvTrainerName = itemView.findViewById(R.id.tv_trainer_name);
             moreDetailsBtn = itemView.findViewById(R.id.more_details_button);
             requestTraining = itemView.findViewById(R.id.search_activity_request_training_button);

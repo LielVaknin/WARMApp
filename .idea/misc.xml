@@ -3,6 +3,8 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/layout_search_training_row.xml" value="0.6" />
+        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/trainee_request_row.xml" value="1.0" />
         <entry key="..\:/Users/USER/.gradle/caches/transforms-3/44c7e289c259f8ba9041d1fdaa8b5a24/transformed/jetified-ScrollableNumberPicker-0.2.2/res/drawable-anydpi-v21/ic_arrow_left.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable-mdpi/ic_calendar.xml" value="0.2703125" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable-v24/edit_text_bg.xml" value="0.14166666666666666" />

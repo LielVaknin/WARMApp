@@ -188,7 +188,10 @@ public class SearchActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void getIntents() {
         byte[] byteArray = getIntent().getByteArrayExtra("userImage");
-        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        if(byteArray!=null) {
+            userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+        }
         userName = getIntent().getStringExtra("firstName");
     }
 
@@ -205,10 +208,14 @@ public class SearchActivity extends AppCompatActivity {
 
     private void sendToIntent(Intent intent) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
+        if(userImage!=null) {
+            userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            intent.putExtra("userImage",byteArray);
+        }
+
         intent.putExtra("firstName", userName);
-        intent.putExtra("userImage",byteArray);
+
     }
 
     private void setUpBottomNavigation() {
@@ -381,13 +388,15 @@ public class SearchActivity extends AppCompatActivity {
                         break;
                     case "chips":
                         ArrayList<Boolean> chipsList = new ArrayList<>();
-                        for (String filter : filters) {
-                            if (training.getFeatures().containsKey(filter)) {
-                                chipsList.add(true);
-                            } else {
-                                chipsList.add(false);
+                        if(training.getFeatures()!=null) {
+                            for (String filter : filters) {
+                                if (training.getFeatures().containsKey(filter)) {
+                                    chipsList.add(true);
+                                } else {
+                                    chipsList.add(false);
+                                }
+                                checkSelectedFilters.put("chips", chipsList);
                             }
-                            checkSelectedFilters.put("chips", chipsList);
                         }
                         break;
                     case "price":

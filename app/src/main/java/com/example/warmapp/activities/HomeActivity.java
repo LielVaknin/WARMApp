@@ -95,9 +95,11 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
     @SuppressLint("SetTextI18n")
     private void getIntents() {
         byte[] byteArray = getIntent().getByteArrayExtra("userImage");
-        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
-        if (userImage != null){
-            circularUserImageView.setImageBitmap(userImage);
+        if(byteArray!=null) {
+            userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+            if (userImage != null) {
+                circularUserImageView.setImageBitmap(userImage);
+            }
         }
 
         userName = getIntent().getStringExtra("firstName");
@@ -150,10 +152,13 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
 
     private void sendToIntent(Intent intent) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
-        intent.putExtra("firstName", userName);
-        intent.putExtra("userImage",byteArray);
+        if(userImage!=null){
+            userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            intent.putExtra("firstName", userName);
+            intent.putExtra("userImage", byteArray);
+        }
+
     }
 
     private void updateUserDetails() {

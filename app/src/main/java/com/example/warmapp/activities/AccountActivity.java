@@ -63,6 +63,7 @@ public class AccountActivity extends AppCompatActivity {
     TextView firstName,lastName,email,changePassword,phone,description,descriptionTitle;
     MaterialCardView firstNameCard,lastNameCard,emailCard,changePasswordCard,phoneCard,descriptionCard;
     ImageView iconDescription;
+    String descriptionText;
     FloatingActionButton changePhoto;
     ImageView profilePhoto;
     ActivityResultLauncher<Intent> launchCameraActivity;
@@ -70,6 +71,7 @@ public class AccountActivity extends AppCompatActivity {
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private Bitmap userImage;
     private String userName;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,7 +139,9 @@ public class AccountActivity extends AppCompatActivity {
         changePasswordCard= findViewById(R.id.activity_account_password_material_card_view);
         changePhoto= findViewById(R.id.activity_account_change_photo);
         profilePhoto=findViewById(R.id.activity_account_profile_photo);
-        profilePhoto.setImageBitmap(userImage);
+        if(userImage!=null) {
+            profilePhoto.setImageBitmap(userImage);
+        }
         getPersonalDetails();
         launchCameraActivity= registerForActivityResult(
                 new ActivityResultContracts.StartActivityForResult(),
@@ -209,16 +213,23 @@ public class AccountActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void getIntents() {
         byte[] byteArray = getIntent().getByteArrayExtra("userImage");
-        userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+        if(byteArray!=null) {
+            userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
+
+        }
         userName = getIntent().getStringExtra("firstName");
     }
 
     private void sendToIntent(Intent intent) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
-        byte[] byteArray = stream.toByteArray();
+        if(userImage!=null) {
+            userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
+            byte[] byteArray = stream.toByteArray();
+            intent.putExtra("userImage",byteArray);
+        }
+
         intent.putExtra("firstName", userName);
-        intent.putExtra("userImage",byteArray);
+
     }
 
     private void changeProfilePhoto(){
@@ -267,7 +278,8 @@ public class AccountActivity extends AppCompatActivity {
                 email.setText(user.getMail());
                 phone.setText(user.getPhone());
                 if(userType.equals("trainer")){
-                    description.setText(snapshot.getValue(UserTrainer.class).getDescription());
+                    descriptionText=snapshot.getValue(UserTrainer.class).getDescription();
+                    //description.setText(descriptionText);
                     descriptionCard.setVisibility(View.VISIBLE);
                 }
 //                StorageReference storageReference = FirebaseStorage.getInstance().getReference();
@@ -486,7 +498,7 @@ public class AccountActivity extends AppCompatActivity {
 
                 TextInputLayout changeDetails = dialogView.findViewById(R.id.change_details);
                 TextInputEditText newDetails=dialogView.findViewById(R.id.change_details_edit);
-                newDetails.setText(description.getText().toString());
+                newDetails.setText(descriptionText);
                 Button positiveButton =alert.getButton(AlertDialog.BUTTON_POSITIVE);
                 positiveButton.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -497,8 +509,8 @@ public class AccountActivity extends AppCompatActivity {
                         }
                         else{
                             String newDescription =newDetails.getText().toString();
-                            userReference.child("Description").setValue(newDetails.getText().toString());
-                            description.setText(newDescription);
+                            userReference.child("description").setValue(newDetails.getText().toString());
+                            //description.setText(newDescription);
                             alert.dismiss();
                             Toast.makeText(AccountActivity.this,"Your Changes Saved",Toast.LENGTH_SHORT).show();
                         }
