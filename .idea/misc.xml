@@ -3,8 +3,6 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
-        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/layout_search_training_row.xml" value="0.6" />
-        <entry key="..\:/Users/Oriya/Desktop/warmapp/app/src/main/res/layout/trainee_request_row.xml" value="1.0" />
         <entry key="..\:/Users/USER/.gradle/caches/transforms-3/44c7e289c259f8ba9041d1fdaa8b5a24/transformed/jetified-ScrollableNumberPicker-0.2.2/res/drawable-anydpi-v21/ic_arrow_left.xml" value="0.23541666666666666" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable-mdpi/ic_calendar.xml" value="0.2703125" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/drawable-v24/edit_text_bg.xml" value="0.14166666666666666" />
@@ -46,12 +44,13 @@
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_trainer_profile.xml" value="0.18702290076335878" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/activity_training_list.xml" value="0.18" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/cities_list.xml" value="0.21403508771929824" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_more_details_dialog.xml" value="0.19635416666666666" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_recycle_view_my_trainings.xml" value="0.1609375" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_reset_password.xml" value="0.1793478260869565" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_review_row.xml" value="0.4" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_search_filters.xml" value="0.264" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_search_trainer_row.xml" value="0.4" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_search_training_row.xml" value="0.4" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_search_training_row.xml" value="0.72" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_type_trainings_selected.xml" value="0.4" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/layout_types_trainings.xml" value="0.14166666666666666" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/list.xml" value="0.264" />
@@ -60,7 +59,7 @@
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/review_row.xml" value="0.36666666666666664" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/spinner_dropdown_item.xml" value="0.14166666666666666" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/titles_list.xml" value="0.1" />
-        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/trainee_request_row.xml" value="0.14166666666666666" />
+        <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/trainee_request_row.xml" value="0.4" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/trainer_request_row.xml" value="0.6" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/trainer_row.xml" value="0.264" />
         <entry key="..\:/Users/USER/Desktop/WARMApp/app/src/main/res/layout/training.xml" value="0.30120481927710846" />
