@@ -163,7 +163,12 @@ public class HomeActivity extends AppCompatActivity implements UpdateRVTrainings
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         user = snapshot.getValue(User.class);
-                        showUserTrainings();
+                        if(snapshot.hasChild("trainings")){
+                            showUserTrainings();
+                        }
+                        else{
+                            progressBarMyTrainings.setVisibility(View.GONE);
+                        }
                     }
 
                     @Override

@@ -68,7 +68,7 @@ public class SearchTrainerProfileAdapter extends RecyclerView.Adapter<SearchTrai
                 pairs[2] = new Pair<View,String>(holder.trainerRatingNumber,"trainer_rating");
                 pairs[3] = new Pair<View,String>(holder.trainerDescription,"trainer_description");
                 ActivityOptions activityOptions = ActivityOptions.makeSceneTransitionAnimation((Activity) context,pairs);
-
+                myIntent.putExtra("rating",holder.trainerRatingNumber.getText());
                 myIntent.putExtra("trainerId", trainers.get(position).getTrainerID());
                 myIntent.putExtra("firstName",trainers.get(position).getUserTrainer().getFirstName());
                 myIntent.putExtra("lastName", trainers.get(position).getUserTrainer().getLastName());

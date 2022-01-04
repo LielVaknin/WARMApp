@@ -134,7 +134,7 @@ public class CalendarActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
         setContentView(R.layout.activity_calendar);
-
+        userTrainings = new ArrayList<>();
         getIntents();
         initViews();
         setUpBottomNavigation();
@@ -264,7 +264,7 @@ public class CalendarActivity extends AppCompatActivity {
 
     private void putTrainingsDayOnCalendar() {
         events = new ArrayList<>();
-        userTrainings = new ArrayList<>();
+
 
         //get list uniqueID of user trainings
         FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings")

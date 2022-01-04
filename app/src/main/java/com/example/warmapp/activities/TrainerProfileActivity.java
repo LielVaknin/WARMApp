@@ -131,7 +131,7 @@ public class TrainerProfileActivity extends AppCompatActivity {
         Bitmap bmp = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
         trainerImage.setImageBitmap(bmp);
         imageViewBlur.setImageBitmap(BlurImage(bmp));
-
+        ratingAverageNumber.setText(getIntent().getStringExtra("rating"));
         FirebaseDatabase.getInstance().getReference().child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
