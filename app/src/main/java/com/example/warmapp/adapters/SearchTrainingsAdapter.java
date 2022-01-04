@@ -187,11 +187,13 @@ public class SearchTrainingsAdapter extends RecyclerView.Adapter<SearchTrainings
 
         StringBuilder features = new StringBuilder();
         int count = 0;
-        for (String feature : trainingModel.getTraining().getFeatures().keySet()) {
-            count++;
-            features.append(feature);
-            if (count != trainingModel.getTraining().getFeatures().keySet().size()){
-                features.append(", ");
+        if (trainingModel.getTraining().getFeatures() != null) {
+            for (String feature : trainingModel.getTraining().getFeatures().keySet()) {
+                count++;
+                features.append(feature);
+                if (count != trainingModel.getTraining().getFeatures().keySet().size()) {
+                    features.append(", ");
+                }
             }
         }
         if (trainingModel.getTraining().getParticipants() == null){

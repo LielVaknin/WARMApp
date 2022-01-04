@@ -168,7 +168,7 @@ public class SearchActivity extends AppCompatActivity {
                 getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
 
-                if (radioButton.getText().toString().equals("Search Trainer")) {
+                if (radioButton.getText().toString().equals("Trainer Search")) {
                     fireBaseTrainerSearch(searchText);
                 } else {
                     getUserDetails(searchText);
@@ -188,7 +188,7 @@ public class SearchActivity extends AppCompatActivity {
     @SuppressLint("SetTextI18n")
     private void getIntents() {
         byte[] byteArray = getIntent().getByteArrayExtra("userImage");
-        if(byteArray!=null) {
+        if (byteArray != null) {
             userImage = BitmapFactory.decodeByteArray(byteArray, 0, byteArray.length);
 
         }
@@ -208,10 +208,10 @@ public class SearchActivity extends AppCompatActivity {
 
     private void sendToIntent(Intent intent) {
         ByteArrayOutputStream stream = new ByteArrayOutputStream();
-        if(userImage!=null) {
+        if (userImage != null) {
             userImage.compress(Bitmap.CompressFormat.JPEG, 100, stream);
             byte[] byteArray = stream.toByteArray();
-            intent.putExtra("userImage",byteArray);
+            intent.putExtra("userImage", byteArray);
         }
 
         intent.putExtra("firstName", userName);
@@ -258,7 +258,7 @@ public class SearchActivity extends AppCompatActivity {
         });
     }
 
-    private void getUserDetails(String searchText){
+    private void getUserDetails(String searchText) {
         FirebaseDatabase.getInstance().getReference().child("Users").child(userID).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -269,8 +269,8 @@ public class SearchActivity extends AppCompatActivity {
                 if (snapshot.hasChild("requests")) {
                     hasUserRequests = true;
                 }
-                if(snapshot.hasChild("trainings")){
-                    hasUserTrainings=true;
+                if (snapshot.hasChild("trainings")) {
+                    hasUserTrainings = true;
                 }
                 fireBaseTrainingSearch(searchText);
             }
@@ -288,21 +288,21 @@ public class SearchActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         trainings = new ArrayList<>();
-        searchTrainingsAdapter = new SearchTrainingsAdapter(this, trainings,userType);
+        searchTrainingsAdapter = new SearchTrainingsAdapter(this, trainings, userType);
         recyclerView.setAdapter(searchTrainingsAdapter);
 
         allTrainings = new HashMap<>();
 
         FirebaseDatabase.getInstance().getReference().child("Trainings")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-                    int countTrainings;
-
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshotTrainings) {
+                        int countTrainings = 0;
                         for (DataSnapshot dataSnapshot : snapshotTrainings.getChildren()) {
                             countTrainings++;
                             Training training = dataSnapshot.getValue(Training.class);
                             String trainingID = dataSnapshot.getKey();
+                            int finalCountTrainings = countTrainings;
                             FirebaseDatabase.getInstance().getReference().child("Users").child(Objects.requireNonNull(training).getTrainerId())
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
@@ -314,17 +314,14 @@ public class SearchActivity extends AppCompatActivity {
                                                 trainerNameAndTraining.put(trainerName, training);
                                                 allTrainings.put(trainingID, trainerNameAndTraining);
                                             }
-                                            if (countTrainings == snapshotTrainings.getChildrenCount()) {
-                                                if(hasUserRequests){
+                                            if (finalCountTrainings == snapshotTrainings.getChildrenCount()) {
+                                                if (hasUserRequests) {
                                                     getUserRequests();
-                                                }else{
-                                                    if(hasUserTrainings){
-                                                        getUserTrainings();
-                                                    }else{
-                                                        setTrainingModel();
-                                                    }
+                                                } else if (hasUserTrainings) {
+                                                    getUserTrainings();
+                                                } else {
+                                                    setTrainingModel();
                                                 }
-
                                             }
                                         }
 
@@ -388,7 +385,7 @@ public class SearchActivity extends AppCompatActivity {
                         break;
                     case "chips":
                         ArrayList<Boolean> chipsList = new ArrayList<>();
-                        if(training.getFeatures()!=null) {
+                        if (training.getFeatures() != null) {
                             for (String filter : filters) {
                                 if (training.getFeatures().containsKey(filter)) {
                                     chipsList.add(true);
@@ -448,23 +445,22 @@ public class SearchActivity extends AppCompatActivity {
 
         FirebaseDatabase.getInstance().getReference().child("Users").child(userID).child("requests")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
-                    int countRequests;
+                    int countRequests = 0;
 
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshotMain) {
                         for (DataSnapshot dataSnapshot : snapshotMain.getChildren()) {
+                            countRequests++;
                             FirebaseDatabase.getInstance().getReference().child("Requests").child(Objects.requireNonNull(dataSnapshot.getKey()))
                                     .addListenerForSingleValueEvent(new ValueEventListener() {
                                         @Override
                                         public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                            countRequests++;
                                             Request request = snapshot.getValue(Request.class);
                                             userRequests.add(request);
                                             if (countRequests == snapshotMain.getChildrenCount()) {
-                                                if(hasUserTrainings){
+                                                if (hasUserTrainings) {
                                                     getUserTrainings();
-                                                }
-                                                else{
+                                                } else {
                                                     setTrainingModel();
                                                 }
 
@@ -491,15 +487,19 @@ public class SearchActivity extends AppCompatActivity {
 
     private void getUserTrainings() {
 
-
         FirebaseDatabase.getInstance().getReference("Users").child(userID).child("trainings")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
+                    int countTrainings = 0;
+
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                            countTrainings++;
                             userTrainingsID.add(dataSnapshot.getKey());
+                            if (countTrainings == snapshot.getChildrenCount()) {
+                                setTrainingModel();
+                            }
                         }
-                        setTrainingModel();
                     }
 
                     @Override
@@ -578,6 +578,7 @@ public class SearchActivity extends AppCompatActivity {
         FirebaseDatabase.getInstance().getReference().child("Users").orderByChild("userType").equalTo("trainer")
                 .addListenerForSingleValueEvent(new ValueEventListener() {
                     int countTrainers;
+
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
                         for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
@@ -588,7 +589,7 @@ public class SearchActivity extends AppCompatActivity {
                                     || userTrainer.getFirstName().toLowerCase().contains(searchText.toLowerCase())) {
                                 setTrainerModel(userTrainer, trainerID);
                             }
-                            if (countTrainers == snapshot.getChildrenCount()){
+                            if (countTrainers == snapshot.getChildrenCount()) {
                                 progressBar.setVisibility(View.GONE);
                                 getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                             }
